@@ -3,6 +3,7 @@ import Home from './views/home'
 import Monitor from './views/monitor'
 import GlobalSearch from './views/globalSearch'
 import Report from './views/report'
+import Manager from './views/manager'
 import Analysis from './views/analysis'
 import Header from './components/header'
 import { Layout } from 'antd';
@@ -23,6 +24,7 @@ class App extends Component {
               <Route path="/monitor" component={ Monitor }></Route>
               <Route path="/search" component={ GlobalSearch }></Route>
               <Route path="/report" component={ Report }></Route>
+              <Route path="/manager" component={ Manager }></Route>
               <Route path="/analysis" component={ Analysis }></Route>
               <Redirect from="/*" to="/home"></Redirect>
             </Switch>

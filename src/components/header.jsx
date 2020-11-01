@@ -18,7 +18,7 @@ class Header extends Component {
   componentDidMount = () => {
     let moren = this.props.location.pathname
     let text = moren.substring(moren.lastIndexOf('/') + 1, moren.length)
-    ![ 'home', 'monitor', 'search', 'report', 'analysis' ].includes(text) && (text = 'home')
+    ![ 'home', 'monitor', 'search', 'report', 'manager', 'analysis' ].includes(text) && (text = 'home')
     this.setState({
       current: text
     })
@@ -52,6 +52,9 @@ class Header extends Component {
           </Menu.Item>
           <Menu.Item key="report">
             <Link to="/report">舆情简报</Link>
+          </Menu.Item>
+          <Menu.Item key="manager">
+            <Link to="/manager">用户管理</Link>
           </Menu.Item>
           <Menu.Item key="analysis">
             <Link to="/analysis">事件分析</Link>
