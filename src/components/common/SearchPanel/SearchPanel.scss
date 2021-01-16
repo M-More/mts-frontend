@@ -1,0 +1,33 @@
+@import "../../../utils/enums/constant.scss";
+
+.mts-search-module-container{
+  padding: 32px;
+  max-width: 1000px;
+  min-width: 500px;
+  margin: 0 auto;
+  .mts-search-module-input {
+    margin-bottom: 16px;
+  }
+  .ant-form-item {
+    margin-bottom: 8px;
+    .ant-form-item-label {
+      text-align: center;
+    }
+    .mts-search-module-radios {
+      margin-left: 20px;
+    }
+  }
+  .divider {
+    margin: 4px;
+  }
+  .mts-search-module-buttons-wrapper {
+    display: flex;
+    margin-top: 16px;
+    justify-content: center;
+    .mts-search-module-button {
+      width: 150px;
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+  }
+}
