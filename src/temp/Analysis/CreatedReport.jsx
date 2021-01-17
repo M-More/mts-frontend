@@ -25,7 +25,7 @@ class CreatedReport extends Component {
   }
 
   render() {
-    const columns = [
+    const columnRender = [
       {
         title: '编号',
         dataIndex: 'number',

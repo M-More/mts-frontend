@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Button } from 'antd';
-import '../Home/Home.scss';
+import './Home.scss';
 import moment from 'moment';
 import payload from './payload';
 import {

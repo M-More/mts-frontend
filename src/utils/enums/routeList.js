@@ -1,4 +1,4 @@
-const routes = [
+const routesList = [
   { key: 'home', link: '/home', label: '首页' },
   { key: 'search', link: '/search', label: '全文搜索' },
   { key: 'monitor', link: '/monitor', label: '舆情监测' },
@@ -6,4 +6,4 @@ const routes = [
   { key: 'admin', link: '/admin', label: '用户管理' },
 ];
 
-export default routes;
+export default routesList;

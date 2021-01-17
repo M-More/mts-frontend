@@ -5,7 +5,7 @@ import {
   random,
   sensitiveLevels,
   sourceTypes
-} from '../../constant';
+} from '../constant';
 
 const payload = {
   articles: new Array(100).fill(0).map(() => ({

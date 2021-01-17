@@ -6,7 +6,7 @@ import {
   random,
   sensitiveLevels,
   sourceTypes
-} from '../../constant';
+} from '../constant';
 
 const menu = [
   {

@@ -7,7 +7,7 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { actionCreator } from '../../../redux/actionCreator';
+import { actions } from '../../../redux/actions';
 import SearchCondition from '../SearchCondition/SearchCondition';
 import './InfoList.scss';
 
@@ -18,7 +18,7 @@ const rowSelection = {
     name: record.title
   }),
 };
-const columns = [
+const columnRender = [
   {
     width: 600,
     title: '标题',

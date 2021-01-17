@@ -38,7 +38,7 @@ class UserList extends Component {
         this.setState({})
       }
   render () {
-    const columns = [
+    const columnRender = [
         {
           title: '登录名',
           dataIndex: 'loginname',

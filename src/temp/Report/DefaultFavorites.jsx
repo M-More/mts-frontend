@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import './DefaultFavorites.css';
 
-const columns = [
+const columnRender = [
   {
     title: '标题',
     dataIndex: 'title',

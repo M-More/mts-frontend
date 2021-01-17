@@ -21,7 +21,7 @@ class RoleList extends Component {
         this.setState({})
       }
   render () {
-    const columns = [
+    const columnRender = [
         {
           title: '角色名称',
           dataIndex: 'rolename',

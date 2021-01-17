@@ -21,7 +21,7 @@ class OrganizationList extends Component {
         this.setState({})
       }
   render () {
-    const columns = [
+    const columnRender = [
         {
           title: '机构名称',
           dataIndex: 'OrganizationName',

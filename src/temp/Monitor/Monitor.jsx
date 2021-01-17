@@ -6,7 +6,7 @@ import InfoList from '../common/InfoList/InfoList';
 import Direction from './Direction/Direction';
 import payload from './payload';
 import './Monitor.scss';
-import { actionCreator } from '../../redux/actionCreator';
+import { actions } from '../../redux/actions';
 import { connect } from 'react-redux';
 
 const { Content, Sider } = Layout;
@@ -248,7 +248,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  resetFilter: actionCreator.resetFilter,
+  resetFilter: actions.resetFilter,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Monitor);

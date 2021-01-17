@@ -6,7 +6,7 @@ import {
   random,
   sourceTypes,
   sensitiveLevels,
-} from '../../constant';
+} from '../constant';
 
 const payload = {
   sensitiveInfo: new Array(8).fill(0).map(() => ({

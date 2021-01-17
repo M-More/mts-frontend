@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Divider } from 'antd';
 import { connect } from 'react-redux';
-import { sourceTypes, sensitiveLevels, timeRangeOptions, timeOrderOptions } from '../../../constant';
+import { sourceTypes, sensitiveLevels, timeRangeOptions, timeOrderOptions } from '../../constant';
 import './SearchCondition.scss';
-import { actionCreator } from '../../../redux/actionCreator';
+import { actions } from '../../../redux/actions';
 
 class SearchCondition extends Component {
   handleClick = (type, value) => {
@@ -104,7 +104,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setFilter: actionCreator.setFilter,
+  setFilter: actions.setFilter,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SearchCondition);

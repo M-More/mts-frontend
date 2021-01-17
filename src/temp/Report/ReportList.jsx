@@ -9,7 +9,7 @@ import './ReportList.css';
 
 const { RangePicker } = DatePicker;
 
-const columns = [
+const columnRender = [
   {
     title: '简报名称',
     dataIndex: 'name',
