@@ -2,6 +2,6 @@ export const actionTypes = {
   TEST: 'TEST',
 };
 
-export const actionCreator = {
+export const actions = {
   test: (data) => ({ type: actionTypes.TEST, data }),
 };
