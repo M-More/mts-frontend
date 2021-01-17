@@ -1,74 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import './Header.css';
+import routes from '../../utils/models/routes';
+import './Header.scss';
 
-const history = createBrowserHistory() // history模式
+const history = createBrowserHistory();
 
-class Header extends Component {
+class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      logo: '',
-      current: 'home',
-    }
+    this.state = { current: 'home' };
   }
 
-  handleClick = (e) => {
-    this.setState({ current: e.key });
-  }
+  handleClick = (e) => { this.setState({ current: e.key }); };
 
   componentDidMount = () => {
-    const moren = this.props.location.pathname
-    let text = moren.substring(moren.lastIndexOf('/') + 1, moren.length)
-    ![ 'home', 'monitor', 'search', 'report', 'manager', 'analysis' ].includes(text) && (text = 'home')
-    this.setState({
-      current: text,
-    })
+    const { pathname } = this.props.location;
+    let text = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length);
+    if (!['home', 'monitor', 'search', 'report', 'manager', 'analysis'].includes(text)) text = 'home';
+    this.setState({ current: text });
     history.listen((event) => {
-      const test = event.pathname
-      const text = test.substring(test.lastIndexOf('/') + 1, test.length)
-      this.setState({
-        current: text,
-      })
-    })
-  }
+      const test = event.pathname;
+      const current = test.substring(test.lastIndexOf('/') + 1, test.length);
+      this.setState({ current });
+    });
+  };
 
   render() {
     const { current } = this.state;
     return (
       <div>
         <Menu
-          onClick={ this.handleClick }
-          selectedKeys={ [ current ] }
+          onClick={this.handleClick}
+          selectedKeys={[current]}
           theme="dark"
           mode="horizontal"
-          style={ { lineHeight: '64px' } }
           className="mts-top-bar"
         >
-          <Menu.Item key="home">
-            <Link to="/home">首页</Link>
-          </Menu.Item>
-          <Menu.Item key="monitor">
-            <Link to="/monitor">舆情监测</Link>
-          </Menu.Item>
-          <Menu.Item key="search">
-            <Link to="/search">全文搜索</Link>
-          </Menu.Item>
-          <Menu.Item key="report">
-            <Link to="/report">舆情简报</Link>
-          </Menu.Item>
-          <Menu.Item key="manager">
-            <Link to="/manager">用户管理</Link>
-          </Menu.Item>
-          <Menu.Item key="analysis">
-            <Link to="/analysis">事件分析</Link>
-          </Menu.Item>
+          { routes.map((route) => (
+            <Menu.Item key={route.key}>
+              <Link to={route.link}>{route.label}</Link>
+            </Menu.Item>
+          ))}
         </Menu>
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(Header)
+export default withRouter(Header);
