@@ -1,4 +1,4 @@
-const searchCriterias = [
+const searchCriteria = [
   {
     name: 'cflag',
     label: '敏感度',
@@ -49,4 +49,4 @@ const searchCriterias = [
   },
 ];
 
-export default searchCriterias;
+export default searchCriteria;

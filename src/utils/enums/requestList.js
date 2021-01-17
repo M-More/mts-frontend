@@ -1,7 +1,7 @@
-const domain = 'https://localhost:3000';
+const domain = 'http://localhost:8082';
 
-const requestsList = {
-  search: { url: `${domain}/search`, method: 'GET' },
+const requestList = {
+  search: { url: `${domain}/data/globalSearch`, method: 'GET' },
 };
 
-export default requestsList;
+export default requestList;

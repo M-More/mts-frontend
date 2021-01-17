@@ -1,0 +1,17 @@
+html body #root {
+  height: 100%;
+}
+
+.mts-app-container {
+  height: 100%;
+  .ant-layout-content {
+    height: 100%;
+    .mts-routes-wrapper {
+      min-height: calc(100% - 64px - 64px);
+      background: whitesmoke;
+    }
+    .mts-footer {
+      height: 64px;
+    }
+  }
+}

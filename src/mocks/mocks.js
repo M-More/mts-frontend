@@ -1,9 +1,8 @@
 import Mock from 'mockjs';
-import requests from '../utils/enums/requests';
+import mockFetch from 'mockjs-fetch';
+import requestList from '../utils/enums/requestList';
 import mockInfo from './mockInfo';
 
-const agents = [
-  Mock.mock(requests.search.url, mockInfo()),
-];
+mockFetch(Mock);
+Mock.mock(requestList.search.url, requestList.search.method, mockInfo());
 
-export default agents;

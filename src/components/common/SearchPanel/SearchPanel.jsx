@@ -1,26 +1,24 @@
 import React from 'react';
-import { Radio, Input, Button, Form, Divider } from 'antd';
+import { Radio, Input, Button, Form, Divider, DatePicker } from 'antd';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import searchCriteria from './searchCriteria';
-import './SearchModule.scss';
-import { timeRangeOptions } from '../../../temp/constant';
+import './SearchPanel.scss';
 
-const PAGE_SIZE = 20;
-
-class SearchModule extends React.Component {
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+class SearchPanel extends React.Component {
   constructor() {
     super();
-    this.state = {
-      cflag: null,
-      fromType: null,
-      timeOrder: 0,
-      timeRange: null,
-      keyword: null,
-      page: 0,
-      startTime: null,
-      endTime: null,
-    };
+    this.moments = null;
+    this.state = {};
+  }
+
+  // eslint-disable-next-line react/no-deprecated
+  componentWillMount() {
+    const { searchCriteria } = this.props;
+    searchCriteria.forEach((criterion) => {
+      this.state[criterion.name] = criterion.defaultValue;
+    });
+    console.log(this.state);
   }
 
   handleSelect = (event, type) => {
@@ -29,18 +27,52 @@ class SearchModule extends React.Component {
     this.setState(newState);
   };
 
-  handleSearch = () => {
-    console.log(this.state);
+  handleDatePicked = (moments) => {
+    this.moments = moments;
+  };
+
+  handleSearch = (keyword) => {
+    const { timeRange } = this.state;
+    const { moments } = this;
+    // const current = moment();
+    const current = moment('2020-07-18 12:00:00');
+    let startPublishedDay = null;
+    let endPublishedDay = null;
+    switch (timeRange) {
+      case 0:
+        endPublishedDay = current.format(DATE_FORMAT);
+        startPublishedDay = current.startOf('day').format(DATE_FORMAT);
+        break;
+      case -1:
+        if (!moments) break;
+        startPublishedDay = moments[0]?.format(DATE_FORMAT);
+        endPublishedDay = moments[1]?.format(DATE_FORMAT);
+        break;
+      case null:
+        break;
+      default:
+        endPublishedDay = current.format(DATE_FORMAT);
+        startPublishedDay = current.add(-timeRange, 'days').format(DATE_FORMAT);
+        break;
+    }
+    console.log(startPublishedDay, endPublishedDay);
+    if (this.props.handleSearch) {
+      this.props.handleSearch({
+        keyword,
+        ...this.state,
+        startPublishDay: startPublishedDay,
+        endPublishDay: endPublishedDay,
+      });
+    }
   };
 
   render() {
-    const {
-      cflag, fromType, timeOrder, timeRange, keyword, page,
-    } = this.state;
+    const { searchCriteria } = this.props;
+    const { moments } = this;
     return (
-      <div className="mts-search-module-container">
+      <div className="mts-search-panel-container">
         <Input.Search
-          className="mts-search-module-input"
+          className="mts-search-panel-input"
           enterButton
           size="large"
           onSearch={this.handleSearch}
@@ -49,63 +81,39 @@ class SearchModule extends React.Component {
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 20 }}
         >
-          {searchCriteria.map((criteria) => (
+          {searchCriteria.map((criterion) => (
             <>
               <Form.Item
-                label={criteria.label}
-                key={criteria.name}
+                label={criterion.label}
+                key={criterion.name}
               >
                 <Radio.Group
-                  className="mts-search-module-radios"
-                  defaultValue={criteria.defaultValue}
-                  value={this.state[criteria.name]}
-                  onChange={(event) => this.handleSelect(event, criteria.name)}
+                  className="mts-search-panel-radios"
+                  defaultValue={criterion.defaultValue}
+                  value={this.state[criterion.name]}
+                  onChange={(event) => this.handleSelect(event, criterion.name)}
                 >
-                  {criteria.options.map((option) => (
+                  {criterion.options.map((option) => (
                     <Radio
                       value={option.value}
                       key={option.value}
                     >
                       {option.label}
+                      { criterion.name === 'timeRange' && option.value === -1 && this.state.timeRange === -1 && (
+                        // self defined date picker
+                        <DatePicker.RangePicker
+                          className="mts-search-panel-date-picker"
+                          onChange={this.handleDatePicked}
+                        />
+                      )}
                     </Radio>
                   ))}
                 </Radio.Group>
               </Form.Item>
               <Divider className="divider" />
             </>
-            /* <>
-              <div className="conditionWrapper">
-                <span>{criteria.label}</span>
-                <ul className="conditionList timeRange">
-                  {criteria.options.map((option) => (
-                    <li
-                      key={option.value}
-                      className={this.state[criteria.name] === option.value ? 'active' : ''}
-                      onClick={() => this.handleSelect(criteria.name, option.value)}
-                    >
-                      {option.label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <Divider className="divider" />
-            </> */
           ))}
         </Form>
-        {/* <div className="mts-search-module-buttons-wrapper">
-          <Button
-            className="mts-search-module-button"
-            type="primary"
-          >
-            舆情搜索
-          </Button>
-          <Button
-            className="mts-search-module-button"
-            type="primary"
-          >
-            导出素材
-          </Button>
-        </div> */}
       </div>
     );
   }
@@ -114,4 +122,4 @@ class SearchModule extends React.Component {
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SearchModule);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SearchPanel);

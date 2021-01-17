@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import routes from '../../utils/models/routes';
+import routeList from '../utils/enums/routeList';
 import './Header.scss';
 
 const history = createBrowserHistory();
@@ -30,15 +30,15 @@ class Header extends React.Component {
   render() {
     const { current } = this.state;
     return (
-      <div>
+      <div className="mts-header-container">
         <Menu
           onClick={this.handleClick}
           selectedKeys={[current]}
           theme="dark"
           mode="horizontal"
-          className="mts-top-bar"
+          className="mts-header"
         >
-          { routes.map((route) => (
+          { routeList.map((route) => (
             <Menu.Item key={route.key}>
               <Link to={route.link}>{route.label}</Link>
             </Menu.Item>
