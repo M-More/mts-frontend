@@ -60,8 +60,8 @@ class SearchPanel extends React.Component {
       this.props.handleSearch({
         keyword,
         ...this.state,
-        startPublishDay: startPublishedDay,
-        endPublishDay: endPublishedDay,
+        startPublishedDay,
+        endPublishedDay,
       });
     }
   };
