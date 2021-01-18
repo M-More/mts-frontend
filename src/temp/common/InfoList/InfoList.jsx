@@ -76,7 +76,7 @@ class InfoList extends Component {
   filterData = (data) => {
     const { currentTimeRange, currentTimeOrder, currentSensitive, currentSource } = this.props;
     let newData = data;
-    // filter by timestamp
+    // Filter by timestamp
     let latestTimestamp; let
       oldestTimestamp;
     switch (currentTimeRange) {

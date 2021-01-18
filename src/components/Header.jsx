@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import routeList from '../utils/enums/routeList';
+import routes from '../common/routes';
 import './Header.scss';
 
 const history = createBrowserHistory();
@@ -38,7 +38,7 @@ class Header extends React.Component {
           mode="horizontal"
           className="mts-header"
         >
-          { routeList.map((route) => (
+          { routes.map((route) => (
             <Menu.Item key={route.key}>
               <Link to={route.link}>{route.label}</Link>
             </Menu.Item>
