@@ -7,7 +7,7 @@ import Home from './Home/Home';
 import Search from './Search/Search';
 import store from '../redux/store';
 import './App.scss';
-import '../utils/enums/constant.scss';
+import '../common/constant.scss';
 // import '../mocks/mocks';
 
 const { Footer, Content } = Layout;

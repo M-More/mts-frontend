@@ -2,16 +2,16 @@ import React from 'react';
 import { Button, Input, Table, Checkbox, Modal } from 'antd';
 import { HeartOutlined, TagsOutlined, SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import './InfoList.scss';
+import './Results.scss';
 
-class InfoList extends React.Component {
+class Results extends React.Component {
   constructor() {
     super();
     this.state = {
       content: '',
       title: '',
+      visible: false,
       loading: false,
-      modalVisible: false,
     };
     this.rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
@@ -21,20 +21,18 @@ class InfoList extends React.Component {
     };
     this.columnsRender = [
       {
-        width: 300,
+        width: 400,
         title: '标题',
         dataIndex: 'title',
         key: 'title',
-        render: (text, record, index) => (
-          <a onClick={() => this.handleTitleClicked(record)}>{text}</a>
-        ),
+        render: this.renderTitle,
       },
       {
-        width: 300,
+        width: 100,
         title: '地址',
         dataIndex: 'webpageUrl',
         key: 'webpageUrl',
-        render: (text, record, index) => (<a href={text}>{text}</a>),
+        render: this.renderAddr,
       },
       {
         title: '来源',
@@ -54,46 +52,45 @@ class InfoList extends React.Component {
     ];
   }
 
+  renderTitle = (text, record) => (<a onClick={() => this.handleTitleClicked(record)}>{text}</a>);
+
+  renderAddr = (text) => (<a className="mts-search-results-addr" href={text}>{text}</a>);
+
   renderFooter = () => (
-    <div className="mts-info-list-footer">
+    <div className="mts-search-results-footer">
       <span>批量操作：</span>
-      <div className="mts-info-list-icon-button">
+      <div className="mts-search-results-icon-button">
         <Button primary icon={<TagsOutlined />} onClick={(e) => this.handleMaterial(e)} />
       </div>
-      <div className="mts-info-list-icon-button">
+      <div className="mts-search-results-icon-button">
         <Button primary icon={<HeartOutlined />} onClick={(e) => this.handleCollect(e)} />
       </div>
     </div>
   );
 
-  handlePageTurned = (pagination, filters, sorter) => {
-    console.log(pagination);
-    if (this.props.handleSearch) {
-      this.props.handleSearch({
-        page: pagination.current,
-      });
+  handlePageTurned = (pagination) => {
+    if (this.props.onPageChange) {
+      this.props.onPageChange(pagination.current);
     }
   };
 
   handleTitleClicked = (record) => {
     this.setState({
-      modalVisible: true,
+      visible: true,
       content: record.content,
       title: record.title,
     });
   };
 
-  handleModalConfirm = () => {
-    this.setState({ modalVisible: false });
-  };
-
   handleModalCancel = () => {
-    this.setState({ modalVisible: false });
+    this.setState({ visible: false });
   };
 
   render() {
     const data = this.props.data || [];
-    const { loading, modalVisible, content, title } = this.state;
+    const { loading, visible, content, title } = this.state;
+    const { hitNumber, pageSize } = this.props;
+    console.log(hitNumber, data);
     return (
       <div>
         <div id="table">
@@ -104,14 +101,14 @@ class InfoList extends React.Component {
             dataSource={data}
             pagination={{
               position: ['none', 'bottomRight'],
-              total: this.props.hitNumber,
+              total: hitNumber,
             }}
             footer={this.renderFooter}
-            loading={loading}
             onChange={this.handlePageTurned}
+            loading={loading}
           />
         </div>
-        <Modal title={title} visible={modalVisible} onOk={this.handleModalConfirm} onCancel={this.handleModalCancel}>
+        <Modal title={title} visible={visible} onCancel={this.handleModalCancel}>
           {content}
         </Modal>
       </div>
@@ -122,4 +119,4 @@ class InfoList extends React.Component {
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(InfoList);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Results);

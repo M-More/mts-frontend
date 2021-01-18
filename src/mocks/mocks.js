@@ -1,8 +1,8 @@
 import Mock from 'mockjs';
 import mockFetch from 'mockjs-fetch';
-import requestList from '../utils/enums/requestList';
+import requests from '../common/requests';
 import mockInfo from './mockInfo';
 
 mockFetch(Mock);
-Mock.mock(requestList.search.url, requestList.search.method, mockInfo());
+Mock.mock(requests.search.url, requests.search.method, mockInfo());
 

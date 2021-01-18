@@ -1,6 +1,7 @@
-const searchCriteria = [
+const criteria = [
   {
     name: 'cflag',
+    type: 'common',
     label: '敏感度',
     defaultValue: null,
     options: [
@@ -12,6 +13,7 @@ const searchCriteria = [
   {
     name: 'fromType',
     label: '来源',
+    type: 'common',
     defaultValue: null,
     options: [
       { label: '不限', value: null },
@@ -25,8 +27,9 @@ const searchCriteria = [
     ],
   },
   {
-    name: 'timeRange',
+    name: 'dateRange',
     label: '时间范围',
+    type: 'datePicker',
     defaultValue: null,
     options: [
       { label: '不限', value: null },
@@ -40,6 +43,7 @@ const searchCriteria = [
   },
   {
     name: 'timeOrder',
+    type: 'common',
     label: '时间排序',
     defaultValue: 0,
     options: [
@@ -49,4 +53,4 @@ const searchCriteria = [
   },
 ];
 
-export default searchCriteria;
+export default criteria;
