@@ -3,29 +3,24 @@ import Lodash from 'lodash';
 import moment from 'moment';
 import requests from '../../../common/requests';
 import rules from '../../../common/enums/rules';
+import Doughnut from '../../../components/common/Chart/Doughnut/Doughnut';
 import Filter from '../../../components/Search/Filter/Filter';
-import Results from '../../../components/Search/Results/Results';
 
-const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-class Table extends Component {
+class Chart extends Component {
   constructor() {
     super();
     this.state = {
       // request param
-      page: 0,
-      pageSize: PAGE_SIZE,
       keyword: '',
-      fromType: null,
       startPublishedDay: null,
       endPublishedDay: null,
-      cflag: null,
       dateRange: null,
-      timeOrder: 0,
       // response param
-      hitNumber: 0,
-      results: [],
+      cflagResults: {},
+      fromTypeResults: {},
+      timeTrendResults: {},
     };
   }
 
@@ -34,21 +29,23 @@ class Table extends Component {
   }
 
   handleSearch = () => {
-    const { getInfoResults } = requests;
-    const current = Lodash.pick(this.state, ['keyword', 'fromType', 'startPublishedDay', 'endPublishedDay', 'cflag', 'timeOrder', 'pageSize', 'page']);
+    const { getCflagResults } = requests;
+    const current = Lodash.pick(this.state, ['keyword', 'startPublishedDay', 'endPublishedDay']);
     const params = Object.keys(current).map((rule) => {
       if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
       if (current[rule] === null) return (`${rule}=`);
       return (`${rule}=${current[rule]}`);
     }).join('&');
-    const url = encodeURI(`${getInfoResults.url}?${params}`);
-    console.log(url);
-    fetch(url, { method: getInfoResults.method })
+    const url = encodeURI(`${getCflagResults.url}?${params}`);
+    fetch(url, { method: getCflagResults.method })
       .then((response) => response.json())
       .then((response) => {
+        console.log(url, response);
         this.setState({
-          results: response.dataContent,
-          hitNumber: response.hitNumber,
+          cflagResults: {
+            '敏感': response.cflag1,
+            '非敏感': response.cflag2,
+          },
         });
       })
       .catch((error) => console.error(error));
@@ -92,13 +89,6 @@ class Table extends Component {
     }
   };
 
-  handlePageChange = (page) => {
-    console.log('pageChange');
-    this.setState({ page }, () => {
-      this.handleSearch();
-    });
-  };
-
   handleKeywordChange = (keyword) => {
     this.setState({ keyword }, () => {
       this.handleSearch();
@@ -106,8 +96,8 @@ class Table extends Component {
   };
 
   render() {
-    const current = Lodash.pick(this.state, ['cflag', 'fromType', 'timeOrder', 'dateRange']);
-    const { results, hitNumber, pageSize } = this.state;
+    const current = Lodash.pick(this.state, ['dateRange']);
+    const { timeTrendResults, cflagResults, fromTypeResults } = this.state;
     return (
       <div className="mts-search-container">
         <Filter
@@ -117,15 +107,13 @@ class Table extends Component {
           onSearch={this.handleKeywordChange}
           onDateChange={this.handleDateChange}
         />
-        <Results
-          results={results}
-          hitNumber={hitNumber}
-          pageSize={pageSize}
-          onPageChange={this.handlePageChange}
+        <Doughnut
+          title="敏感"
+          results={cflagResults}
         />
       </div>
     );
   }
 }
 
-export default Table;
+export default Chart;

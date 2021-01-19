@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Input, Table, Checkbox, Modal } from 'antd';
 import { HeartOutlined, TagsOutlined, SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import Lodash from 'lodash';
+import rules from '../../../common/enums/rules';
 import './Results.scss';
 
 class Results extends React.Component {
@@ -21,28 +23,33 @@ class Results extends React.Component {
     };
     this.columnsRender = [
       {
-        width: 400,
         title: '标题',
         dataIndex: 'title',
         key: 'title',
         render: this.renderTitle,
       },
       {
-        width: 100,
         title: '地址',
         dataIndex: 'webpageUrl',
         key: 'webpageUrl',
         render: this.renderAddr,
       },
       {
+        title: '站点',
+        dataIndex: 'resource',
+        key: 'resource',
+      },
+      {
         title: '来源',
         dataIndex: 'fromType',
         key: 'fromType',
+        render: this.renderFromType,
       },
       {
         title: '敏感度',
         dataIndex: 'cflag',
         key: 'cflag',
+        render: this.renderCflag,
       },
       {
         title: '发布时间',
@@ -52,9 +59,33 @@ class Results extends React.Component {
     ];
   }
 
-  renderTitle = (text, record) => (<a onClick={() => this.handleTitleClicked(record)}>{text}</a>);
+  renderFromType = (text) => {
+    const options = Lodash.find(rules, { name: 'fromType' })?.options || [];
+    return Lodash.find(options, { value: text })?.label || '';
+  };
 
-  renderAddr = (text) => (<a className="mts-search-results-addr" href={text}>{text}</a>);
+  renderCflag = (text) => {
+    const options = Lodash.find(rules, { name: 'cflag' })?.options || [];
+    return Lodash.find(options, { value: text })?.label || '';
+  };
+
+  renderTitle = (text, record) => (
+    <a
+      className="mts-search-results-title"
+      onClick={() => this.handleTitleClicked(record)}
+    >
+      {text}
+    </a>
+  );
+
+  renderAddr = (text) => (
+    <a
+      className="mts-search-results-addr"
+      href={text}
+    >
+      {text}
+    </a>
+  );
 
   renderFooter = () => (
     <div className="mts-search-results-footer">
@@ -87,18 +118,17 @@ class Results extends React.Component {
   };
 
   render() {
-    const data = this.props.data || [];
+    const results = this.props.results || [];
     const { loading, visible, content, title } = this.state;
     const { hitNumber, pageSize } = this.props;
-    console.log(hitNumber, data);
     return (
-      <div>
+      <div className="mts-search-results">
         <div id="table">
           <Table
             rowKey={(record) => record.id}
             rowSelection={this.rowSelection}
             columns={this.columnsRender}
-            dataSource={data}
+            dataSource={results}
             pagination={{
               position: ['none', 'bottomRight'],
               total: hitNumber,
@@ -108,7 +138,13 @@ class Results extends React.Component {
             loading={loading}
           />
         </div>
-        <Modal title={title} visible={visible} onCancel={this.handleModalCancel}>
+        <Modal
+          title={title}
+          visible={visible}
+          onCancel={this.handleModalCancel}
+          clsssName="mts-search-results-modal"
+          wrapClassName="mts-search-results"
+        >
           {content}
         </Modal>
       </div>

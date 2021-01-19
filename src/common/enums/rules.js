@@ -1,4 +1,4 @@
-const criteria = [
+const rules = [
   {
     name: 'cflag',
     type: 'common',
@@ -6,8 +6,8 @@ const criteria = [
     defaultValue: null,
     options: [
       { label: '不限', value: null },
-      { label: '敏感', value: 1 },
-      { label: '非敏感', value: 2 },
+      { label: '敏感', value: '1' },
+      { label: '非敏感', value: '2' },
     ],
   },
   {
@@ -17,13 +17,13 @@ const criteria = [
     defaultValue: null,
     options: [
       { label: '不限', value: null },
-      { label: '网站', value: 1 },
-      { label: '论坛', value: 2 },
-      { label: '微博', value: 3 },
-      { label: '微信', value: 4 },
-      { label: '博客', value: 5 },
-      { label: '外媒', value: 6 },
-      { label: '新闻', value: 7 },
+      { label: '网站', value: '1' },
+      { label: '论坛', value: '2' },
+      { label: '微博', value: '3' },
+      { label: '微信', value: '4' },
+      { label: '博客', value: '5' },
+      { label: '外媒', value: '6' },
+      { label: '新闻', value: '7' },
     ],
   },
   {
@@ -53,4 +53,4 @@ const criteria = [
   },
 ];
 
-export default criteria;
+export default rules;
