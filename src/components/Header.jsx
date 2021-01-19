@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import routes from '../common/routes';
+import routes from '../common/enums/routes';
 import './Header.scss';
 
 const history = createBrowserHistory();

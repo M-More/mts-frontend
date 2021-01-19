@@ -24,7 +24,7 @@ class Filter extends React.Component {
   };
 
   render() {
-    const { criteria, DateRange, current } = this.props;
+    const { rules, DateRange, current } = this.props;
     return (
       <div className="mts-search-filter-container">
         <Input.Search
@@ -37,17 +37,17 @@ class Filter extends React.Component {
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 999 }}
         >
-          {criteria && criteria.map((criterion) => (
-            <div key={criterion.name}>
+          {rules && rules.map((rule) => (
+            <div key={rule.name}>
               <Form.Item
-                label={criterion.label}
+                label={rule.label}
               >
                 <Radio.Group
                   className="mts-search-filter-radios"
-                  value={current[criterion.name]}
-                  onChange={(event) => this.handleSelect(event, criterion.name)}
+                  value={current[rule.name]}
+                  onChange={(event) => this.handleSelect(event, rule.name)}
                 >
-                  {criterion.options.map((option) => (
+                  {rule.options.map((option) => (
                     <Radio
                       value={option.value}
                       key={option.value}
@@ -56,7 +56,7 @@ class Filter extends React.Component {
                     </Radio>
                   ))}
                 </Radio.Group>
-                {criterion.type === 'datePicker' && current[criterion.name] === -1 && (
+                {rule.type === 'datePicker' && current[rule.name] === -1 && (
                   <DatePicker.RangePicker
                     className="mts-search-filter-date-picker"
                     onChange={this.handleDatePicked}
