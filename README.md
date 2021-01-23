@@ -1,5 +1,6 @@
 ## Mts-system-frontend
 
+
 In the project directory, you can run:
 
 ### `yarn install`
@@ -26,3 +27,5 @@ add this in './src/pages/App.js'
 import '../mocks/mocks';
 ```
 
+
+@Shanghai Jiaotong University 2020

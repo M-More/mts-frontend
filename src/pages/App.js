@@ -8,7 +8,7 @@ import Search from './Search/Search';
 import store from '../redux/store';
 import './App.scss';
 import '../common/constant.scss';
-import '../mocks/mocks';
+// import '../mocks/mocks';
 
 const { Footer, Content } = Layout;
 

@@ -13,7 +13,6 @@ class Search extends Component {
   }
 
   handlePageChange = (event) => {
-    console.log(event);
     this.setState({ page: event.key });
   };
 
