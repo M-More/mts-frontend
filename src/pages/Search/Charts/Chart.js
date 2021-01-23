@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
 import requests from '../../../common/requests';
-import rules from '../../../common/enums/rules';
+import criteria from '../../../common/enums/criteria';
 import Doughnut from '../../../components/common/Chart/Doughnut/Doughnut';
 import Filter from '../../../components/Search/Filter/Filter';
+import Pie from "../../../components/common/Chart/Pie/Pie";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -18,9 +19,9 @@ class Chart extends Component {
       endPublishedDay: null,
       dateRange: null,
       // response param
-      cflagResults: {},
-      fromTypeResults: {},
-      timeTrendResults: {},
+      cflagData: [],
+      fromTypeData: [],
+      timeTrendData: [],
     };
   }
 
@@ -29,30 +30,41 @@ class Chart extends Component {
   }
 
   handleSearch = () => {
-    const { getCflagResults } = requests;
+    this.getData(requests.getCflags, 'cflag');
+    this.getData(requests.getFromTypes, 'fromType');
+  };
+
+  getData = (request, name) => {
     const current = Lodash.pick(this.state, ['keyword', 'startPublishedDay', 'endPublishedDay']);
     const params = Object.keys(current).map((rule) => {
       if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
       if (current[rule] === null) return (`${rule}=`);
       return (`${rule}=${current[rule]}`);
     }).join('&');
-    const url = encodeURI(`${getCflagResults.url}?${params}`);
-    fetch(url, { method: getCflagResults.method })
+    const url = encodeURI(`${request.url}?${params}`);
+    fetch(url, { method: request.method })
       .then((response) => response.json())
       .then((response) => {
-        console.log(url, response);
-        this.setState({
-          cflagResults: {
-            '敏感': response.cflag1,
-            '非敏感': response.cflag2,
-          },
+        this.setState(() => {
+          const newState = {};
+          newState[`${name}Data`] = [];
+          const options = Lodash.find(criteria, { name }).options || {};
+          Object.keys(response).forEach((key) => {
+            const value = key.slice(-1);
+            const option = Lodash.find(options, { value }) || {};
+            newState[`${name}Data`].push({
+              name: option.label,
+              label: option.label,
+              value: response[key],
+            });
+          });
+          return newState;
         });
       })
       .catch((error) => console.error(error));
   };
 
   handleDateChange = (moments) => {
-    console.log('dateChange');
     const [startMoment, endMoment] = moments;
     this.setState({
       startPublishedDay: startMoment.format(DATE_FORMAT),
@@ -97,19 +109,24 @@ class Chart extends Component {
 
   render() {
     const current = Lodash.pick(this.state, ['dateRange']);
-    const { timeTrendResults, cflagResults, fromTypeResults } = this.state;
+    const { timeTrendData, cflagData, fromTypeData } = this.state;
+    console.log(fromTypeData);
     return (
       <div className="mts-search-container">
         <Filter
-          rules={rules}
+          rules={criteria}
           current={current}
           onSelect={this.handleSelect}
           onSearch={this.handleKeywordChange}
           onDateChange={this.handleDateChange}
         />
         <Doughnut
-          title="敏感"
-          results={cflagResults}
+          title="敏感度分部"
+          data={cflagData}
+        />
+        <Pie
+          title="类型分部"
+          data={fromTypeData}
         />
       </div>
     );

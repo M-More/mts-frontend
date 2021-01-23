@@ -1,9 +1,11 @@
 import Mock from 'mockjs';
 import mockFetch from 'mockjs-fetch';
 import requests from '../common/requests';
-import genInfoResults from './genInfoResults';
-import genCflagResults from "./genCflagResults";
+import information from './information';
+import cflags from './cflags';
+import fromTypes from "./fromTypes";
 
 mockFetch(Mock);
-Mock.mock(requests.getCflagResults.url, requests.getCflagResults.method, genCflagResults());
-Mock.mock(requests.getInfoResults.url, requests.getInfoResults.method, genInfoResults());
+Mock.mock(requests.getCflags.url, requests.getCflags.method, cflags());
+Mock.mock(requests.getFromTypes.url, requests.getFromTypes.method, fromTypes());
+Mock.mock(requests.getInformation.url, requests.getInformation.method, information());
