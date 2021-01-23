@@ -2,13 +2,13 @@ import React from 'react';
 import Mock from 'mockjs';
 import EChart from 'echarts/lib/echarts';
 import rules from './rules';
-import 'echarts/lib/chart/pie';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
-import './Doughnut.scss';
+import './Stack.scss';
 
-class Doughnut extends React.Component {
+class Stack extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -18,17 +18,18 @@ class Doughnut extends React.Component {
 
   componentDidUpdate() {
     const { title, data } = this.props;
+    console.log(data);
     const { guid } = this.state;
-    const myChart = EChart.init(document.getElementById(`doughnut-${guid}`));
-    myChart.setOption(rules(title, data));
+    const myChart = EChart.init(document.getElementById(`stack-${guid}`));
+    if (data) myChart.setOption(rules(title, data));
   }
 
   render() {
     const { guid } = this.state;
     return (
-      <div id={`doughnut-${guid}`} className="common-chart-doughnut" />
+      <div id={`stack-${guid}`} className="common-chart-stack" />
     );
   }
 }
 
-export default Doughnut;
+export default Stack;

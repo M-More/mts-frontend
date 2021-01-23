@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
 import requests from '../../../common/requests';
-import rules from '../../../common/enums/rules';
+import criteria from '../../../common/enums/criteria';
 import Doughnut from '../../../components/common/Chart/Doughnut/Doughnut';
 import Filter from '../../../components/Search/Filter/Filter';
+import Pie from '../../../components/common/Chart/Pie/Pie';
+import Area from '../../../components/common/Chart/Area/Area';
+import Stack from '../../../components/common/Chart/Stack/Stack';
+import './Chart.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -18,9 +22,10 @@ class Chart extends Component {
       endPublishedDay: null,
       dateRange: null,
       // response param
-      cflagResults: {},
-      fromTypeResults: {},
-      timeTrendResults: {},
+      cflagData: [],
+      fromTypeData: [],
+      fromTypeTrendData: null,
+      totalTrendData: null,
     };
   }
 
@@ -29,30 +34,87 @@ class Chart extends Component {
   }
 
   handleSearch = () => {
-    const { getCflagResults } = requests;
+    this.getAmount(requests.getCflags, 'cflag');
+    this.getAmount(requests.getFromTypes, 'fromType');
+    this.getTrend();
+  };
+
+  getTrend = () => {
+    const request = requests.getTrend;
+    const name = 'fromType';
+    const current = Lodash.pick(this.state, ['keyword', 'startPublishedDay', 'endPublishedDay']);
+    if (!current.startPublishedDay || !current.endPublishedDay) {
+      this.setState({
+        fromTypeTrendData: null,
+        totalTrendData: null,
+      });
+      return;
+    }
+    const params = Object.keys(current).map((rule) => {
+      if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
+      if (current[rule] === null) return (`${rule}=`);
+      return (`${rule}=${current[rule]}`);
+    }).join('&');
+    const url = encodeURI(`${request.url}?${params}`);
+    fetch(url, { method: request.method })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        const fromTypeTrendData = {
+          xAxis: response.timeRange.map((timestamp) => (timestamp.slice(0, 5))),
+          yAxis: [],
+        };
+        const options = Lodash.find(criteria, { name }).options || {};
+        Object.keys(response).forEach((key) => {
+          if (key === 'timeRange' || key === 'totalAmountTrend') return;
+          const value = key.slice(-1);
+          const option = Lodash.find(options, { value }) || {};
+          fromTypeTrendData.yAxis.push({
+            name: option.label,
+            label: option.label,
+            value: response[key],
+          });
+        });
+        const totalTrendData = {
+          xAxis: response.timeRange.map((timestamp) => (timestamp.slice(0, 5))),
+          yAxis: response.totalAmountTrend,
+        };
+        this.setState({ fromTypeTrendData, totalTrendData });
+      })
+      .catch((error) => console.error(error));
+  };
+
+  getAmount = (request, name) => {
     const current = Lodash.pick(this.state, ['keyword', 'startPublishedDay', 'endPublishedDay']);
     const params = Object.keys(current).map((rule) => {
       if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
       if (current[rule] === null) return (`${rule}=`);
       return (`${rule}=${current[rule]}`);
     }).join('&');
-    const url = encodeURI(`${getCflagResults.url}?${params}`);
-    fetch(url, { method: getCflagResults.method })
+    const url = encodeURI(`${request.url}?${params}`);
+    fetch(url, { method: request.method })
       .then((response) => response.json())
       .then((response) => {
-        console.log(url, response);
-        this.setState({
-          cflagResults: {
-            '敏感': response.cflag1,
-            '非敏感': response.cflag2,
-          },
+        this.setState(() => {
+          const newState = {};
+          newState[`${name}Data`] = [];
+          const options = Lodash.find(criteria, { name }).options || {};
+          Object.keys(response).forEach((key) => {
+            const value = key.slice(-1);
+            const option = Lodash.find(options, { value }) || {};
+            newState[`${name}Data`].push({
+              name: option.label,
+              label: option.label,
+              value: response[key],
+            });
+          });
+          return newState;
         });
       })
       .catch((error) => console.error(error));
   };
 
   handleDateChange = (moments) => {
-    console.log('dateChange');
     const [startMoment, endMoment] = moments;
     this.setState({
       startPublishedDay: startMoment.format(DATE_FORMAT),
@@ -96,8 +158,9 @@ class Chart extends Component {
   };
 
   render() {
+    const rules = [Lodash.find(criteria, { name: 'dateRange' })];
     const current = Lodash.pick(this.state, ['dateRange']);
-    const { timeTrendResults, cflagResults, fromTypeResults } = this.state;
+    const { fromTypeTrendData, totalTrendData, cflagData, fromTypeData } = this.state;
     return (
       <div className="mts-search-container">
         <Filter
@@ -107,10 +170,24 @@ class Chart extends Component {
           onSearch={this.handleKeywordChange}
           onDateChange={this.handleDateChange}
         />
-        <Doughnut
-          title="敏感"
-          results={cflagResults}
-        />
+        <div className="search-charts">
+          <Doughnut
+            title="敏感度分部"
+            data={cflagData}
+          />
+          <Pie
+            title="类型分部"
+            data={fromTypeData}
+          />
+          <Area
+            title="总量变化"
+            data={totalTrendData}
+          />
+          <Stack
+            title="来源变化"
+            data={fromTypeTrendData}
+          />
+        </div>
       </div>
     );
   }

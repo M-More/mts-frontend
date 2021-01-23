@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
 import requests from '../../../common/requests';
-import rules from '../../../common/enums/rules';
+import criteria from '../../../common/enums/criteria';
 import Filter from '../../../components/Search/Filter/Filter';
 import Results from '../../../components/Search/Results/Results';
 
@@ -34,16 +34,16 @@ class Table extends Component {
   }
 
   handleSearch = () => {
-    const { getInfoResults } = requests;
+    const { getInformation } = requests;
     const current = Lodash.pick(this.state, ['keyword', 'fromType', 'startPublishedDay', 'endPublishedDay', 'cflag', 'timeOrder', 'pageSize', 'page']);
     const params = Object.keys(current).map((rule) => {
       if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
       if (current[rule] === null) return (`${rule}=`);
       return (`${rule}=${current[rule]}`);
     }).join('&');
-    const url = encodeURI(`${getInfoResults.url}?${params}`);
+    const url = encodeURI(`${getInformation.url}?${params}`);
     console.log(url);
-    fetch(url, { method: getInfoResults.method })
+    fetch(url, { method: getInformation.method })
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -111,7 +111,7 @@ class Table extends Component {
     return (
       <div className="mts-search-container">
         <Filter
-          rules={rules}
+          rules={criteria}
           current={current}
           onSelect={this.handleSelect}
           onSearch={this.handleKeywordChange}

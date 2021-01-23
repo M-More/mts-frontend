@@ -3,7 +3,7 @@ import { Button, Input, Table, Checkbox, Modal } from 'antd';
 import { HeartOutlined, TagsOutlined, SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
-import rules from '../../../common/enums/rules';
+import criteria from '../../../common/enums/criteria';
 import './Results.scss';
 
 class Results extends React.Component {
@@ -60,12 +60,12 @@ class Results extends React.Component {
   }
 
   renderFromType = (text) => {
-    const options = Lodash.find(rules, { name: 'fromType' })?.options || [];
+    const options = Lodash.find(criteria, { name: 'fromType' })?.options || [];
     return Lodash.find(options, { value: text })?.label || '';
   };
 
   renderCflag = (text) => {
-    const options = Lodash.find(rules, { name: 'cflag' })?.options || [];
+    const options = Lodash.find(criteria, { name: 'cflag' })?.options || [];
     return Lodash.find(options, { value: text })?.label || '';
   };
 
@@ -91,10 +91,10 @@ class Results extends React.Component {
     <div className="mts-search-results-footer">
       <span>批量操作：</span>
       <div className="mts-search-results-icon-button">
-        <Button primary icon={<TagsOutlined />} onClick={(e) => this.handleMaterial(e)} />
+        <Button primary="true" icon={<TagsOutlined />} onClick={(e) => this.handleMaterial(e)} />
       </div>
       <div className="mts-search-results-icon-button">
-        <Button primary icon={<HeartOutlined />} onClick={(e) => this.handleCollect(e)} />
+        <Button primary="true" icon={<HeartOutlined />} onClick={(e) => this.handleCollect(e)} />
       </div>
     </div>
   );

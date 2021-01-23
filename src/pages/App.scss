@@ -8,6 +8,7 @@ html body #root {
     height: 100%;
     .mts-routes-wrapper {
       min-height: calc(100% - 64px - 64px);
+      height: fit-content;
       background: whitesmoke;
     }
     .mts-footer {

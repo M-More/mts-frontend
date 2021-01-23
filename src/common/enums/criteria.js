@@ -1,4 +1,4 @@
-const rules = [
+const criteria = [
   {
     name: 'cflag',
     type: 'common',
@@ -53,4 +53,4 @@ const rules = [
   },
 ];
 
-export default rules;
+export default criteria;
