@@ -10542,6 +10542,11 @@ safe-regex@^1.1.0:
   resolved "https://registry.npm.taobao.org/safer-buffer/download/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha1-RPoWGwGHuVSd2Eu5GAL5vYOFzWo=
 
+saltshaker-crypto@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/saltshaker-crypto/download/saltshaker-crypto-1.0.7.tgz#333bc95cee6c50b961ec10afd390fc7f7027f3d9"
+  integrity sha1-MzvJXO5sULlh7BCv05D8f3An89k=
+
 sane@^4.0.3:
   version "4.1.0"
   resolved "https://registry.npm.taobao.org/sane/download/sane-4.1.0.tgz#ed881fd922733a6c461bc189dc2b6c006f3ffded"
