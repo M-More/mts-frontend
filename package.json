@@ -1,6 +1,7 @@
 {
   "name": "mts-frontend",
   "version": "0.1.0",
+  "main": "main.js",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
@@ -19,6 +20,7 @@
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "echarts": "4.0.0",
+    "electron": "^11.2.1",
     "fetch-mock": "^9.11.0",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
@@ -84,7 +86,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'"
+    "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'",
+    "electron": "electron ."
   },
   "browserslist": {
     "production": [
