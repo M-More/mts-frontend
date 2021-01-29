@@ -17,6 +17,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
+### `yarn electron`
+
+Runs the app as a desktop application.
+
+The application will reload if you make edits.
+You will also see any lint errors in the console.
+
 ### `backend`
 
 If you can't connect to mts-system-backend and databases

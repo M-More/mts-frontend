@@ -4,6 +4,7 @@ node_modules
 scripts
 config
 build
+main.js
 
 *.ts
 *.tsx

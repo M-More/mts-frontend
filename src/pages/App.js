@@ -8,11 +8,16 @@ import Search from './Search/Search';
 import store from '../redux/store';
 import './App.scss';
 import '../common/constant.scss';
+import SaltShakerCrypto from 'saltshaker-crypto';
 // import '../mocks/mocks';
 
 const { Footer, Content } = Layout;
 
 class App extends Component {
+  componentDidMount() {
+    console.log(SaltShakerCrypto.SaltShaker.create());
+  }
+
   render() {
     return (
       <Provider store={store}>
