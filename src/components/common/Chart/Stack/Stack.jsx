@@ -25,9 +25,11 @@ class Stack extends React.Component {
   }
 
   render() {
-    const { guid } = this.state;
+    const { guid, title } = this.state;
     return (
-      <div id={`stack-${guid}`} className="common-chart-stack" />
+      <div id={`stack-${guid}`} className="common-chart-stack">
+        {title} 当前无图表展示
+      </div>
     );
   }
 }

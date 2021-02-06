@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
-import requests from '../../../common/requests';
+import requests from '../../../common/enums/requests';
 import criteria from '../../../common/enums/criteria';
-import Filter from '../../../components/Search/Filter/Filter';
-import Results from '../../../components/Search/Results/Results';
+import Filter from '../../common/Filter/Filter';
+import Results from '../../common/InfoList/InfoList';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-class Table extends Component {
+class SearchTable extends Component {
   constructor() {
     super();
     this.state = {
@@ -34,16 +34,16 @@ class Table extends Component {
   }
 
   handleSearch = () => {
-    const { getInformation } = requests;
+    const { getInfo } = requests;
     const current = Lodash.pick(this.state, ['keyword', 'fromType', 'startPublishedDay', 'endPublishedDay', 'cflag', 'timeOrder', 'pageSize', 'page']);
     const params = Object.keys(current).map((rule) => {
       if (rule === 'keyword' && current[rule] === '') return (`${rule}=`);
       if (current[rule] === null) return (`${rule}=`);
       return (`${rule}=${current[rule]}`);
     }).join('&');
-    const url = encodeURI(`${getInformation.url}?${params}`);
+    const url = encodeURI(`${getInfo.url}?${params}`);
     console.log(url);
-    fetch(url, { method: getInformation.method })
+    fetch(url, { method: getInfo.method })
       .then((response) => response.json())
       .then((response) => {
         this.setState({
@@ -128,4 +128,4 @@ class Table extends Component {
   }
 }
 
-export default Table;
+export default SearchTable;

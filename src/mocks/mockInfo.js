@@ -1,6 +1,6 @@
 import Mock from 'mockjs';
 
-const information = (url) => ({
+const mockInfo = (url) => ({
   'hitNumber': 55,
   'dataContent|10': [{
     'id': '@guid',
@@ -15,4 +15,4 @@ const information = (url) => ({
   }],
 });
 
-export default information;
+export default mockInfo;

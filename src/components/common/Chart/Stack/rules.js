@@ -21,7 +21,8 @@ const rules = (title, data, stack) => ({
   grid: {
     left: '20%',
     right: '5%',
-    bottom: '10%',
+    top: '20%',
+    bottom: '15%',
     containLabel: true,
   },
   toolbox: {
@@ -41,7 +42,7 @@ const rules = (title, data, stack) => ({
     data.yAxis.map((item) => ({
       name: item.label,
       type: 'line',
-      smooth: 'true',
+      // smooth: 'true',
       areaStyle: {},
       emphasis: {
         focus: 'series',

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
-import requests from '../../../common/requests';
+import requests from '../../../common/enums/requests';
 import criteria from '../../../common/enums/criteria';
-import Doughnut from '../../../components/common/Chart/Doughnut/Doughnut';
-import Filter from '../../../components/Search/Filter/Filter';
-import Pie from '../../../components/common/Chart/Pie/Pie';
-import Area from '../../../components/common/Chart/Area/Area';
-import Stack from '../../../components/common/Chart/Stack/Stack';
-import './Chart.scss';
+import Doughnut from '../../common/Chart/Doughnut/Doughnut';
+import Filter from '../../common/Filter/Filter';
+import Pie from '../../common/Chart/Pie/Pie';
+import Area from '../../common/Chart/Area/Area';
+import Stack from '../../common/Chart/Stack/Stack';
+import './SearchChart.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-class Chart extends Component {
+class SearchChart extends Component {
   constructor() {
     super();
     this.state = {
@@ -35,7 +35,7 @@ class Chart extends Component {
 
   handleSearch = () => {
     this.getAmount(requests.getCflags, 'cflag');
-    this.getAmount(requests.getFromTypes, 'fromType');
+    this.getAmount(requests.getResources, 'fromType');
     this.getTrend();
   };
 
@@ -193,4 +193,4 @@ class Chart extends Component {
   }
 }
 
-export default Chart;
+export default SearchChart;

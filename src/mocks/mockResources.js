@@ -1,4 +1,4 @@
-const fromTypes = (url) => ({
+const mockResources = (url) => ({
   '1|0-100': 50,
   '2|0-100': 50,
   '3|0-100': 50,
@@ -8,4 +8,4 @@ const fromTypes = (url) => ({
   '7|0-100': 50,
 });
 
-export default fromTypes;
+export default mockResources;

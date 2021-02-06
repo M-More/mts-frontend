@@ -1,6 +1,6 @@
 import Mock from 'mockjs';
 
-const trend = (url) => ({
+const mockTrend = (url) => ({
   'timeRange|6': [() => (
     `${Mock.Random.date('yyyy-MM-dd hh:mm:ss')} to ${Mock.Random.date('yyyy-MM-dd hh:mm:ss')}`
   )],
@@ -14,4 +14,4 @@ const trend = (url) => ({
   'fromTypeAmountTrend7|6': [() => (Mock.Random.integer(0, 20))],
 });
 
-export default trend;
+export default mockTrend;

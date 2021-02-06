@@ -24,9 +24,11 @@ class Pie extends React.Component {
   }
 
   render() {
-    const { guid } = this.state;
+    const { guid, title } = this.state;
     return (
-      <div id={`pie-${guid}`} className="common-chart-pie" />
+      <div id={`pie-${guid}`} className="common-chart-pie">
+        {title} 当前无图表展示
+      </div>
     );
   }
 }

@@ -24,9 +24,11 @@ class Doughnut extends React.Component {
   }
 
   render() {
-    const { guid } = this.state;
+    const { guid, title } = this.state;
     return (
-      <div id={`doughnut-${guid}`} className="common-chart-doughnut" />
+      <div id={`doughnut-${guid}`} className="common-chart-doughnut">
+        {title} 当前无图表展示
+      </div>
     );
   }
 }

@@ -24,9 +24,11 @@ class Area extends React.Component {
   }
 
   render() {
-    const { guid } = this.state;
+    const { guid, title } = this.state;
     return (
-      <div id={`line-${guid}`} className="common-chart-line" />
+      <div id={`line-${guid}`} className="common-chart-line">
+        {title} 当前无图表展示
+      </div>
     );
   }
 }

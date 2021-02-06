@@ -4,9 +4,9 @@ import { HeartOutlined, TagsOutlined, SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../../../common/enums/criteria';
-import './Results.scss';
+import './InfoList.scss';
 
-class Results extends React.Component {
+class InfoList extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -155,4 +155,4 @@ class Results extends React.Component {
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Results);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(InfoList);

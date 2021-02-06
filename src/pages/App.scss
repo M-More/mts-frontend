@@ -4,15 +4,14 @@ html body #root {
 
 .mts-app-container {
   height: 100%;
-  .ant-layout-content {
-    height: 100%;
-    .mts-routes-wrapper {
-      min-height: calc(100% - 64px - 64px);
-      height: fit-content;
-      background: whitesmoke;
-    }
-    .mts-footer {
-      height: 64px;
-    }
+  width: 100%;
+  min-width: 1000px;
+  .mts-routes-wrapper {
+    min-height: calc(100% - 64px - 64px);
+    height: auto;
+    background: whitesmoke;
+  }
+  .mts-footer {
+    height: 64px;
   }
 }
