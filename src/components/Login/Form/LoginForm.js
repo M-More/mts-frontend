@@ -1,9 +1,8 @@
 import React from 'react';
 import { Layout, Form, Input, Button, Tabs, Checkbox } from 'antd';
 import '../../../pages/Login/Login.scss';
+import { withRouter } from 'react-router-dom';
 import requests from '../../../common/enums/requests';
-import Lodash from "lodash";
-import criteria from "../../../common/enums/criteria";
 
 class LoginForm extends React.Component {
   handleSubmit = (data) => {
@@ -16,7 +15,16 @@ class LoginForm extends React.Component {
       .then((results) => {
         console.log(results);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+      });
+    // mock login
+    if (this.props.onAuthChange) {
+      sessionStorage.setItem('auth', 'admin');
+      this.props.onAuthChange('admin');
+      console.log('home');
+      this.props.history.push('/home');
+    }
   };
 
   handleReject = () => {};
@@ -68,4 +76,4 @@ class LoginForm extends React.Component {
     );
   }
 }
-export default LoginForm;
+export default withRouter(LoginForm);

@@ -18,11 +18,12 @@ class Login extends React.Component {
 
   render() {
     const { layout, tailLayout } = this;
+    const { onAuthChange } = this.props;
     return (
       <Layout className="login-wrap">
         <Tabs className="login-tabs" type="card">
           <Tabs.TabPane tab="login" key="login">
-            <LoginForm layout={layout} tailLayout={tailLayout} />
+            <LoginForm layout={layout} tailLayout={tailLayout} onAuthChange={onAuthChange} />
           </Tabs.TabPane>
           <Tabs.TabPane tab="register" key="register">
             <RegisterForm layout={layout} tailLayout={tailLayout} />

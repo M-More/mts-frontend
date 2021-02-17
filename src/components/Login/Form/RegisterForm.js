@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Input, Button, Tabs } from 'antd';
+import {Layout, Form, Input, Button, Tabs, Checkbox} from 'antd';
 import '../../../pages/Login/Login.scss';
 
 class RegisterForm extends React.Component {
@@ -57,6 +57,13 @@ class RegisterForm extends React.Component {
           rules={[{ required: true, message: '请输入电子邮箱!' }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          {...this.props.tailLayout}
+          valuePropName="checked"
+          name="role"
+        >
+          <Checkbox>以管理员身份注册</Checkbox>
         </Form.Item>
         <Form.Item
           {...this.props.tailLayout}

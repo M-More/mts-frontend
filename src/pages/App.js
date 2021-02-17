@@ -10,7 +10,7 @@ import Login from './Login/Login';
 import store from '../redux/store';
 import './App.scss';
 import '../common/constant.scss';
-// import '../mocks/mocks';
+import '../mocks/mocks';
 
 const { Footer, Content } = Layout;
 
@@ -29,20 +29,37 @@ const Main = () => (
 );
 
 class App extends Component {
-  componentDidMount() {
+  constructor() {
+    super();
     console.log(SaltShakerCrypto.SaltShaker.create());
+    this.state = {
+      auth: sessionStorage.getItem('auth'),
+    };
   }
 
+  handleAuthChange = (auth) => {
+    this.setState({ auth }, () => {
+      console.log(sessionStorage.getItem('auth'));
+    });
+  };
+
   render() {
+    const { auth } = this.state;
     return (
       <Provider store={store}>
         <Content className="mts-app-container">
           <BrowserRouter>
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/" component={Main} />
-              <Redirect from="/*" to="/" />
-            </Switch>
+            { auth ? (
+              <Switch>
+                <Route path="/" component={Main} />
+                <Redirect from="/*" to="/" />
+              </Switch>
+            ) : (
+              <Switch>
+                <Route path="/login" render={() => (<Login onAuthChange={this.handleAuthChange} />)} />
+                <Redirect from="/*" to="/login" />
+              </Switch>
+            )}
           </BrowserRouter>
         </Content>
       </Provider>
