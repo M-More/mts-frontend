@@ -6,9 +6,9 @@ import 'echarts/lib/chart/pie';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
-import './Doughnut.scss';
+import './PieChart.scss';
 
-class Doughnut extends React.Component {
+class PieChart extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -19,18 +19,18 @@ class Doughnut extends React.Component {
   componentDidUpdate() {
     const { title, data } = this.props;
     const { guid } = this.state;
-    const myChart = EChart.init(document.getElementById(`doughnut-${guid}`));
+    const myChart = EChart.init(document.getElementById(`pie-${guid}`));
     myChart.setOption(rules(title, data));
   }
 
   render() {
     const { guid, title } = this.state;
     return (
-      <div id={`doughnut-${guid}`} className="common-chart-doughnut">
+      <div id={`pie-${guid}`} className="common-chart-pie">
         {title} 当前无图表展示
       </div>
     );
   }
 }
 
-export default Doughnut;
+export default PieChart;

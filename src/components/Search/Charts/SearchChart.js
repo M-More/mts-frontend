@@ -3,11 +3,11 @@ import Lodash from 'lodash';
 import moment from 'moment';
 import requests from '../../../common/enums/requests';
 import criteria from '../../../common/enums/criteria';
-import Doughnut from '../../common/Chart/Doughnut/Doughnut';
+import DoughnutChart from '../../common/Chart/Doughnut/DoughnutChart';
 import Filter from '../../common/Filter/Filter';
-import Pie from '../../common/Chart/Pie/Pie';
-import Area from '../../common/Chart/Area/Area';
-import Stack from '../../common/Chart/Stack/Stack';
+import PieChart from '../../common/Chart/Pie/PieChart';
+import AreaChart from '../../common/Chart/Area/AreaChart';
+import StackChart from '../../common/Chart/Stack/StackChart';
 import './SearchChart.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -171,19 +171,19 @@ class SearchChart extends Component {
           onDateChange={this.handleDateChange}
         />
         <div className="search-charts">
-          <Doughnut
+          <DoughnutChart
             title="敏感度分部"
             data={cflagData}
           />
-          <Pie
+          <PieChart
             title="类型分部"
             data={fromTypeData}
           />
-          <Area
+          <AreaChart
             title="总量变化"
             data={totalTrendData}
           />
-          <Stack
+          <StackChart
             title="来源变化"
             data={fromTypeTrendData}
           />

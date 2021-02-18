@@ -6,9 +6,9 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
-import './Stack.scss';
+import './StackChart.scss';
 
-class Stack extends React.Component {
+class StackChart extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -34,4 +34,4 @@ class Stack extends React.Component {
   }
 }
 
-export default Stack;
+export default StackChart;

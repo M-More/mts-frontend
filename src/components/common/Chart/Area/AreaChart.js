@@ -6,9 +6,9 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
-import './Area.scss';
+import './AreaChart.scss';
 
-class Area extends React.Component {
+class AreaChart extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -33,4 +33,4 @@ class Area extends React.Component {
   }
 }
 
-export default Area;
+export default AreaChart;
