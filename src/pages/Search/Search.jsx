@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
-import Table from './Table/Table';
+import SearchTable from '../../components/Search/Table/SearchTable';
 import './Search.scss';
-import Chart from "./Charts/Chart";
+import SearchChart from "../../components/Search/Charts/SearchChart";
 
 class Search extends Component {
   constructor() {
@@ -31,8 +31,8 @@ class Search extends Component {
           <Menu.Item key="charts">数据大屏</Menu.Item>
         </Menu>
         <Layout.Content className="site-layout-background">
-          {page === 'table' && (<Table />)}
-          {page === 'charts' && (<Chart />)}
+          {page === 'table' && (<SearchTable />)}
+          {page === 'charts' && (<SearchChart />)}
         </Layout.Content>
       </Layout>
     );
