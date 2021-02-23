@@ -9,7 +9,18 @@ Install packages before running the app.
 
 Yarn is recommended. you can also use NPM.
 
+### `yarn build`
+
+Build static material for current app.
+
 ### `yarn start`
+
+Runs the app in the normal mode.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will NOT reload if you make edits.<br />
+
+### `yarn develop`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -33,6 +44,5 @@ add this in './src/pages/App.js'
 ```
 import '../mocks/mocks';
 ```
-
 
 @Shanghai Jiaotong University 2020

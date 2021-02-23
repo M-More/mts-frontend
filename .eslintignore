@@ -5,6 +5,7 @@ scripts
 config
 build
 main.js
+node
 
 *.ts
 *.tsx
