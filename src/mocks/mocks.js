@@ -1,15 +1,15 @@
 import Mock from 'mockjs';
 import mockFetch from 'mockjs-fetch';
-import requests from '../common/enums/requests';
-import mockInfo from './mockInfo';
-import mockCflags from './mockCflags';
-import mockResources from './mockResources';
-import mockTrend from './mockTrend';
-import mockTags from './mockTags';
+import requests from '../services/requests';
+import getInfo from './data/getInfo';
+import getSensiLayout from './data/getSensiLayout';
+import getSourceLayout from './data/getSourceLayout';
+import getAmountTrend from './data/getAmountTrend';
+import getTopics from './data/getTopics';
 
 mockFetch(Mock);
-Mock.mock(requests.getCflags.url, requests.getCflags.method, mockCflags());
-Mock.mock(requests.getResources.url, requests.getResources.method, mockResources());
-Mock.mock(requests.getTrend.url, requests.getTrend.method, mockTrend());
-Mock.mock(requests.getInfo.url, requests.getInfo.method, mockInfo());
-Mock.mock(requests.getTags.url, requests.getTags.method, mockTags());
+Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
+Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
+Mock.mock(requests.getAmountTrend.url, requests.getAmountTrend.method, getAmountTrend());
+Mock.mock(requests.getInfo.url, requests.getInfo.method, getInfo());
+Mock.mock(requests.getTopics.url, requests.getTopics.method, getTopics());

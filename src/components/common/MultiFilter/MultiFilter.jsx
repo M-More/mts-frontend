@@ -1,0 +1,75 @@
+import React from 'react';
+import { Radio, Input, Form, Divider, DatePicker } from 'antd';
+import { connect } from 'react-redux';
+import criteria from './criteria';
+import './MultiFilter.scss';
+
+class MultiFilter extends React.Component {
+  handleSelect = (event, type) => {
+    if (this.props.onSelect) {
+      this.props.onSelect(type, event.target.value);
+    }
+  };
+
+  handleSearch = (keyword) => {
+    if (this.props.onSearch) {
+      this.props.onSearch(keyword);
+    }
+  };
+
+  handleDateChange = (moments) => {
+    if (this.props.onDateChange) {
+      this.props.onDateChange(moments);
+    }
+  };
+
+  render() {
+    const { current } = this.props;
+    return (
+      <div className="mts-search-filter-container">
+        <Input.Search
+          className="mts-search-filter-input"
+          enterButton
+          size="large"
+          onSearch={this.handleSearch}
+        />
+        <Form
+          labelCol={{ span: 3 }}
+          wrapperCol={{ span: 999 }}
+        >
+          {criteria.map((item) => (
+            <div key={item.name}>
+              <Form.Item label={item.label}>
+                <Radio.Group
+                  className="mts-search-filter-radios"
+                  value={current[item.name]}
+                  onChange={(event) => this.handleSelect(event, item.name)}
+                >
+                  {item.options.map((option) => (
+                    <Radio
+                      value={option.value}
+                      key={option.value}
+                    >
+                      {option.label}
+                    </Radio>
+                  ))}
+                </Radio.Group>
+                {item.type === 'datePicker' && current[item.name] === -1 && (
+                  <DatePicker.RangePicker
+                    className="mts-search-filter-date-picker"
+                    onChange={this.handleDateChange}
+                    value={[current.startPublishedDay, current.endPublishedDay]}
+                  />
+                )}
+              </Form.Item>
+              <Divider className="divider" />
+            </div>
+          ))}
+        </Form>
+      </div>
+    );
+  }
+}
+
+export default MultiFilter;
+

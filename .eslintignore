@@ -4,7 +4,7 @@ node_modules
 scripts
 config
 build
-main.js
+electron.js
 node
 
 *.ts

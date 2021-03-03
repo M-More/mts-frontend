@@ -3,7 +3,7 @@ import { Button, Input, Table, Checkbox, Modal } from 'antd';
 import { HeartOutlined, TagsOutlined, SearchOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
-import criteria from '../../../common/enums/criteria';
+import criteria from '../MultiFilter/criteria';
 import './InfoList.scss';
 
 class InfoList extends React.Component {
@@ -118,7 +118,7 @@ class InfoList extends React.Component {
   };
 
   render() {
-    const results = this.props.results || [];
+    const data = this.props.data || [];
     const { loading, visible, content, title } = this.state;
     const { hitNumber, pageSize } = this.props;
     return (
@@ -128,7 +128,7 @@ class InfoList extends React.Component {
             rowKey={(record) => record.id}
             rowSelection={this.rowSelection}
             columns={this.columnsRender}
-            dataSource={results}
+            dataSource={data}
             pagination={{
               position: ['none', 'bottomRight'],
               total: hitNumber,
