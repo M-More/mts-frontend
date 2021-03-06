@@ -1,7 +1,6 @@
 const criteria = [
   {
-    name: 'cflag',
-    type: 'common',
+    name: 'sensi',
     label: '敏感度',
     defaultValue: null,
     options: [
@@ -11,9 +10,8 @@ const criteria = [
     ],
   },
   {
-    name: 'fromType',
+    name: 'source',
     label: '来源',
-    type: 'common',
     defaultValue: null,
     options: [
       { label: '不限', value: null },
@@ -29,7 +27,6 @@ const criteria = [
   {
     name: 'dateRange',
     label: '时间范围',
-    type: 'datePicker',
     defaultValue: null,
     options: [
       { label: '不限', value: null },
@@ -43,7 +40,6 @@ const criteria = [
   },
   {
     name: 'timeOrder',
-    type: 'common',
     label: '时间排序',
     defaultValue: 0,
     options: [

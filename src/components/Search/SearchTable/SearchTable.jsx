@@ -13,16 +13,16 @@ class SearchTable extends Component {
   constructor() {
     super();
     this.state = {
-      page: 0,
+      pageId: 0,
       pageSize: PAGE_SIZE,
       keyword: '',
-      fromType: null,
+      source: null,
       startPublishedDay: null,
       endPublishedDay: null,
-      cflag: null,
+      sensi: null,
       dateRange: null,
       timeOrder: 0,
-      hitNumber: 0,
+      dataSize: 0,
       data: [],
     };
   }
@@ -32,17 +32,31 @@ class SearchTable extends Component {
   }
 
   handleSearch = async () => {
-    const params = ['keyword', 'fromType', 'startPublishedDay', 'endPublishedDay', 'cflag', 'timeOrder', 'pageSize', 'page'];
-    const current = Lodash.pick(this.state, params);
-    const result = await getInfo(current);
+    const params = [
+      this.state.keyword,
+      this.state.source,
+      this.state.startPublishedDay,
+      this.state.endPublishedDay,
+      this.state.sensi,
+      this.state.timeOrder,
+      this.state.pageSize,
+      this.state.pageId,
+    ];
+    const result = await getInfo(...params);
+    console.log(result);
     this.setState({
       data: result.data,
-      hitNumber: result.hitNumber,
+      dataSize: result.dataSize,
     });
   };
 
   handleDateChange = (moments) => {
-    console.log('dateChange');
+    if (!moments) {
+      this.setState({
+        startPublishedDay: null,
+        endPublishedDay: null,
+      });
+    }
     const [startMoment, endMoment] = moments;
     this.setState({
       startPublishedDay: startMoment.format(DATE_FORMAT),
@@ -58,29 +72,27 @@ class SearchTable extends Component {
     if (name === 'dateRange') {
       switch (value) {
         case 0:
-          this.setState({
-            endPublishedDay: moment(current).format(DATE_FORMAT),
-            startPublishedDay: moment(current).startOf('day').format(DATE_FORMAT),
-          });
+          this.handleDateChange([
+            moment(current),
+            moment(current).startOf('day'),
+          ]);
           break;
+        case -1:
         case null:
-          this.setState({
-            startPublishedDay: null,
-            endPublishedDay: null,
-          });
+          this.handleDateChange();
           break;
         default:
-          this.setState({
-            endPublishedDay: moment(current).format(DATE_FORMAT),
-            startPublishedDay: moment(current).subtract(value, 'days').format(DATE_FORMAT),
-          });
+          this.handleDateChange([
+            moment(current),
+            moment(current).subtract(value, 'days'),
+          ]);
           break;
       }
     }
   };
 
-  handlePageChange = (page) => {
-    this.setState({ page }, () => {
+  handlePageChange = (pageId) => {
+    this.setState({ pageId }, () => {
       this.handleSearch();
     });
   };
@@ -92,9 +104,9 @@ class SearchTable extends Component {
   };
 
   render() {
-    const params = ['cflag', 'fromType', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
+    const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
-    const { data, hitNumber, pageSize } = this.state;
+    const { data, dataSize, pageSize } = this.state;
     return (
       <div className="mts-search-container">
         <MultiFilter
@@ -105,7 +117,7 @@ class SearchTable extends Component {
         />
         <InfoList
           data={data}
-          hitNumber={hitNumber}
+          dataSize={dataSize}
           pageSize={pageSize}
           onPageChange={this.handlePageChange}
         />

@@ -1,4 +1,4 @@
-@import "../../other/config/constant";
+@import "../../static/config/constant";
 
 .home-wrap {
   display: flex;
@@ -6,7 +6,7 @@
   align-content: center;
   align-items: center;
   .title {
-    font-size: 40px;
+    font-size: 60px;
     font-weight: bolder;
     color: $default-blue;
     position: absolute;

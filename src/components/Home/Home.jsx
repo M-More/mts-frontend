@@ -1,8 +1,8 @@
 import React from 'react';
-import '../../other/utils/tagcanvas';
+import '../../static/utils/tagCanvas';
 import './Home.scss';
 import requests from '../../services/requests';
-import constant from '../../other/config/constant';
+import constant from '../../static/config/constant';
 
 class Home extends React.Component {
   constructor() {

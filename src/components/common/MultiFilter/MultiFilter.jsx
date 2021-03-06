@@ -1,6 +1,5 @@
 import React from 'react';
 import { Radio, Input, Form, Divider, DatePicker } from 'antd';
-import { connect } from 'react-redux';
 import criteria from './criteria';
 import './MultiFilter.scss';
 
@@ -26,9 +25,9 @@ class MultiFilter extends React.Component {
   render() {
     const { current } = this.props;
     return (
-      <div className="mts-search-filter-container">
+      <div className="mts-multi-filter-container">
         <Input.Search
-          className="mts-search-filter-input"
+          className="mts-multi-filter-input"
           enterButton
           size="large"
           onSearch={this.handleSearch}
@@ -41,7 +40,7 @@ class MultiFilter extends React.Component {
             <div key={item.name}>
               <Form.Item label={item.label}>
                 <Radio.Group
-                  className="mts-search-filter-radios"
+                  className="mts-multi-filter-radios"
                   value={current[item.name]}
                   onChange={(event) => this.handleSelect(event, item.name)}
                 >
@@ -54,11 +53,10 @@ class MultiFilter extends React.Component {
                     </Radio>
                   ))}
                 </Radio.Group>
-                {item.type === 'datePicker' && current[item.name] === -1 && (
+                {item.name === 'dateRange' && current[item.name] === -1 && (
                   <DatePicker.RangePicker
-                    className="mts-search-filter-date-picker"
+                    className="mts-multi-filter-date-picker"
                     onChange={this.handleDateChange}
-                    value={[current.startPublishedDay, current.endPublishedDay]}
                   />
                 )}
               </Form.Item>
@@ -72,4 +70,3 @@ class MultiFilter extends React.Component {
 }
 
 export default MultiFilter;
-

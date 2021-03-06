@@ -1,4 +1,4 @@
-const area = (title, data) => ({
+const areaLine = (data, title) => ({
   title: {
     text: title,
     left: 'center',
@@ -8,9 +8,7 @@ const area = (title, data) => ({
     boundaryGap: false,
     data: data.xAxis,
   },
-  yAxis: {
-    type: 'value',
-  },
+  yAxis: { type: 'value' },
   series: [{
     data: data.yAxis,
     type: 'line',
@@ -18,4 +16,4 @@ const area = (title, data) => ({
   }],
 });
 
-export default area;
+export default areaLine;

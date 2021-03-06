@@ -1,9 +1,9 @@
-@import "../../../other/config/constant";
+@import "../../../static/config/constant";
 
-.mts-search-filter-container{
+.mts-multi-filter-container{
   padding: 32px;
   margin: 0 auto;
-  .mts-search-filter-input {
+  .mts-multi-filter-input {
     margin-bottom: 16px;
   }
   .ant-form-item {
@@ -11,10 +11,10 @@
     .ant-form-item-label {
       text-align: center;
     }
-    .mts-search-filter-radios {
+    .mts-multi-filter-radios {
       margin-left: 20px;
     }
-    .mts-search-filter-date-picker {
+    .mts-multi-filter-date-picker {
       position: absolute;
       right: 0;
     }
@@ -22,11 +22,11 @@
   .divider {
     margin: 4px;
   }
-  .mts-search-filter-buttons-wrapper {
+  .mts-multi-filter-buttons-wrapper {
     display: flex;
     margin-top: 16px;
     justify-content: center;
-    .mts-search-filter-button {
+    .mts-multi-filter-button {
       width: 150px;
       margin-left: 16px;
       margin-right: 16px;

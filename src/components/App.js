@@ -5,8 +5,10 @@ import Login from './Login/Login';
 import Entry from './Entry/Entry';
 import { actions } from '../redux/actions';
 import './App.scss';
-import '../other/config/constant.scss';
-import '../mocks/mocks';
+
+import '../static/config/constant.scss';
+import '../services/mocks/mocks';
+// import '../static/utils/darkChart';
 
 class App extends React.Component {
   componentDidMount() {

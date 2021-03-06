@@ -1,16 +1,38 @@
-import requests from "../requests";
+import moment from 'moment';
+import requests from '../requests';
 
-const getInfo = async (params) => {
-  const host = requests.getInfo.url;
-  const uri = Object.keys(params).map((rule) => {
-    if (rule === 'keyword' && params[rule] === '') return (`${rule}=`);
-    if (params[rule] === null) return (`${rule}=`);
-    return (`${rule}=${params[rule]}`);
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+const getInfo = async (keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId) => {
+  const params = {
+    keyword,
+    startPublishedDay,
+    endPublishedDay,
+    timeOrder,
+    pageSize,
+    fromType: source,
+    cflag: sensi,
+    page: pageId,
+  };
+  const paramsUri = Object.keys(params).map((item) => {
+    if (item === 'keyword' && params[item] === '') return (`${item}=`);
+    if (params[item] === null) return (`${item}=`);
+    return (`${item}=${params[item]}`);
   }).join('&');
-  const url = encodeURI(`${host}?${uri}`);
+  const url = encodeURI(`${requests.getInfo.url}?${paramsUri}`);
   const response = await fetch(url, { method: requests.getInfo.method });
-  const result = response.status === 200 ? await response.json() : {};
-  result.data = result.dataContent;
+  const rawResult = response.status === 200 ? await response.json() : {};
+  const result = {
+    dataSize: rawResult.hitNumber,
+    data: rawResult.dataContent.map((item) => ({
+      source: item.fromType,
+      addr: item.resource,
+      url: item.webpageUrl,
+      sensi: item.cflag,
+      publishedDay: moment(item.publishedDay).add(8, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+      ...item,
+    })),
+  };
   return result;
 };
 
