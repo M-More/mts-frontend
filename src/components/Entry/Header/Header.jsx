@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import routes from '../routes';
+import getRoutes from '../getRoutes';
 import './Header.scss';
 
 const history = createBrowserHistory();
@@ -16,8 +16,9 @@ class Header extends React.Component {
   handleClick = (e) => { this.setState({ current: e.key }); };
 
   componentDidMount = () => {
+    const { userType } = this.props;
     const { pathname } = this.props.location;
-    const routeLinks = routes.map((item) => item.link);
+    const routeLinks = getRoutes(userType).map((item) => item.link);
     let text = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.length);
     if (!routeLinks.includes(text)) text = 'home';
     this.setState({ current: text });
@@ -29,6 +30,7 @@ class Header extends React.Component {
   };
 
   render() {
+    const { userType } = this.props;
     const { current } = this.state;
     return (
       <div className="mts-header-container">
@@ -39,7 +41,7 @@ class Header extends React.Component {
           mode="horizontal"
           className="mts-header"
         >
-          { routes.map((route) => (
+          { getRoutes(userType).map((route) => (
             <Menu.Item key={route.key}>
               <Link to={route.link}>{route.label}</Link>
             </Menu.Item>

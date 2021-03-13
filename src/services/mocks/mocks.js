@@ -1,17 +1,21 @@
 import Mock from 'mockjs';
 import mockFetch from 'mockjs-fetch';
 import requests from '../requests';
-import getInfo from './data/getInfo';
+import getOverallData from './data/getOverallData';
 import getSensiLayout from './data/getSensiLayout';
 import getSourceLayout from './data/getSourceLayout';
 import getAmountTrend from './data/getAmountTrend';
 import getTopics from './data/getTopics';
 import getRegionLayout from './data/getRegionLayout';
+import getProgrammeData from './data/getProgrammeData';
+import getProgrammes from './data/getProgrammes';
 
 mockFetch(Mock);
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
 Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
 Mock.mock(requests.getAmountTrend.url, requests.getAmountTrend.method, getAmountTrend());
-Mock.mock(requests.getInfo.url, requests.getInfo.method, getInfo());
+Mock.mock(requests.getOverallData.url, requests.getOverallData.method, getOverallData());
 Mock.mock(requests.getTopics.url, requests.getTopics.method, getTopics());
 Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegionLayout());
+Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
+Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgrammes());

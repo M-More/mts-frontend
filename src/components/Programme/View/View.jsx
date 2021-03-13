@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 import './View.scss';
-import Echart from '../common/Echart/Echart';
-import getAmountTrend from '../../services/request/data/getAmountTrend';
-import getSensiLayout from '../../services/request/data/getSensiLayout';
-import getSourceLayout from '../../services/request/data/getSourceLayout';
-import getRegionLayout from '../../services/request/data/getRegionLayout';
+import Echart from '../../common/Echart/Echart';
+import getAmountTrend from '../../../services/request/data/getAmountTrend';
+import getSensiLayout from '../../../services/request/data/getSensiLayout';
+import getSourceLayout from '../../../services/request/data/getSourceLayout';
+import getRegionLayout from '../../../services/request/data/getRegionLayout';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 

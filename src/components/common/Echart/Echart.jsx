@@ -9,11 +9,11 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/chart/map';
 import 'echarts/map/js/china';
-import defaultPie from './rules/defaultPie';
-import areaLine from './rules/areaLine';
-import doughnutPie from './rules/doughnutPie';
-import horizontalBar from './rules/horizontalBar';
-import chinaMap from './rules/chinaMap';
+import defaultPie from './getRules/defaultPie';
+import areaLine from './getRules/areaLine';
+import doughnutPie from './getRules/doughnutPie';
+import horizontalBar from './getRules/horizontalBar';
+import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
 
 class Echart extends React.Component {

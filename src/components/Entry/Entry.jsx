@@ -1,23 +1,25 @@
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
 import { Layout } from 'antd';
 import Header from './Header/Header';
-import Home from '../Home/Home';
-import Search from '../Search/Search';
-import View from '../View/View';
+import getRoutes from './getRoutes';
 import './Entry.scss';
-import routes from './routes';
+
+import Home from '../Home/Home';
+import { actions } from '../../redux/actions';
+import { connect } from 'react-redux';
 
 class Entry extends React.Component {
   render() {
+    const { userType } = this.props;
     return (
       <Layout className="mts-app-wrap">
-        <Header />
+        <Header userType={userType} />
         <Layout.Content className="mts-app-body">
           <Switch>
-            <Route path="/home" exact component={Home} />
-            <Route path="/search" component={Search} />
-            <Route path="/view" component={View} />
+            {getRoutes(userType).map((item) => (
+              <Route path={item.link} component={item.component} />
+            ))}
             <Redirect from="/*" to="/home" />
           </Switch>
         </Layout.Content>
@@ -27,4 +29,9 @@ class Entry extends React.Component {
   }
 }
 
-export default Entry;
+const mapStateToProps = (state) => ({
+  userType: state.userType,
+});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Entry);

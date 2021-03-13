@@ -1,41 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Login from './Login/Login';
-import Entry from './Entry/Entry';
+import { connect, Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import Guard from './Entry/Guard/Guard';
 import { actions } from '../redux/actions';
-import './App.scss';
 
 import '../static/config/constant.scss';
 import '../services/mocks/mocks';
-// import '../static/utils/darkChart';
+import store from '../redux/store';
 
 class App extends React.Component {
-  componentDidMount() {
-    this.props.onAuthChange();
-  }
-
   render() {
-    const { userName, userType } = this.props;
-    const redirectPath = userName ? '/' : '/login';
     return (
-      <BrowserRouter>
-        <Switch>
-          {userName && <Route path="/" component={Entry} />}
-          {!userName && <Route path="/login" component={Login} />}
-          <Redirect from="/*" to={redirectPath} />
-        </Switch>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Guard />
+        </BrowserRouter>
+      </Provider>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  userName: state.userName,
-  userType: state.userType,
-});
-const mapDispatchToProps = {
-  onAuthChange: actions.onAuthChange,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(App);
+export default App;
