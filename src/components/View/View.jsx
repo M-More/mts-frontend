@@ -25,8 +25,9 @@ class View extends React.Component {
   }
 
   componentDidMount() {
+    console.log('view mount');
     this.handleSearch();
-    setInterval(() => {
+    this.clk = setInterval(() => {
       this.handleSearch();
     }, 5000);
   }
@@ -82,6 +83,11 @@ class View extends React.Component {
       endPublishedDay: endMoment.format(DATE_FORMAT),
     });
   };
+
+  componentWillUnmount() {
+    console.log('view unmout');
+    clearInterval(this.clk);
+  }
 
   handleSelect = (name, value) => {
     const newState = {};

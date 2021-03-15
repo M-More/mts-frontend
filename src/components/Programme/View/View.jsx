@@ -6,6 +6,7 @@ import getAmountTrend from '../../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../../services/request/data/getRegionLayout';
+import getTraceTree from "../../../services/request/data/getTraceTree";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -21,14 +22,19 @@ class View extends React.Component {
       totalAmountTrend: undefined,
       sourceAmountTrend: undefined,
       regionLayout: undefined,
+      traceTree: undefined,
     };
   }
 
   componentDidMount() {
     this.handleSearch();
-    setInterval(() => {
+    this.clk = setInterval(() => {
       this.handleSearch();
     }, 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.clk);
   }
 
   handleSearch = () => {
@@ -36,6 +42,14 @@ class View extends React.Component {
     this.getSensiLayout();
     this.getSourceLayout();
     this.getRegionLayout();
+    this.getTraceTree();
+  };
+
+  getTraceTree = async () => {
+    const keyword = '';
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const traceTree = await getTraceTree(keyword, startPublishedDay, endPublishedDay);
+    this.setState({ traceTree });
   };
 
   getRegionLayout = async () => {
@@ -111,7 +125,7 @@ class View extends React.Component {
   };
 
   render() {
-    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend } = this.state;
+    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree } = this.state;
     return (
       <div className="view-wrap">
         <Echart
@@ -140,6 +154,13 @@ class View extends React.Component {
           title="来源趋势"
           type="chinaMap"
           data={regionLayout}
+        />
+        <Echart
+          title="话题溯源"
+          type="defaultTree"
+          height="500px"
+          width="800px"
+          data={traceTree}
         />
       </div>
     );

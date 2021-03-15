@@ -60,7 +60,6 @@ class Sider extends React.Component {
 
   render() {
     const { curProgramme } = this.props;
-    console.log(curProgramme);
     const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
     return (
       <Layout.Sider
@@ -74,7 +73,7 @@ class Sider extends React.Component {
           onClick={() => this.handleProgrammeNew('open')}
         >
           <PlusOutlined />
-          添加分类
+          添加方案
         </Button>
         <Modal
           title="Basic Modal"
@@ -94,7 +93,7 @@ class Sider extends React.Component {
           mode="inline"
         >
           { programmes.map((item) => (
-            <Menu.Item key={item.fid}>{item.programmeName}</Menu.Item>
+            <Menu.Item key={item.fid}>{item.name}</Menu.Item>
           ))}
         </Menu>
       </Layout.Sider>

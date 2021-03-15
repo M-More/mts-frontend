@@ -1,7 +1,9 @@
 import React from 'react';
 import { Form, Input, Button, Radio, Layout, Switch } from 'antd';
 import { QuestionCircleFilled } from '@ant-design/icons';
-import './Config.scss'
+import './Config.scss';
+import modifyProgramme from "../../../services/request/data/modifyProgamme";
+import delProgramme from "../../../services/request/data/delProgramme";
 
 class Config extends React.Component {
   constructor() {
@@ -11,35 +13,95 @@ class Config extends React.Component {
       wrapperCol: { span: 999 }
     };
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
-    this.radioLayout = {}
+    this.radioLayout = {};
+    // this.form = {};
+    // this.state = {
+    //   name: '',
+    //   keywordMatch: 'titleOnly',
+    //   regionKeywords: '',
+    //   regionMatch: 'and',
+    //   eventKeywords: '',
+    //   eventMatch: 'and',
+    //   roleKeywords: '',
+    //   roleMatch: 'and',
+    //   enableAlert: false,
+    // }
   }
 
   handleProgrammeConfig = (type, data) => {
     switch (type) {
-      case 'success': break;
-      case 'failed': break;
+      case 'submit':
+        this.modifyProgramme(data);
+        break;
+      case 'reject': break;
+      case 'del':
+        this.delProgramme();
+        break;
     }
+  }
+
+  /*
+  enableAlert: undefined
+  eventKeywords: "1"
+  eventMatchMethod: "and"
+  keywordMatchMethod: "titleOnly"
+  programmeName: "1"
+  regionKeywords: "1"
+  regionMatchMethod: "or"
+  roleKeywords: "1"
+  roleMatchMethod: "or"
+   */
+  modifyProgramme = async (rawData) => {
+    const data = {
+      fid: this.props.curProgramme.fid,
+      ...rawData,
+    };
+    const result = await modifyProgramme(data);
+    console.log('modifyProgramme', result);
+  }
+
+  delProgramme = async () => {
+    const { fid } = this.props.curProgramme;
+    const result = await delProgramme({ fid });
+    console.log('delProgramme', result);
+  }
+
+  componentDidMount() {
+    // console.log(this.form.input.props.value);
+    this.resetProgrammeForm();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.resetProgrammeForm();
+  }
+
+  resetProgrammeForm = () => {
+    this.form.setFieldsValue({
+      ...this.props.curProgramme
+    })
   }
 
   render() {
     const { layout, subLayout } = this;
+    // console.log(this.props.curProgramme);
     return (
       <Layout className="programme-config-wrap">
         <Form
           {...layout}
+          ref = {(r) => {this.form = r}}
           className="config-form"
-          onFinish={info => this.handleProgrammeConfig('success', info)}
-          onFinishFailed={err => this.handleProgrammeConfig('failed', err)}
+          onFinish={info => this.handleProgrammeConfig('submit', info)}
+          onFinishFailed={err => this.handleProgrammeConfig('reject', err)}
         >
           <Form.Item
             label="方案名称"
-            name="programmeName"
+            name="name"
             rules={[{ required: true, message: '请输入方案名称' }]}
           >
-            <Input/>
+            <Input />
           </Form.Item>
           <Form.Item
-            name="keywordMatchMethod"
+            name="keywordMatch"
             label="匹配方式"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
@@ -56,7 +118,7 @@ class Config extends React.Component {
             <Input />
           </Form.Item>
           <Form.Item
-            name="regionMatchMethod"
+            name="regionMatch"
             label="地域关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
@@ -72,7 +134,7 @@ class Config extends React.Component {
             <Input />
           </Form.Item>
           <Form.Item
-            name="roleMatchMethod"
+            name="roleMatch"
             label="人物关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
@@ -88,7 +150,7 @@ class Config extends React.Component {
             <Input />
           </Form.Item>
           <Form.Item
-            name="eventMatchMethod"
+            name="eventMatch"
             label="事件关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
@@ -113,9 +175,8 @@ class Config extends React.Component {
                 提交方案
               </Button>
               <Button
-                className="submit-btn"
                 type="danger"
-                htmlType="submit"
+                onClick={() => this.handleProgrammeConfig('del')}
               >
                 删除方案
               </Button>

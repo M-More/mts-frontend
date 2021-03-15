@@ -9,6 +9,7 @@ import getTopics from './data/getTopics';
 import getRegionLayout from './data/getRegionLayout';
 import getProgrammeData from './data/getProgrammeData';
 import getProgrammes from './data/getProgrammes';
+import getTraceTree from "./data/getTraceTree";
 
 mockFetch(Mock);
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
@@ -19,3 +20,4 @@ Mock.mock(requests.getTopics.url, requests.getTopics.method, getTopics());
 Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegionLayout());
 Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
 Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgrammes());
+Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());

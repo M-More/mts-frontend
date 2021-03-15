@@ -9,14 +9,16 @@ const requests = {
   getSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount`, method: 'GET' },
   getAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount`, method: 'GET' },
   getRegionLayout: { url: `${curDomain}/data/globalSearch/areaCount`, method: 'GET' },
-  getProgrammes: { url: `${curDomain}/User/findFangAn`, method: 'GET' },
-  addProgramme: { url: `${curDomain}/User/addFangAn`, method: 'POST' },
-  delProgramme: { url: `${curDomain}/User/delFangAn`, method: 'POST' },
   editProgramme: { url: `${curDomain}/User/editFangAn`, method: 'POST' },
   getProgrammeData: { url: `${curDomain}/data/singleSearch/findByFangAn`, method: 'GET' },
   login: { url: `${curDomain}/User/login`, method: 'POST' },
   logout: { url: `${curDomain}/User/logout`, method: 'POST' },
   register: { url: `${curDomain}/User/register`, method: 'POST' },
+  getTraceTree: { url: `${curDomain}/data/weiboTrack`, method: 'GET' },
+  modifyProgramme: { url: `${curDomain}/changeFangAn`, method: 'POST' },
+  addProgramme: { url: `${curDomain}/User/saveFangAn`, method: 'POST' },
+  delProgramme: { url: `${curDomain}/delFangAn`, method: 'GET' },
+  getProgrammes: { url: `${curDomain}/User/findFangAn`, method: 'GET' },
 };
 
 export default requests;

@@ -15,6 +15,7 @@ import doughnutPie from './getRules/doughnutPie';
 import horizontalBar from './getRules/horizontalBar';
 import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
+import defaultTree from './getRules/defaultTree';
 
 class Echart extends React.Component {
   constructor() {
@@ -28,18 +29,19 @@ class Echart extends React.Component {
 
   componentDidUpdate() {
     const { title, data, type } = this.props;
-    let rules;
+    let getRules;
     switch (type) {
-      case 'defaultPie': rules = defaultPie; break;
-      case 'areaLine': rules = areaLine; break;
-      case 'doughnutPie': rules = doughnutPie; break;
-      case 'horizontalBar': rules = horizontalBar; break;
-      case 'chinaMap': rules = chinaMap; break;
+      case 'defaultPie': getRules = defaultPie; break;
+      case 'areaLine': getRules = areaLine; break;
+      case 'doughnutPie': getRules = doughnutPie; break;
+      case 'horizontalBar': getRules = horizontalBar; break;
+      case 'chinaMap': getRules = chinaMap; break;
+      case 'defaultTree': getRules = defaultTree; break;
       default: break;
     }
     const { guid } = this.state;
     const myChart = echart.init(document.getElementById(`echart-${guid}`), 'dark');
-    if (data) myChart.setOption(rules(data, title));
+    if (data) myChart.setOption(getRules(data, title));
   }
 
   render() {

@@ -1,4 +1,5 @@
 import requests from '../../requests';
+import qs from 'qs';
 
 const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
   const params = {
@@ -6,12 +7,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     startPublishedDay,
     endPublishedDay,
   };
-  const paramsUri = Object.keys(params).map((rule) => {
-    if (rule === 'keyword' && params[rule] === '') return (`${rule}=`);
-    if (params[rule] === null) return (`${rule}=`);
-    return (`${rule}=${params[rule]}`);
-  }).join('&');
-  const url = encodeURI(`${requests.getAmountTrend.url}?${paramsUri}`);
+  const url = encodeURI(`${requests.getAmountTrend.url}?${qs.stringify(params)}`);
   const response = await fetch(url, { method: requests.getOverallData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 
