@@ -2,9 +2,9 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { connect } from 'react-redux';
-import requests from '../../../services/requests';
 import '../Authority.scss';
 import { actions } from '../../../redux/actions';
+import login from "../../../services/request/auth/login";
 
 class Login extends React.Component {
   constructor() {
@@ -18,23 +18,15 @@ class Login extends React.Component {
     };
   }
 
-  handleSubmit = (data) => {
-    const request = requests.login;
-    const params = Object.keys(data).map((key) => (`${key}=${data[key]}`)).join('&');
-    const url = encodeURI(`${request.url}?${params}`);
-    // fetch(url, { method: requests.method })
-    //   .then((response) => response.json())
-    //   .then((results) => {
-    //     console.log(results);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    // mock login
-    sessionStorage.setItem('userName', 'MaChau');
-    sessionStorage.setItem('userType', 'admin');
-    this.props.onAuthChange();
-    this.props.history.push('/home');
+  handleSubmit = async (data) => {
+    const result = await login();
+    if (result.login !== 1) alert('登录失败');
+    else {
+      localStorage.setItem('userName', result.username);
+      localStorage.setItem('userType', result.role === '0' ? 'admin' : 'default');
+      this.props.onAuthChange();
+      this.props.history.push('/home');
+    }
   };
 
   handleReject = () => {};

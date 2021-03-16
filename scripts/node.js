@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, '../build')));
-const pathList = ['/', '/home', '/search', '/login'];
+const pathList = ['/', '/home', '/search', '/auth'];
 
 // Set proxy
 app.use('/api', (req, res) => {

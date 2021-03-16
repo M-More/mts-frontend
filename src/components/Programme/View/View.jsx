@@ -158,8 +158,15 @@ class View extends React.Component {
         <Echart
           title="话题溯源"
           type="defaultTree"
-          height="500px"
-          width="800px"
+          height="1000px"
+          width="1600px"
+          data={traceTree}
+        />
+        <Echart
+          title="话题溯源"
+          type="circleTree"
+          height="1000px"
+          width="1600px"
           data={traceTree}
         />
       </div>

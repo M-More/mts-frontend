@@ -13,7 +13,7 @@ class Guard extends React.Component {
   render() {
     const { userName, userType } = this.props;
     const redirectPath = userName ? '/home' : '/login';
-
+    console.log(userName, userType, redirectPath);
     return (
       <Switch>
         {userName && <Route path="/" component={Entry} />}

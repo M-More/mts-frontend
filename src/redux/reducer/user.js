@@ -2,7 +2,7 @@
 export const handleAuthChange = (prevState) => {
   return {
     ...prevState,
-    userName: sessionStorage.getItem('userName'),
-    userType: sessionStorage.getItem('userType'),
+    userName: localStorage.getItem('userName'),
+    userType: localStorage.getItem('userType'),
   };
-}
+};

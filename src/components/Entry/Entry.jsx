@@ -5,8 +5,6 @@ import Header from './Header/Header';
 import getRoutes from './getRoutes';
 import './Entry.scss';
 
-import Home from '../Home/Home';
-import { actions } from '../../redux/actions';
 import { connect } from 'react-redux';
 
 class Entry extends React.Component {
@@ -14,7 +12,7 @@ class Entry extends React.Component {
     const { userType } = this.props;
     return (
       <Layout className="mts-app-wrap">
-        <Header userType={userType} />
+        <Header />
         <Layout.Content className="mts-app-body">
           <Switch>
             {getRoutes(userType).map((item) => (

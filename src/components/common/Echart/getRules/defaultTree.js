@@ -5,6 +5,10 @@ const defaultTree = (data, title) => ({
   },
   tooltip: {
     trigger: 'item',
+    formatter: (params) => {
+      const { data } = params.data;
+      return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data.author}\n${data.content}</div>`;
+    },
     triggerOn: 'mousemove',
   },
   series: [

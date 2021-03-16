@@ -16,6 +16,7 @@ import horizontalBar from './getRules/horizontalBar';
 import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
 import defaultTree from './getRules/defaultTree';
+import circleTree from './getRules/circleTree';
 
 class Echart extends React.Component {
   constructor() {
@@ -37,6 +38,7 @@ class Echart extends React.Component {
       case 'horizontalBar': getRules = horizontalBar; break;
       case 'chinaMap': getRules = chinaMap; break;
       case 'defaultTree': getRules = defaultTree; break;
+      case 'circleTree': getRules = circleTree; break;
       default: break;
     }
     const { guid } = this.state;

@@ -8,8 +8,11 @@ import getAmountTrend from './data/getAmountTrend';
 import getTopics from './data/getTopics';
 import getRegionLayout from './data/getRegionLayout';
 import getProgrammeData from './data/getProgrammeData';
-import getProgrammes from './data/getProgrammes';
-import getTraceTree from "./data/getTraceTree";
+import getProgrammes from './programme/getProgrammes';
+import getTraceTree from './data/getTraceTree';
+import login from './auth/login';
+import logout from './auth/logout';
+import getUsers from './auth/getUsers';
 
 mockFetch(Mock);
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
@@ -21,3 +24,6 @@ Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegi
 Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
 Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgrammes());
 Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());
+Mock.mock(requests.logout.url, requests.logout.method, logout);
+Mock.mock(requests.login.url, requests.login.method, login());
+Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
