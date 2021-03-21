@@ -1,0 +1,25 @@
+.programme-config-wrap {
+  min-height: 100%;
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+  justify-content: center;
+  .config-form {
+    width: 500px;
+    background: white;
+    padding: 30px;
+    margin: 30px;
+    .submit-btn-wrap {
+      width: 100%;
+      display: flex;
+      vertical-align: center;
+      align-items: center;
+      justify-content: center;
+      .submit-btn {
+        width: 100px;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+    }
+  }
+}

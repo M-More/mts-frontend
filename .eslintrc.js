@@ -18,7 +18,7 @@ module.exports = {
     'quotes': 1,
     'linebreak-style': 0,
     'import/order': 1,
-    'arrow-parens': 1,
+    'arrow-parens': 0,
     'operator-linebreak': 0,
     'consistent-return': 1,
     'import/extensions': 1,

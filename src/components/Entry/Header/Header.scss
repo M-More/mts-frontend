@@ -1,0 +1,17 @@
+.mts-header-container {
+  width: 100%;
+  min-width: 1000px;
+  .mts-header {
+    width: 100%;
+    position: sticky;
+    z-index: 1;
+    line-height: 64px;
+  }
+  .user-menu {
+    color: #ffffff99;
+    font-size: 16px;
+    width: 50px;
+    float: right;
+    margin-right: 20px;
+  }
+}
