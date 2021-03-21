@@ -4,7 +4,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import '../Authority.scss';
 import { actions } from '../../../redux/actions';
-import login from "../../../services/request/auth/login";
+import login from '../../../services/request/auth/login';
 
 class Login extends React.Component {
   constructor() {

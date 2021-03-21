@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from '../../../redux/actions';
 import '../Authority.scss';
-import register from "../../../services/request/auth/register";
+import register from '../../../services/request/auth/register';
 
 class Register extends React.Component {
   constructor(props) {
@@ -19,7 +19,6 @@ class Register extends React.Component {
   }
 
   handleSubmit = async (data) => {
-    console.log(data);
     const result = await register(data.userName, data.password, data.email, data.phone);
     if (result.register !== 1) alert('注册失败！');
     else alert('注册成功!');

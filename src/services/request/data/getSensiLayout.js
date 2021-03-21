@@ -8,7 +8,6 @@ const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     endPublishedDay,
   };
   const url = encodeURI(`${requests.getSensiLayout.url}?${qs.stringify(params)}`);
-  console.log(url);
   const response = await fetch(url, { method: requests.getSensiLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 

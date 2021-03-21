@@ -15,6 +15,7 @@ const defaultTree = (data, title) => ({
     {
       type: 'tree',
       data: [data],
+      roam: true,
       left: '10%',
       right: '10%',
       symbolSize: 7,
@@ -34,6 +35,7 @@ const defaultTree = (data, title) => ({
       emphasis: {
         focus: 'descendant',
       },
+      initialTreeDepth: [-1],
       expandAndCollapse: true,
       animationDuration: 550,
       animationDurationUpdate: 750,
