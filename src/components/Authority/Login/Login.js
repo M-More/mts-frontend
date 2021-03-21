@@ -19,7 +19,7 @@ class Login extends React.Component {
   }
 
   handleSubmit = async (data) => {
-    const result = await login();
+    const result = await login(data.userName, data.password, data.role ? 0 : 1);
     if (result.login !== 1) alert('登录失败');
     else {
       localStorage.setItem('userName', result.username);
@@ -41,7 +41,7 @@ class Login extends React.Component {
       >
         <Form.Item
           label="用户名"
-          name="username"
+          name="userName"
           rules={[{ required: true, message: '请输入用户名!' }, {
             validator: (rule, value, callback) => {
               const regExp = /^[a-zA-Z0-9_]*$/g;
