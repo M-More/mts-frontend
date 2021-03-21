@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { FolderOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import OrgList from './UserList/OrgList';
+import OrgList from './OrgList/OrgList';
 import UserList from './UserList/UserList';
 import './Admin.scss';
+import getUsers from "../../services/request/data/getUsers";
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -23,8 +24,10 @@ class Admin extends Component {
     this.getOrgs();
   }
 
-  getUsers = () => {
-
+  getUsers = async () => {
+    const users = await getUsers();
+    console.log(users);
+    this.setState({ users });
   };
 
   getOrgs = () => {};

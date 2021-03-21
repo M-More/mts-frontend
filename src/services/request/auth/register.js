@@ -1,17 +1,18 @@
 import requests from '../../requests';
 
-const login = async (userName, password, role) => {
-  const url = encodeURI(`${requests.login.url}`);
+const register = async (userName, password, email, phone) => {
+  const url = encodeURI(`${requests.register.url}`);
   const response = await fetch(url, {
-    method: requests.login.method,
+    method: requests.register.method,
     body: {
       username: userName,
       password,
-      role,
+      email,
+      phone,
     },
   });
   const result = response.status === 200 ? await response.json() : {};
   return result;
 };
 
-export default login;
+export default register;

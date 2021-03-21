@@ -28,13 +28,13 @@ class View extends React.Component {
 
   componentDidMount() {
     this.handleSearch();
-    this.clk = setInterval(() => {
-      this.handleSearch();
-    }, 5000);
+    // this.clk = setInterval(() => {
+    //   this.handleSearch();
+    // }, 5000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.clk);
+    // clearInterval(this.clk);
   }
 
   handleSearch = () => {

@@ -48,7 +48,6 @@ class Specific extends React.Component {
       this.state.pageId,
     ];
     const result = await getOverallData(...params);
-    console.log(result);
     this.setState({
       data: result.data,
       dataSize: result.dataSize,

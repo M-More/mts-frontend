@@ -17,7 +17,9 @@ class Register extends React.Component {
     };
   }
 
-  handleSubmit = () => {};
+  handleSubmit = (data) => {
+    console.log(data);
+  };
 
   handleReject = () => {};
 
@@ -46,7 +48,15 @@ class Register extends React.Component {
         <Form.Item
           label="确认密码"
           name="confirm"
-          rules={[{ required: true, message: '两次密码输入不一致!' }]}
+          rules={[
+            { required: true, message: '请输入密码！' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) { return Promise.resolve(); }
+                return Promise.reject(new Error('两次输入的密码必须一致！'));
+              },
+            }),
+          ]}
         >
           <Input.Password />
         </Form.Item>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Input, Menu, Modal, Layout } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import getProgrammes from '../../../services/request/data/getProgrammes';
+import getProgrammes from '../../../services/request/programme/getProgrammes';
 import './Sider.scss';
 import { connect } from 'react-redux';
 

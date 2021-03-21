@@ -2,8 +2,8 @@ import React from 'react';
 import { Form, Input, Button, Radio, Layout, Switch } from 'antd';
 import { QuestionCircleFilled } from '@ant-design/icons';
 import './Config.scss';
-import modifyProgramme from "../../../services/request/data/modifyProgamme";
-import delProgramme from "../../../services/request/data/delProgramme";
+import modifyProgramme from "../../../services/request/programme/modifyProgamme";
+import delProgramme from "../../../services/request/programme/delProgramme";
 
 class Config extends React.Component {
   constructor() {

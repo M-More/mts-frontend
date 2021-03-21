@@ -12,7 +12,8 @@ import getProgrammes from './programme/getProgrammes';
 import getTraceTree from './data/getTraceTree';
 import login from './auth/login';
 import logout from './auth/logout';
-import getUsers from './auth/getUsers';
+import register from "./auth/register";
+import getUsers from './data/getUsers';
 
 mockFetch(Mock);
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
@@ -26,4 +27,5 @@ Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgramm
 Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());
 Mock.mock(requests.logout.url, requests.logout.method, logout);
 Mock.mock(requests.login.url, requests.login.method, login());
+Mock.mock(requests.register.url, requests.register.method, register());
 Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
