@@ -17,7 +17,10 @@ const addProgramme = async (rawData) => {
   const url = encodeURI(`${requests.addProgramme.url}`);
   const response = await fetch(url, {
     method: requests.login.method,
-    body: data,
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {

@@ -28,9 +28,9 @@ Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegi
 Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
 Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgramme());
 Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());
-Mock.mock(requests.logout.url, requests.logout.method, logout);
-Mock.mock(requests.login.url, requests.login.method, login());
-Mock.mock(requests.register.url, requests.register.method, register());
+// Mock.mock(requests.logout.url, requests.logout.method, logout);
+// Mock.mock(requests.login.url, requests.login.method, login());
+// Mock.mock(requests.register.url, requests.register.method, register());
 Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
 Mock.mock(requests.delProgramme.url, requests.delProgramme.method, delProgramme());
 Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());

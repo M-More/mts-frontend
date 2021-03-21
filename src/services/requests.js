@@ -1,6 +1,6 @@
 const domain1 = 'http://localhost:8082';
 const domain2 = 'http://localhost:3000/api';
-const curDomain = domain2;
+const curDomain = domain1;
 
 const requests = {
   getTopics: { url: `${curDomain}/data/getTags`, method: 'GET' },
@@ -10,7 +10,6 @@ const requests = {
   getSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount`, method: 'GET' },
   getAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount`, method: 'GET' },
   getRegionLayout: { url: `${curDomain}/data/globalSearch/areaCount`, method: 'GET' },
-  editProgramme: { url: `${curDomain}/User/editFangAn`, method: 'POST' },
   register: { url: `${curDomain}/User/register`, method: 'POST' },
   getTraceTree: { url: `${curDomain}/data/weiboTrack`, method: 'GET' },
   modifyProgramme: { url: `${curDomain}/changeFangAn`, method: 'POST' },
