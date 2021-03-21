@@ -4,6 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import getProgrammes from '../../../services/request/programme/getProgrammes';
 import './Sider.scss';
 import { connect } from 'react-redux';
+import addProgramme from '../../../services/request/programme/addProgramme';
 
 class Sider extends React.Component {
   constructor() {
@@ -32,6 +33,7 @@ class Sider extends React.Component {
         this.setState({ newProgrammeVisible: true });
         break;
       case 'ok':
+        this.addProgramme();
         this.setState({
           newProgrammeVisible: false,
           newProgrammeName: '',
@@ -48,6 +50,13 @@ class Sider extends React.Component {
         break;
       default: break;
     }
+  };
+
+  addProgramme = async () => {
+    const { userName } = this.props;
+    const name = this.state.newProgrammeName;
+    const result = await addProgramme({ userName, name });
+    if (result.addProgramme !== 1) { alert('添加失败'); } else { alert('添加成功'); }
   };
 
   handleProgrammeSelect = (e) => {
@@ -84,7 +93,7 @@ class Sider extends React.Component {
           <span>添加分类</span>
           <Input
             value={newProgrammeName}
-            onChange={e => this.handleProgrammeNew('name', { name: e.target.value})}
+            onChange={e => this.handleProgrammeNew('name', { name: e.target.value })}
           />
         </Modal>
         <Menu
