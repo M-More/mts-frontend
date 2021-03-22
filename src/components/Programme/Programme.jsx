@@ -1,33 +1,25 @@
 import React from 'react';
 import './Programme.scss';
 import { Layout, Menu } from 'antd';
+import { connect } from 'react-redux';
 import Sider from './Sider/Sider';
 import Content from './Content/Content';
 
 class Programme extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      curProgramme: undefined,
-    };
-  }
-
-  handleProgrammeSelect = (newProgramme) => {
-    this.setState({ curProgramme: newProgramme });
-  };
-
   render() {
-    const { curProgramme } = this.state;
+    const { curProgramme } = this.props;
     return (
       <Layout>
-        <Sider
-          curProgramme={curProgramme}
-          onProgrammeSelect={this.handleProgrammeSelect}
-        />
-        <Content curProgramme={curProgramme} />
+        <Sider />
+        <Content />
       </Layout>
     );
   }
 }
 
-export default Programme;
+const mapStateToProps = (state) => ({
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Programme);

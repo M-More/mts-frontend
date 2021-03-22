@@ -16,8 +16,8 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
     cflag: sensi,
     page: pageId,
   };
-  const url = encodeURI(`${requests.getOverallData.url}?${qs.stringify(params)}`);
-  const response = await fetch(url, { method: requests.getOverallData.method });
+  const url = encodeURI(`${requests.getProgrammeData.url}?${qs.stringify(params)}`);
+  const response = await fetch(url, { method: requests.getProgrammeData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
@@ -30,6 +30,7 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
       ...item,
     })),
   };
+  console.log(params, result);
   return result;
 };
 

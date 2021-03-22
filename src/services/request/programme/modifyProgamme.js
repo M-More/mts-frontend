@@ -1,31 +1,16 @@
 import requests from '../../requests';
 
-/**\
- * enableAlert: true
- eventKeywords: "市布复但局"
- eventMatch: "or"
- fid: "0"
- keywordMatch: "titleOnly"
- name: "改精位"
- regionKeywords: "只第与最不"
- regionMatch: "and"
- roleKeywords: "器可那战太"
- roleMatch: "or"
- userName: "龚秀兰"
- * @param rawData
- * @returns {Promise<{}>}
- */
 const modifyProgramme = async (rawData) => {
   const data = {
     fid: rawData.fid,
     enableAlert: rawData.enableAlert,
-    matchType: rawData.keywordMatch,
+    matchType: rawData.keywordMatch === 'or' ? 0 : 1,
     regionKeyword: rawData.regionKeywords,
     eventKeyword: rawData.eventKeywords,
     roleKeyword: rawData.eventKeywords,
-    roleKeywordMatch: rawData.roleMatch,
-    eventKeywordMatch: rawData.eventMatch,
-    regionKeywordMatch: rawData.regionMatch,
+    roleKeywordMatch: rawData.roleMatch === 'or' ? 0 : 1,
+    eventKeywordMatch: rawData.eventMatch === 'or' ? 0 : 1,
+    regionKeywordMatch: rawData.regionMatch === 'or' ? 0 : 1,
     username: rawData.userName,
     programmeName: rawData.name,
   };
@@ -39,7 +24,7 @@ const modifyProgramme = async (rawData) => {
   });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
-    modifyProgramme: rawResult.saveFangAn,
+    modifyProgramme: rawResult.changeFangAn,
   };
   return result;
 };

@@ -4,6 +4,7 @@ const getUsers = async () => {
   const url = encodeURI(`${requests.getUsers.url}`);
   const response = await fetch(url, { method: requests.getUsers.method });
   const rawResult = response.status === 200 ? await response.json() : {};
+  console.log(rawResult);
   const result = rawResult.map((item) => ({
     ...item,
     userName: item.username,

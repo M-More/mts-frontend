@@ -5,6 +5,7 @@ import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
 import delProgramme from "../../../services/request/programme/delProgramme";
 import { connect } from "react-redux";
+import { actions } from "../../../redux/actions";
 
 class Config extends React.Component {
   constructor() {
@@ -41,15 +42,22 @@ class Config extends React.Component {
   roleMatchMethod: "or"
    */
   modifyProgramme = async (rawData) => {
-    const { userName } = this.props;
+    const { userName, curProgramme } = this.props;
     const data = {
       fid: this.props.curProgramme.fid,
       userName,
       ...rawData,
     };
+    console.log(rawData.name);
     const result = await modifyProgramme(data);
     if (result.modifyProgramme !== 1) { alert('提交失败！'); }
-    else { alert('提交成功！'); }
+    else {
+      this.props.onProgrammeChange({ curProgramme: {
+        ...curProgramme,
+        name: rawData.name,
+      }});
+      alert('提交成功！');
+    }
   }
 
   delProgramme = async () => {
@@ -57,7 +65,10 @@ class Config extends React.Component {
     const { fid } = this.props.curProgramme;
     const result = await delProgramme(fid, userName);
     if (result.delProgramme !== 1) { alert('删除失败！'); }
-    else { alert('删除成功！'); }
+    else {
+      alert('删除成功！');
+      this.props.onProgrammeChange({ curProgramme: undefined });
+    }
   }
 
   componentDidMount() {
@@ -185,7 +196,10 @@ class Config extends React.Component {
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
+  curProgramme: state.curProgramme,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Config);

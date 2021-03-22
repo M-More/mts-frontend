@@ -7,6 +7,7 @@ import getSensiLayout from '../../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
+import {connect} from "react-redux";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -180,4 +181,9 @@ class View extends React.Component {
   }
 }
 
-export default View;
+const mapStateToProps = (state) => ({
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(View);
