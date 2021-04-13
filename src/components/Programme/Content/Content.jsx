@@ -3,6 +3,8 @@ import { Layout, Menu } from 'antd';
 import Specific from '../Specific/Specific';
 import Config from '../Config/Config';
 import View from '../View/View';
+import {actions} from "../../../redux/actions";
+import {connect} from "react-redux";
 
 class Content extends React.Component {
   constructor() {
@@ -34,13 +36,20 @@ class Content extends React.Component {
           <Menu.Item key="view">数据大屏</Menu.Item>
         </Menu>
         <Layout.Content className="site-layout-background">
-          {curTabPage === 'info' && <Specific curProgramme={curProgramme} />}
-          {curTabPage === 'view' && <View curProgramme={curProgramme} />}
-          {curTabPage === 'config' && <Config curProgramme={curProgramme} />}
+          {curTabPage === 'info' && curProgramme && <Specific />}
+          {curTabPage === 'view' && curProgramme && <View />}
+          {curTabPage === 'config' && curProgramme && <Config />}
         </Layout.Content>
       </Layout.Content>
     );
   }
 }
 
-export default Content;
+const mapStateToProps = (state) => ({
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Content);

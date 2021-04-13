@@ -4,6 +4,8 @@ import { QuestionCircleFilled } from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
 import delProgramme from "../../../services/request/programme/delProgramme";
+import { connect } from "react-redux";
+import { actions } from "../../../redux/actions";
 
 class Config extends React.Component {
   constructor() {
@@ -14,18 +16,6 @@ class Config extends React.Component {
     };
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
     this.radioLayout = {};
-    // this.form = {};
-    // this.state = {
-    //   name: '',
-    //   keywordMatch: 'titleOnly',
-    //   regionKeywords: '',
-    //   regionMatch: 'and',
-    //   eventKeywords: '',
-    //   eventMatch: 'and',
-    //   roleKeywords: '',
-    //   roleMatch: 'and',
-    //   enableAlert: false,
-    // }
   }
 
   handleProgrammeConfig = (type, data) => {
@@ -52,18 +42,33 @@ class Config extends React.Component {
   roleMatchMethod: "or"
    */
   modifyProgramme = async (rawData) => {
+    const { userName, curProgramme } = this.props;
     const data = {
       fid: this.props.curProgramme.fid,
+      userName,
       ...rawData,
     };
+    console.log(rawData.name);
     const result = await modifyProgramme(data);
-    console.log('modifyProgramme', result);
+    if (result.modifyProgramme !== 1) { alert('提交失败！'); }
+    else {
+      this.props.onProgrammeChange({ curProgramme: {
+        ...curProgramme,
+        name: rawData.name,
+      }});
+      alert('提交成功！');
+    }
   }
 
   delProgramme = async () => {
+    const { userName } = this.props;
     const { fid } = this.props.curProgramme;
-    const result = await delProgramme({ fid });
-    console.log('delProgramme', result);
+    const result = await delProgramme(fid, userName);
+    if (result.delProgramme !== 1) { alert('删除失败！'); }
+    else {
+      alert('删除成功！');
+      this.props.onProgrammeChange({ curProgramme: undefined });
+    }
   }
 
   componentDidMount() {
@@ -188,4 +193,13 @@ class Config extends React.Component {
   }
 }
 
-export default Config;
+
+const mapStateToProps = (state) => ({
+  userName: state.userName,
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Config);

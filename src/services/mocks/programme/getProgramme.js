@@ -1,4 +1,4 @@
-const getProgrammes = (url) => ({
+const getProgramme = (url) => ({
   'data|10': [{
     'fangAnname': '@cword(3)',
     'fid|+1': 0,
@@ -13,4 +13,4 @@ const getProgrammes = (url) => ({
   }],
 });
 
-export default getProgrammes;
+export default getProgramme;

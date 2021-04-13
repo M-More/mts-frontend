@@ -6,7 +6,8 @@ import getAmountTrend from '../../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../../services/request/data/getRegionLayout';
-import getTraceTree from "../../../services/request/data/getTraceTree";
+import getTraceTree from '../../../services/request/data/getTraceTree';
+import {connect} from "react-redux";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -24,6 +25,12 @@ class View extends React.Component {
       regionLayout: undefined,
       traceTree: undefined,
     };
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.curProgramme.fid !== prevProps.curProgramme.fid) {
+      this.handleSearch();
+    }
   }
 
   componentDidMount() {
@@ -158,15 +165,15 @@ class View extends React.Component {
         <Echart
           title="话题溯源"
           type="defaultTree"
-          height="1000px"
-          width="1600px"
+          height="500px"
+          width="800px"
           data={traceTree}
         />
         <Echart
           title="话题溯源"
           type="circleTree"
-          height="1000px"
-          width="1600px"
+          height="500px"
+          width="800px"
           data={traceTree}
         />
       </div>
@@ -174,4 +181,9 @@ class View extends React.Component {
   }
 }
 
-export default View;
+const mapStateToProps = (state) => ({
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(View);

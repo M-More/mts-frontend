@@ -3,9 +3,12 @@ import moment from 'moment';
 import Lodash from 'lodash';
 import { Layout } from 'antd';
 import getOverallData from '../../../services/request/data/getOverallData';
+import getProgrammeData from "../../../services/request/data/getProgrammeData";
 import MultiFilter from '../../common/MultiFilter/MultiFilter';
 import DataList from '../../common/DataList/DataList';
 import './Specific.scss';
+import {actions} from "../../../redux/actions";
+import {connect} from "react-redux";
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -38,6 +41,7 @@ class Specific extends React.Component {
 
   handleSearch = async () => {
     const params = [
+      this.props.curProgramme.fid,
       this.state.keyword,
       this.state.source,
       this.state.startPublishedDay,
@@ -47,7 +51,7 @@ class Specific extends React.Component {
       this.state.pageSize,
       this.state.pageId,
     ];
-    const result = await getOverallData(...params);
+    const result = await getProgrammeData(...params);
     this.setState({
       data: result.data,
       dataSize: result.dataSize,
@@ -131,4 +135,13 @@ class Specific extends React.Component {
   }
 }
 
-export default Specific;
+const mapStateToProps = (state) => ({
+  userName: state.userName,
+  curProgramme: state.curProgramme
+});
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Specific);
+
