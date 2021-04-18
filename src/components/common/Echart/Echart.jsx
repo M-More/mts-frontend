@@ -1,14 +1,8 @@
 import React from 'react';
 import Mock from 'mockjs';
-import echart from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/chart/map';
-import 'echarts/map/js/china';
+import ReactEcharts from 'echarts-for-react';
+import * as echarts from 'echarts';
+import china from '../../../utils/map/json/china';
 import defaultPie from './getRules/defaultPie';
 import areaLine from './getRules/areaLine';
 import doughnutPie from './getRules/doughnutPie';
@@ -26,9 +20,10 @@ class Echart extends React.Component {
     };
     this.defaultWidth = '400px';
     this.defaultHeight = '250px';
+    echarts.registerMap('china', china);
   }
 
-  componentDidUpdate() {
+  render() {
     const { title, data, type } = this.props;
     let getRules;
     switch (type) {
@@ -41,21 +36,21 @@ class Echart extends React.Component {
       case 'circleTree': getRules = circleTree; break;
       default: break;
     }
-    const { guid } = this.state;
-    const myChart = echart.init(document.getElementById(`echart-${guid}`), 'dark');
-    if (data) myChart.setOption(getRules(data, title));
-  }
-
-  render() {
+    const option = data ? getRules(data, title) : {};
     const { guid } = this.state;
     const width = this.props.width || this.defaultWidth;
     const height = this.props.height || this.defaultHeight;
     return (
       <div
+        className="common-chart"
         style={{ width, height }}
         id={`echart-${guid}`}
-        className="common-chart"
-      />
+      >
+        <ReactEcharts
+          option={option}
+          theme="dark"
+        />
+      </div>
     );
   }
 }

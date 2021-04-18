@@ -118,6 +118,7 @@ class View extends React.Component {
 
   render() {
     const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend } = this.state;
+    // console.log( sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend)
     return (
       <div className="view-wrap">
         <Echart
