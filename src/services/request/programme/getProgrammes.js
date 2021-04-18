@@ -7,7 +7,7 @@ const getProgrammes = async (username) => {
   const rawResult = response.status === 200 ? await response.json() : {};
   console.log(rawResult);
   // const result = rawResult.data.map((item) => ({
-  const result = rawResult.map((item) => ({
+  const result = rawResult.data.map((item) => ({
     fid: item.fid,
     name: item.programmeName,
     keywordMatch: item.matchType,
