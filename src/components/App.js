@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Guard from './Entry/Guard/Guard';
 import { actions } from '../redux/actions';
 
-import '../static/config/constant.scss';
+import '../config/constant.scss';
 import '../services/mocks/mocks';
 import store from '../redux/store';
 

@@ -1,13 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import './View.scss';
+import { connect } from 'react-redux';
 import Echart from '../../common/Echart/Echart';
 import getAmountTrend from '../../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
-import {connect} from "react-redux";
+import WordCloud from '../../common/WordCloud/WordCloud';
+import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -24,6 +26,7 @@ class View extends React.Component {
       sourceAmountTrend: undefined,
       regionLayout: undefined,
       traceTree: undefined,
+      keywordsCloud: undefined,
     };
   }
 
@@ -50,6 +53,17 @@ class View extends React.Component {
     this.getSourceLayout();
     this.getRegionLayout();
     this.getTraceTree();
+    this.getKeywordsCloud();
+  };
+
+  getKeywordsCloud = async () => {
+    const keyword = '';
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const { fid } = this.props.curProgramme;
+    const wordNumber = 25;
+    const keywordsCloud = await getKeywordsCloud(fid, startPublishedDay, endPublishedDay, wordNumber);
+    console.log(keywordsCloud);
+    this.setState({ keywordsCloud });
   };
 
   getTraceTree = async () => {
@@ -132,9 +146,12 @@ class View extends React.Component {
   };
 
   render() {
-    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree } = this.state;
+    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud } = this.state;
     return (
       <div className="view-wrap">
+        <WordCloud
+          option={keywordsCloud}
+        />
         <Echart
           title="敏感度分布"
           type="doughnutPie"

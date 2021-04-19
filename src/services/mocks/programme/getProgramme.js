@@ -1,6 +1,6 @@
 const getProgramme = (url) => ({
   'data|10': [{
-    'fangAnname': '@cword(3)',
+    'programmeName': '@cword(3)',
     'fid|+1': 0,
     'matchType': 'titleOnly',
     'regionKeyword': '@cword(5)',
