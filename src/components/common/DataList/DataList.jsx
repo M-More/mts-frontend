@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
 import './DataList.scss';
+import DataContent from "../DataContent/DataContent";
 
 class DataList extends React.Component {
   constructor() {
@@ -137,16 +138,13 @@ class DataList extends React.Component {
             onChange={this.handlePageTurned}
             loading={loading}
           />
+          <DataContent
+            title={title}
+            visible={visible}
+            content={content}
+            handleModalCancel={this.handleModalCancel}
+          />
         </div>
-        <Modal
-          title={title}
-          visible={visible}
-          onCancel={this.handleModalCancel}
-          clsssName="mts-data-list-modal"
-          wrapClassName="mts-data-list"
-        >
-          {content}
-        </Modal>
       </div>
     );
   }

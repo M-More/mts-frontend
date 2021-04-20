@@ -23,7 +23,7 @@ class Sider extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { curProgramme } = this.props;
-    console.log(curProgramme, prevProps.curProgramme);
+    // console.log(curProgramme?.fid, prevProps.curProgramme?.fid);
     if (!prevProps.curProgramme || !curProgramme) return;
     if (prevProps.curProgramme.fid !== curProgramme.fid || prevProps.curProgramme.name !== curProgramme.name) {
       this.getProgrammes();
@@ -33,7 +33,8 @@ class Sider extends React.Component {
   getProgrammes = async () => {
     const programmes = await getProgrammes(this.props.userName);
     this.setState({ programmes });
-    this.props.onProgrammeChange({ curProgramme: programmes[0] });
+    if (!this.props.curProgramme)
+      if (programmes[0]) this.props.onProgrammeChange({ curProgramme: programmes[0] });
   };
 
   handleProgrammeNew = (type, data) => {
@@ -73,6 +74,7 @@ class Sider extends React.Component {
 
   handleProgrammeSelect = (e) => {
     const curProgramme = this.state.programmes.find((item) => item.fid === parseInt(e.key, 10));
+    console.log(curProgramme.fid);
     this.props.onProgrammeChange({ curProgramme });
   };
 

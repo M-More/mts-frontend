@@ -6,7 +6,7 @@ import './WordCloud.scss';
 
 export default class WordCloud extends React.Component {
   wordOption = () => {
-    const wordData = this.props.option || [{ name: "正在加载", value: '1' }];
+    const wordData = this.props.option || [];
     const option = {
       backgroundColor: '#fff',
       tooltip: {

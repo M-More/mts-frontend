@@ -5,7 +5,7 @@ const getProgrammes = async (username) => {
   const url = encodeURI(`${requests.getProgrammes.url}?${qs.stringify({ username })}`);
   const response = await fetch(url, { method: requests.getOverallData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
-  console.log(rawResult);
+  console.log(Object.keys(rawResult));
   // const result = rawResult.data.map((item) => ({
   const result = rawResult.data.map((item) => ({
     fid: item.fid,

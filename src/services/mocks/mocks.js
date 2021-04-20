@@ -17,7 +17,8 @@ import getUsers from './data/getUsers';
 import delProgramme from './programme/delProgramme';
 import addProgramme from './programme/addProgramme';
 import modifyProgramme from './programme/modifyProgramme';
-import getKeywordsCloud from "./data/getKeywordsCloud";
+import getKeywordsCloud from './data/getKeywordsCloud';
+import getSensitiveWord from "./data/getSensitiveWord";
 
 mockFetch(Mock);
 // Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
@@ -37,6 +38,7 @@ mockFetch(Mock);
 // Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());
 // Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());
 // Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
+// Mock.mock(requests.getSensitiveWord.url, requests.getSensitiveWord.method, getSensitiveWord());
 
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
 Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
@@ -54,4 +56,5 @@ Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
 // Mock.mock(requests.delProgramme.url, requests.delProgramme.method, delProgramme());
 // Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());
 // Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());
-Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
+// Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
+// Mock.mock(requests.getSensitiveWord.url, requests.getSensitiveWord.method, getSensitiveWord());
