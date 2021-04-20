@@ -47,6 +47,7 @@ class Echart extends React.Component {
         id={`echart-${guid}`}
       >
         <ReactEcharts
+          style={{ width, height }}
           option={option}
           theme="dark"
         />

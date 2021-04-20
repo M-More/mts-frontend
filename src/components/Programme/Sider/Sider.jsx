@@ -33,7 +33,8 @@ class Sider extends React.Component {
   getProgrammes = async () => {
     const programmes = await getProgrammes(this.props.userName);
     this.setState({ programmes });
-    if (!this.props.curProgramme) this.props.onProgrammeChange({ curProgramme: programmes[0] });
+    if (!this.props.curProgramme)
+      if (programmes[0]) this.props.onProgrammeChange({ curProgramme: programmes[0] });
   };
 
   handleProgrammeNew = (type, data) => {

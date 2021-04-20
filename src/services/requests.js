@@ -20,6 +20,7 @@ const requests = {
   logout: { url: `${curDomain}/User/logout`, method: 'POST' },
   getUsers: { url: `${curDomain}/User/allUsers`, method: 'GET' },
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
+  getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
 };
 
 export default requests;

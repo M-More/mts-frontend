@@ -24,17 +24,3 @@
   display: inline-block;
   max-width: 200px;
 }
-.mts-data-list {
-  .ant-modal-content {
-    width: 500px;
-    height: 400px;
-     margin-top: calc( 50% - 200px );
-    .ant-modal-footer {
-      display: none;
-    }
-    .ant-modal-body {
-      height: 345px;
-      overflow: auto;
-    }
-  }
-}
