@@ -19,27 +19,30 @@ import addProgramme from './programme/addProgramme';
 import modifyProgramme from './programme/modifyProgramme';
 import getKeywordsCloud from './data/getKeywordsCloud';
 import getSensitiveWord from "./data/getSensitiveWord";
+import getContentTag from "./data/getContentTag";
 
 mockFetch(Mock);
-// Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
-// Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
-// Mock.mock(requests.getAmountTrend.url, requests.getAmountTrend.method, getAmountTrend());
-// Mock.mock(requests.getOverallData.url, requests.getOverallData.method, getOverallData());
-// Mock.mock(requests.getTopics.url, requests.getTopics.method, getTopics());
-// Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegionLayout());
-// Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
-// Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgramme());
-// Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());
-// Mock.mock(requests.logout.url, requests.logout.method, logout);
-// Mock.mock(requests.login.url, requests.login.method, login());
-// Mock.mock(requests.register.url, requests.register.method, register());
-// Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
-// Mock.mock(requests.delProgramme.url, requests.delProgramme.method, delProgramme());
-// Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());
-// Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());
-// Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
-// Mock.mock(requests.getSensitiveWord.url, requests.getSensitiveWord.method, getSensitiveWord());
+Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
+Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
+Mock.mock(requests.getAmountTrend.url, requests.getAmountTrend.method, getAmountTrend());
+Mock.mock(requests.getOverallData.url, requests.getOverallData.method, getOverallData());
+Mock.mock(requests.getTopics.url, requests.getTopics.method, getTopics());
+Mock.mock(requests.getRegionLayout.url, requests.getRegionLayout.method, getRegionLayout());
+Mock.mock(requests.getProgrammeData.url, requests.getProgrammeData.method, getProgrammeData());
+Mock.mock(requests.getProgrammes.url, requests.getProgrammes.method, getProgramme());
+Mock.mock(requests.getTraceTree.url, requests.getTraceTree.method, getTraceTree());
+Mock.mock(requests.logout.url, requests.logout.method, logout);
+Mock.mock(requests.login.url, requests.login.method, login());
+Mock.mock(requests.register.url, requests.register.method, register());
+Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
+Mock.mock(requests.delProgramme.url, requests.delProgramme.method, delProgramme());
+Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());
+Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());
+Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
+Mock.mock(requests.getSensitiveWord.url, requests.getSensitiveWord.method, getSensitiveWord());
+Mock.mock(requests.getContentTag.url, requests.getContentTag.method, getContentTag())
 
+/*
 Mock.mock(requests.getSensiLayout.url, requests.getSensiLayout.method, getSensiLayout());
 Mock.mock(requests.getSourceLayout.url, requests.getSourceLayout.method, getSourceLayout());
 Mock.mock(requests.getAmountTrend.url, requests.getAmountTrend.method, getAmountTrend());
@@ -58,3 +61,4 @@ Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
 // Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());
 // Mock.mock(requests.getKeywordsCloud.url, requests.getKeywordsCloud.method, getKeywordsCloud());
 // Mock.mock(requests.getSensitiveWord.url, requests.getSensitiveWord.method, getSensitiveWord());
+*/

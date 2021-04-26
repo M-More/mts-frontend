@@ -9,11 +9,11 @@ class DataContent extends React.Component {
     this.state = {
       contentSlice: [],
     };
-  };
+  }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.content !== this.props.content) this.getSensitiveWord();
-  };
+  }
 
   getSensitiveWord = async () => {
     const { content } = this.props;
