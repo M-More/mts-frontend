@@ -8,7 +8,7 @@ export default class WordCloud extends React.Component {
   wordOption = () => {
     const wordData = this.props.option || [];
     const option = {
-      backgroundColor: '#fff',
+      backgroundColor: '#100c2A',
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
       },
@@ -17,7 +17,7 @@ export default class WordCloud extends React.Component {
           type: 'wordCloud',
           gridSize: 1,
           sizeRange: [12, 55],
-          rotationRange: [-45, 0, 45, 90],
+          rotationRange: [-0, 0, 0, 90],
           textStyle: {
             normal: {
               color() {
@@ -50,6 +50,7 @@ export default class WordCloud extends React.Component {
     return (
       <div className="word-chart">
         <ReactEcharts
+          className="word-chart-inner"
           option={this.wordOption()}
           theme="dark"
         />

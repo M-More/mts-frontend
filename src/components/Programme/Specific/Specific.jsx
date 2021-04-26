@@ -9,6 +9,7 @@ import DataList from '../../common/DataList/DataList';
 import './Specific.scss';
 import {actions} from "../../../redux/actions";
 import {connect} from "react-redux";
+import getContentTag from "../../../services/request/data/getContentTag";
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -55,6 +56,24 @@ class Specific extends React.Component {
     this.setState({
       data: result.data,
       dataSize: result.dataSize,
+    });
+    const { pageId } = this.state;
+    const contents = result.data.map((item) => item.content);
+    const tagResult = await getContentTag(contents, pageId);
+    console.log(tagResult);
+    this.setState(prevState => {
+      if (prevState.pageId !== pageId) {
+        console.log('请求超时：用户翻页');
+        return {};
+      }
+      const newData = [...prevState.data];
+      const tags = tagResult.result;
+      newData.forEach((item, index) => {
+        const tag = tags[index.toString()];
+        console.log(item, '分类为', tag);
+        item.tag = tag || '无';
+      });
+      return { data: newData };
     });
   };
 

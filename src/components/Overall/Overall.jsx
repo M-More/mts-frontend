@@ -5,6 +5,7 @@ import { Layout } from 'antd';
 import MultiFilter from '../common/MultiFilter/MultiFilter';
 import DataList from '../common/DataList/DataList';
 import getOverallData from '../../services/request/data/getOverallData';
+import getContentTag from "../../services/request/data/getContentTag";
 import './Overall.scss';
 
 const PAGE_SIZE = 10;
@@ -44,10 +45,27 @@ class Overall extends Component {
       this.state.pageId,
     ];
     const result = await getOverallData(...params);
-    console.log(result);
+    const contents = result.data.map((item) => item.content);
     this.setState({
       data: result.data,
       dataSize: result.dataSize,
+    });
+    const { pageId } = this.state;
+    const tagResult = await getContentTag(contents, pageId);
+    console.log(tagResult);
+    this.setState(prevState => {
+      if (prevState.pageId !== pageId) {
+        console.log('请求超时：用户翻页');
+        return {};
+      }
+      const newData = [...prevState.data];
+      const tags = tagResult.result;
+      newData.forEach((item, index) => {
+        const tag = tags[index.toString()];
+        console.log(item, '分类为', tag);
+        item.tag = tag || '无';
+      });
+      return { data: newData };
     });
   };
 

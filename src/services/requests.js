@@ -21,6 +21,7 @@ const requests = {
   getUsers: { url: `${curDomain}/User/allUsers`, method: 'GET' },
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
+  getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
 };
 
 export default requests;

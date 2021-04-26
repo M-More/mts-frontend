@@ -10,6 +10,7 @@ import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
 import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
+import { Button } from "antd";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -27,7 +28,13 @@ class View extends React.Component {
       regionLayout: undefined,
       traceTree: undefined,
       keywordsCloud: undefined,
+      traceTreeFormat: 'defaultTree',
     };
+  }
+
+  changeTraceTreeFormat = () => {
+    const traceTreeFormat = this.state.traceTreeFormat === 'defaultTree' ? 'circleTree' : 'defaultTree';
+    this.setState({ traceTreeFormat });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -146,7 +153,7 @@ class View extends React.Component {
   };
 
   render() {
-    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud } = this.state;
+    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     return (
       <div className="view-wrap">
         <WordCloud
@@ -178,13 +185,6 @@ class View extends React.Component {
           title="来源趋势"
           type="chinaMap"
           data={regionLayout}
-        />
-        <Echart
-          title="话题溯源"
-          type="defaultTree"
-          height="500px"
-          width="800px"
-          data={traceTree}
         />
         <Echart
           title="话题溯源"

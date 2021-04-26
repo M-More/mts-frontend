@@ -57,6 +57,12 @@ class DataList extends React.Component {
         dataIndex: 'publishedDay',
         key: 'publishedDay',
       },
+      {
+        title: '分类',
+        dataIndex: 'tag',
+        key: 'tag',
+        render: (text) => text || '正在解析...'
+      },
     ];
   }
 
