@@ -35,6 +35,7 @@ class UserList extends React.Component {
       <Table
         dataSource={users}
         columns={this.columns}
+        pagination={false}
       />
     );
   }

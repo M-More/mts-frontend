@@ -42,12 +42,14 @@ class Echart extends React.Component {
     const height = this.props.height || this.defaultHeight;
     return (
       <div
-        className="common-chart"
-        style={{ width, height }}
+        className="common-chart-wrap"
         id={`echart-${guid}`}
       >
         <ReactEcharts
-          style={{ width, height }}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
           option={option}
           theme="dark"
         />

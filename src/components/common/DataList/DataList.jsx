@@ -11,8 +11,7 @@ class DataList extends React.Component {
   constructor() {
     super();
     this.state = {
-      content: '',
-      title: '',
+      curRecord: undefined,
       visible: false,
       loading: false,
     };
@@ -115,8 +114,7 @@ class DataList extends React.Component {
   handleTitleClicked = (record) => {
     this.setState({
       visible: true,
-      content: record.content,
-      title: record.title,
+      curRecord: record,
     });
   };
 
@@ -126,7 +124,7 @@ class DataList extends React.Component {
 
   render() {
     const data = this.props.data || [];
-    const { loading, visible, content, title } = this.state;
+    const { loading, visible, curRecord } = this.state;
     const { dataSize, pageSize } = this.props;
     return (
       <div className="mts-data-list">
@@ -145,9 +143,8 @@ class DataList extends React.Component {
             loading={loading}
           />
           <DataContent
-            title={title}
+            record={curRecord}
             visible={visible}
-            content={content}
             handleModalCancel={this.handleModalCancel}
           />
         </div>

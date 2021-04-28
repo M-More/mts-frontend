@@ -21,15 +21,8 @@ export default class WordCloud extends React.Component {
           textStyle: {
             normal: {
               color() {
-                return (
-                  `rgb(${
-                    Math.round(Math.random() * 255)
-                  }, ${
-                    Math.round(Math.random() * 255)
-                  }, ${
-                    Math.round(Math.random() * 255)
-                  })`
-                );
+                const colors = ['#fda67e', '#81cacc', '#cca8ba', '#88cc81', '#82a0c5', '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                return colors[parseInt(Math.random() * 10)];
               },
             },
           },
@@ -50,7 +43,10 @@ export default class WordCloud extends React.Component {
     return (
       <div className="word-chart">
         <ReactEcharts
-          className="word-chart-inner"
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
           option={this.wordOption()}
           theme="dark"
         />

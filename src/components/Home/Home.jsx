@@ -3,6 +3,15 @@ import '../../utils/tagCanvas';
 import './Home.scss';
 import requests from '../../services/requests';
 import constant from '../../config/constant';
+import { Carousel, Card } from "antd";
+
+const contentStyle = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
+};
 
 class Home extends React.Component {
   constructor() {
@@ -53,12 +62,34 @@ class Home extends React.Component {
     return (
       <div className="home-wrap">
         <div className="title">舆情监测系统</div>
-        <canvas className="canvas" width="600" height="600" id="canvas" />
-        <div id="tags" style={{ textAlign: 'center' }}>
-          {tags.map((item) => (
-            <a onClick={this.handleTitleClick}>{ item }</a>
-          ))}
-        </div>
+        <Card title="敏感信息列表" className="home-card">
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
+        <Card title="最新舆情" className="home-card" >
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
       </div>
     );
   }

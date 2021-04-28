@@ -4,7 +4,9 @@ import { Table } from "antd";
 class OrgList extends React.Component {
   render() {
     return (
-      <Table />
+      <Table
+        pagination={false}
+      />
     );
   }
 };

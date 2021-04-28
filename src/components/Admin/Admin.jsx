@@ -38,8 +38,9 @@ class Admin extends Component {
 
   render() {
     const { curRole, users, orgs } = this.state;
+    const height = document.body.offsetHeight;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: `${height - 128}px` }}>
         <Sider
           className="admin-sider-wrap"
           theme="light"

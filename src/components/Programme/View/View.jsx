@@ -10,9 +10,14 @@ import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
 import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
-import { Button } from "antd";
+import { Button, Carousel } from "antd";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+const contentStyle = {
+  color: '#fff',
+  background: '#364d79',
+};
 
 class View extends React.Component {
   constructor() {
@@ -154,9 +159,110 @@ class View extends React.Component {
 
   render() {
     const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const height = `${document.body.offsetHeight - 128 - 50}px`;
+    const width = '100%';
     return (
       <div className="view-wrap">
-        <WordCloud
+        <Carousel
+          dotPosition="right"
+          style={{ width, height, background: "green" }}
+        >
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <WordCloud
+                option={keywordsCloud}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="敏感度分布"
+                type="doughnutPie"
+                data={sensiLayout}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="来源分部"
+                type="defaultPie"
+                data={sourceLayout}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="总量趋势"
+                type="areaLine"
+                data={totalAmountTrend}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="来源趋势"
+                type="horizontalBar"
+                data={sourceAmountTrend}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="地域分布"
+                type="chinaMap"
+                data={regionLayout}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="话题溯源"
+                type="circleTree"
+                data={traceTree}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <Echart
+                title="话题溯源"
+                type="defaultTree"
+                data={traceTree}
+              />
+            </div>
+          </div>
+        </Carousel>
+        {/*<WordCloud
           option={keywordsCloud}
         />
         <Echart
@@ -192,7 +298,7 @@ class View extends React.Component {
           height="500px"
           width="800px"
           data={traceTree}
-        />
+        />*/}
       </div>
     );
   }
