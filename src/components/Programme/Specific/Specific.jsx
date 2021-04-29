@@ -60,7 +60,6 @@ class Specific extends React.Component {
     const { pageId } = this.state;
     const contents = result.data.map((item) => item.content);
     const tagResult = await getContentTag(contents, pageId);
-    console.log(tagResult);
     this.setState(prevState => {
       if (prevState.pageId !== pageId) {
         console.log('请求超时：用户翻页');
@@ -70,7 +69,6 @@ class Specific extends React.Component {
       const tags = tagResult.result;
       newData.forEach((item, index) => {
         const tag = tags[index.toString()];
-        console.log(item, '分类为', tag);
         item.tag = tag || '无';
       });
       return { data: newData };

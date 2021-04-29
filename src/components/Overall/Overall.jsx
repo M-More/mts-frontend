@@ -164,7 +164,7 @@ class Overall extends Component {
       case '':
         return (
           <div className="search-entry-wrap">
-            <div className="title">全文搜索 <SearchOutlined /></div>
+            <div className="title">全网搜索 <SearchOutlined /></div>
             <Input
               className="search-entry-input"
               size="large"
@@ -172,8 +172,8 @@ class Overall extends Component {
               onChange={e => this.setState({ keyword: e.target.value })}
             />
             <div className="btn-group">
-              <Button type="primary" onClick={this.handleSearch}>关键词搜素</Button>
-              <Button type="primary">相似文本匹配</Button>
+              <Button type="primary" onClick={this.handleSearch}>百度搜素</Button>
+              <Button type="primary">搜狗搜素</Button>
             </div>
           </div>
         );

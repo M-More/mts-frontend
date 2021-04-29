@@ -11,6 +11,7 @@ import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
 import defaultTree from './getRules/defaultTree';
 import circleTree from './getRules/circleTree';
+import connGraph from "./getRules/connGraph";
 
 class Echart extends React.Component {
   constructor() {
@@ -34,6 +35,7 @@ class Echart extends React.Component {
       case 'chinaMap': getRules = chinaMap; break;
       case 'defaultTree': getRules = defaultTree; break;
       case 'circleTree': getRules = circleTree; break;
+      case 'connGraph': getRules = connGraph; break;
       default: break;
     }
     const option = data ? getRules(data, title) : {};

@@ -8,7 +8,7 @@ import View from '../View/View';
 const getRoutes = (userType) => {
   const routes = [
     { key: 'home', link: '/home', label: '首页', component: Home },
-    { key: 'search', link: '/search', label: '全文搜索', component: Overall },
+    { key: 'search', link: '/search', label: '全网搜索', component: Overall },
     { key: 'monitor', link: '/monitor', label: '舆情监测', component: Programme },
     { key: 'view', link: '/view', label: '数据大屏', component: View },
   ];

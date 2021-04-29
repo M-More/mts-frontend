@@ -3,7 +3,8 @@ import '../../utils/tagCanvas';
 import './Home.scss';
 import requests from '../../services/requests';
 import constant from '../../config/constant';
-import { Carousel, Card } from "antd";
+import {Carousel, Card, Table} from "antd";
+import DataContent from "../common/DataContent/DataContent";
 
 const contentStyle = {
   height: '160px',
@@ -17,6 +18,8 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
+      curRecord: undefined,
+      visible: false,
       tags: [],
     };
   }
@@ -58,7 +61,7 @@ class Home extends React.Component {
   };
 
   render() {
-    const { tags } = this.state;
+    const { tags, curRecord, visible } = this.state;
     return (
       <div className="home-wrap">
         <div className="title">舆情监测系统</div>
@@ -90,6 +93,11 @@ class Home extends React.Component {
           <p>Card content</p>
           <p>Card content</p>
         </Card>
+        <DataContent
+          record={curRecord}
+          visible={visible}
+          handleModalCancel={this.handleModalCancel}
+        />
       </div>
     );
   }

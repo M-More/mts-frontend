@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from "antd";
+import {Switch} from "antd/es";
 
 class UserList extends React.Component {
   constructor() {
@@ -25,6 +26,11 @@ class UserList extends React.Component {
         title: '邮箱',
         dataIndex: 'email',
         key: 'email',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: () => <Switch/>
       },
     ];
   }
