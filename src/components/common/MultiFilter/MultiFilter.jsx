@@ -23,7 +23,7 @@ class MultiFilter extends React.Component {
   };
 
   render() {
-    const { current } = this.props;
+    const { current, initialKeyword } = this.props;
     return (
       <div className="mts-multi-filter-container">
         <Input.Search
@@ -31,6 +31,7 @@ class MultiFilter extends React.Component {
           enterButton
           size="large"
           onSearch={this.handleSearch}
+          defaultValue={initialKeyword}
         />
         <Form
           labelCol={{ span: 3 }}

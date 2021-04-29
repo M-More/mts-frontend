@@ -1,0 +1,15 @@
+.origin-wrap {
+  width: 80%;
+  margin: 30px auto;
+  background: white;
+  padding: 16px;
+  .origin-table {
+    height: 500px;
+    overflow: auto;
+  }
+  .origin-new {
+    margin-bottom: 10px;
+    input { width: calc(100% - 100px); }
+    button { width: 100px; }
+  }
+}

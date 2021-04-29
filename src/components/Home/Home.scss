@@ -4,13 +4,18 @@
   display: flex;
   justify-content: center;
   align-content: center;
+  flex-direction: column;
   align-items: center;
   .title {
-    font-size: 60px;
+    font-size: 40px;
+    margin-top: 30px;
     font-weight: bolder;
     color: $default-blue;
-    position: absolute;
-    opacity: 0.6;
     z-index: 2;
+  }
+  .home-card {
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 }

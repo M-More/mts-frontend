@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Lodash from 'lodash';
 import moment from 'moment';
-import { Layout } from 'antd';
+import {Form, Input, Layout, Button} from 'antd';
 import MultiFilter from '../common/MultiFilter/MultiFilter';
 import DataList from '../common/DataList/DataList';
 import getOverallData from '../../services/request/data/getOverallData';
 import getContentTag from "../../services/request/data/getContentTag";
 import './Overall.scss';
+import { LeftOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -15,6 +17,7 @@ class Overall extends Component {
   constructor() {
     super();
     this.state = {
+      curPath: '',
       pageId: 0,
       pageSize: PAGE_SIZE,
       keyword: '',
@@ -30,7 +33,7 @@ class Overall extends Component {
   }
 
   componentDidMount() {
-    this.handleSearch();
+    // this.handleSearch();
   }
 
   handleSearch = async () => {
@@ -52,7 +55,6 @@ class Overall extends Component {
     });
     const { pageId } = this.state;
     const tagResult = await getContentTag(contents, pageId);
-    console.log(tagResult);
     this.setState(prevState => {
       if (prevState.pageId !== pageId) {
         console.log('请求超时：用户翻页');
@@ -65,7 +67,10 @@ class Overall extends Component {
         console.log(item, '分类为', tag);
         item.tag = tag || '无';
       });
-      return { data: newData };
+      return {
+        data: newData,
+        curPath: '/result',
+      };
     });
   };
 
@@ -122,26 +127,58 @@ class Overall extends Component {
     });
   };
 
+  handleBack = () => {
+    this.setState({
+      curPath: '',
+      keyword: '',
+    });
+  };
+
   render() {
     const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
-    const { data, dataSize, pageSize } = this.state;
-    return (
-      <Layout className="mts-overall-container">
-        <MultiFilter
-          current={current}
-          onSelect={this.handleSelect}
-          onSearch={this.handleKeywordChange}
-          onDateChange={this.handleDateChange}
-        />
-        <DataList
-          data={data}
-          dataSize={dataSize}
-          pageSize={pageSize}
-          onPageChange={this.handlePageChange}
-        />
-      </Layout>
-    );
+    const { data, dataSize, pageSize, curPath, keyword } = this.state;
+    switch (curPath) {
+      case '/result':
+        return (
+          <Layout className="mts-overall-container">
+            <div className="back" onClick={() => this.handleBack('')}>
+              <LeftOutlined className="back-icon" />
+              返回
+            </div>
+            <MultiFilter
+              initialKeyword={keyword}
+              current={current}
+              onSelect={this.handleSelect}
+              onSearch={this.handleKeywordChange}
+              onDateChange={this.handleDateChange}
+            />
+            <DataList
+              data={data}
+              dataSize={dataSize}
+              pageSize={pageSize}
+              onPageChange={this.handlePageChange}
+            />
+          </Layout>
+        );
+      case '':
+        return (
+          <div className="search-entry-wrap">
+            <div className="title">全网搜索 <SearchOutlined /></div>
+            <Input
+              className="search-entry-input"
+              size="large"
+              value={keyword}
+              onChange={e => this.setState({ keyword: e.target.value })}
+            />
+            <div className="btn-group">
+              <Button type="primary" onClick={this.handleSearch}>百度搜素</Button>
+              <Button type="primary">搜狗搜素</Button>
+            </div>
+          </div>
+        );
+    }
+
   }
 }
 

@@ -7,7 +7,7 @@ const chinaMap = (data, title) => ({
   legend: {
     orient: 'horizontal',
     x: 'left',
-    data: ['订单量'],
+    data: ['舆情数量'],
   },
   visualMap: {
     left: 'right',
@@ -20,7 +20,7 @@ const chinaMap = (data, title) => ({
     calculable: true,
   },
   series: [{
-    name: '订单量',
+    name: '舆情数量',
     type: 'map',
     mapType: 'china',
     roam: true,

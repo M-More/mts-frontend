@@ -15,5 +15,16 @@
         font-weight: bolder;
       }
     }
+    .attr {
+      width: 50%;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      .title {
+        color: red;
+      }
+    }
   }
+
 }

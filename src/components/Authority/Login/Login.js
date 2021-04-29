@@ -22,6 +22,7 @@ class Login extends React.Component {
     const result = await login(data.userName, data.password, data.role ? 0 : 1);
     if (result.login !== 1) alert('登录失败');
     else {
+      console.log(result);
       localStorage.setItem('userName', result.username);
       localStorage.setItem('userType', result.role === '0' ? 'admin' : 'default');
       this.props.onAuthChange();

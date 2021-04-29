@@ -119,35 +119,57 @@ class View extends React.Component {
   render() {
     const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend } = this.state;
     // console.log( sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend)
+    const height = `${document.body.offsetHeight - 128}px`;
     return (
       <div className="view-wrap">
-        <Echart
-          title="敏感度分布"
-          type="doughnutPie"
-          data={sensiLayout}
-        />
-        <Echart
-          title="来源分部"
-          type="defaultPie"
-          data={sourceLayout}
-        />
-        <Echart
-          title="总量趋势"
-          type="areaLine"
-          data={totalAmountTrend}
-        />
-        <Echart
-          title="来源趋势"
-          type="horizontalBar"
-          height="500px"
-          width="800px"
-          data={sourceAmountTrend}
-        />
-        <Echart
-          title="来源趋势"
-          type="chinaMap"
-          data={regionLayout}
-        />
+        <div
+          className="left-chart"
+          style={{ height }}
+        >
+          <div className="sub-item">
+            <Echart
+              title="敏感度分布"
+              type="doughnutPie"
+              data={sensiLayout}
+            />
+          </div>
+          <div className="sub-item">
+            <Echart
+              title="来源分部"
+              type="defaultPie"
+              data={sourceLayout}
+            />
+          </div>
+        </div>
+        <div
+          className="main-chart"
+          style={{ height }}
+        >
+          <Echart
+            title="来源趋势"
+            type="horizontalBar"
+            data={sourceAmountTrend}
+          />
+        </div>
+        <div
+          style={{ height }}
+          className="right-chart"
+        >
+          <div className="sub-item">
+            <Echart
+              title="总量趋势"
+              type="areaLine"
+              data={totalAmountTrend}
+            />
+          </div>
+          <div className="sub-item">
+            <Echart
+              title="地域分布"
+              type="chinaMap"
+              data={regionLayout}
+            />
+          </div>
+        </div>
       </div>
     );
   }

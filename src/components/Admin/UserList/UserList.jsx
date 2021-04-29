@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from "antd";
+import {Switch} from "antd/es";
 
 class UserList extends React.Component {
   constructor() {
@@ -26,6 +27,11 @@ class UserList extends React.Component {
         dataIndex: 'email',
         key: 'email',
       },
+      {
+        title: '操作',
+        key: 'action',
+        render: () => <Switch/>
+      },
     ];
   }
 
@@ -35,6 +41,7 @@ class UserList extends React.Component {
       <Table
         dataSource={users}
         columns={this.columns}
+        pagination={false}
       />
     );
   }

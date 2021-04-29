@@ -7,9 +7,12 @@ import Content from './Content/Content';
 
 class Programme extends React.Component {
   render() {
+    const height = document.body.offsetHeight;
     const { curProgramme } = this.props;
     return (
-      <Layout>
+      <Layout
+        style={{ minHeight: `${height - 128}px` }}
+      >
         <Sider />
         <Content />
       </Layout>
