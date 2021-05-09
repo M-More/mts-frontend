@@ -3,6 +3,57 @@
   justify-content: space-around;
   flex-wrap: wrap;
   .carousel-item {
-    background: #2f54eb;
+    //background: #100c2A;
+    background: white;
+    overflow: hidden;
+  }
+  .latest-info {
+    width: 95%;
+    margin-left: 5%;
+    height: 100%;
+    .theme {
+      color: black;
+      font-size: 16px;
+      font-weight: bolder;
+      margin: 10px 0px;
+      width: 100%;
+      text-align: center;
+    }
+    .latest-info-item {
+      //background: rgba(255,255,255,0.95);
+      &:before {
+        content: '';
+        display: inline-block;
+        border-right: 10px solid #2f54eb;
+        border-left: 10px solid white;
+        border-top: 10px solid white;
+        border-bottom: 10px solid white;
+        background-color: #2f54eb;
+        position: absolute;
+        left: -20px;
+        top: 15px;
+      }
+      position: relative;
+      border: 1px solid #2f54eb;
+      width: 95%;
+      height: 50px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      .title {
+        color: #2f54eb;
+        padding: 0px 10px ;
+        width: 20%;
+        float: left;
+        line-height: 50px;
+      }
+      .content {
+        white-space: nowrap;
+        display: inline-block;
+        width: 75%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 50px;
+      }
+    }
   }
 }

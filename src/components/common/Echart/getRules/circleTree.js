@@ -2,6 +2,7 @@ const circleTree = (data, title) => ({
   title: {
     text: title,
     left: 'center',
+    top: '5%',
   },
   tooltip: {
     trigger: 'item',
@@ -9,6 +10,7 @@ const circleTree = (data, title) => ({
   },
   series: [
     {
+
       type: 'tree',
       data: [data],
       top: '18%',

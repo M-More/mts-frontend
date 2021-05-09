@@ -8,7 +8,8 @@ export default class WordCloud extends React.Component {
   wordOption = () => {
     const wordData = this.props.option || [];
     const option = {
-      backgroundColor: '#100c2A',
+      // backgroundColor: '#100c2A',
+      backgroundColor: 'white',
       tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
       },
@@ -19,12 +20,7 @@ export default class WordCloud extends React.Component {
           sizeRange: [12, 55],
           rotationRange: [-0, 0, 0, 90],
           textStyle: {
-            normal: {
-              color() {
-                const colors = ['#fda67e', '#81cacc', '#cca8ba', '#88cc81', '#82a0c5', '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
-                return colors[parseInt(Math.random() * 10)];
-              },
-            },
+            color: '#2f54eb',
           },
           left: 'center',
           top: 'center',

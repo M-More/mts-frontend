@@ -119,7 +119,7 @@ class View extends React.Component {
   render() {
     const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend } = this.state;
     // console.log( sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend)
-    const height = `${document.body.offsetHeight - 128}px`;
+    const height = `${document.body.offsetHeight - 128 - 20}px`;
     return (
       <div className="view-wrap">
         <div
@@ -146,9 +146,9 @@ class View extends React.Component {
           style={{ height }}
         >
           <Echart
-            title="来源趋势"
-            type="horizontalBar"
-            data={sourceAmountTrend}
+            title="地域分布"
+            type="chinaMap"
+            data={regionLayout}
           />
         </div>
         <div
@@ -161,12 +161,10 @@ class View extends React.Component {
               type="areaLine"
               data={totalAmountTrend}
             />
-          </div>
-          <div className="sub-item">
             <Echart
-              title="地域分布"
-              type="chinaMap"
-              data={regionLayout}
+              title="来源趋势"
+              type="horizontalBar"
+              data={sourceAmountTrend}
             />
           </div>
         </div>

@@ -53,7 +53,7 @@ class Echart extends React.Component {
             height: '100%'
           }}
           option={option}
-          theme="dark"
+          theme="light"
         />
       </div>
     );

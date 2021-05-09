@@ -11,6 +11,7 @@ import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
 import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
+import getProgrammeData from '../../../services/request/data/getProgrammeData';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -112,7 +113,23 @@ const getEventTree = () => {
       },
     ],
   };
-  rawData.level = 0;
+  const list = [rawData];
+  while (list.length) {
+    const head = list.shift();
+    head.name = `事件${head.clusterNum}: \n${head.time}`;
+    head.children = head.childList;
+    head.data = {
+      clusterNum: head.clusterNum,
+      time: head.time,
+      summary: head.summary,
+    };
+    head.children.forEach((item) => {
+      list.push(item);
+    });
+  }
+  console.log(rawData);
+  return rawData;
+  /* rawData.level = 0;
   const list = [rawData];
   const nodes = [];
   const links = [];
@@ -148,8 +165,8 @@ const getEventTree = () => {
   }
   const categories = [{ name: '事件' }];
   const data = { nodes, links, categories };
-  console.log(data);
-  return data;
+  // console.log(data);
+  return data; */
 };
 
 class View extends React.Component {
@@ -167,6 +184,7 @@ class View extends React.Component {
       traceTree: undefined,
       keywordsCloud: undefined,
       traceTreeFormat: 'defaultTree',
+      data: [],
     };
   }
 
@@ -206,6 +224,27 @@ class View extends React.Component {
     this.getRegionLayout();
     this.getTraceTree();
     this.getKeywordsCloud();
+    this.getLatestInfo();
+  };
+
+  getLatestInfo = async () => {
+    const PAGE_SIZE = 10;
+    const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+    const params = [
+      this.props.curProgramme.fid,
+      '',
+      null,
+      null,
+      null,
+      null,
+      1,
+      PAGE_SIZE,
+      0,
+    ];
+    const result = await getProgrammeData(...params);
+    this.setState({
+      data: result.data,
+    });
   };
 
   getKeywordsCloud = async () => {
@@ -297,9 +336,10 @@ class View extends React.Component {
   };
 
   render() {
-    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const { data, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     const height = `${document.body.offsetHeight - 128 - 50}px`;
     const width = '100%';
+    console.log(traceTree);
     return (
       <div className="view-wrap">
         <Carousel
@@ -375,6 +415,22 @@ class View extends React.Component {
                 type="chinaMap"
                 data={regionLayout}
               />
+            </div>
+          </div>
+          <div>
+            <div
+              className="carousel-item"
+              style={{ width, height }}
+            >
+              <div className="latest-info">
+                <div className="theme">最新舆情</div>
+                {data.map((item) => (
+                  <div className="latest-info-item">
+                    <span className="title">{item.title}</span>
+                    <span className="content">{item.content}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div>

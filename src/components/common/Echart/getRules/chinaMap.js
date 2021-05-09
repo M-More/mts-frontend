@@ -2,6 +2,7 @@ const chinaMap = (data, title) => ({
   title: {
     text: title,
     left: 'center',
+    top: '5%',
   },
   tooltip: { trigger: 'item' },
   legend: {

@@ -2,6 +2,7 @@ const areaLine = (data, title) => ({
   title: {
     text: title,
     left: 'center',
+    top: '5%',
   },
   xAxis: {
     type: 'category',

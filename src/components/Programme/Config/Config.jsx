@@ -11,7 +11,7 @@ class Config extends React.Component {
   constructor() {
     super();
     this.layout = {
-      labelCol: { span: 5 },
+      labelCol: { span: 3 },
       wrapperCol: { span: 999 }
     };
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
@@ -120,14 +120,16 @@ class Config extends React.Component {
             label="地域关键词"
             name="regionKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="regionMatch"
             label="地域关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
-            <Radio.Group>
+            <Radio.Group size="small">
               <Radio.Button value="or">或</Radio.Button>
               <Radio.Button value="and">与</Radio.Button>
             </Radio.Group>
@@ -136,14 +138,16 @@ class Config extends React.Component {
             label="人物关键词"
             name="roleKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="roleMatch"
             label="人物关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
-            <Radio.Group>
+            <Radio.Group size="small">
               <Radio.Button value="or">或</Radio.Button>
               <Radio.Button value="and">与</Radio.Button>
             </Radio.Group>
@@ -152,7 +156,9 @@ class Config extends React.Component {
             label="事件关键词"
             name="eventKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="eventMatch"
@@ -160,16 +166,16 @@ class Config extends React.Component {
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
             <Radio.Group>
-              <Radio.Button value="and">或</Radio.Button>
-              <Radio.Button value="or">与</Radio.Button>
+              <Radio value="and">或</Radio>
+              <Radio value="or">与</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
+          {/*<Form.Item
             label="启用预警"
             name="enableAlert"
           >
             <Switch />
-          </Form.Item>
+          </Form.Item>*/}
           <Form.Item>
             <div className="submit-btn-wrap">
               <Button

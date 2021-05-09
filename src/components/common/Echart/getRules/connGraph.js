@@ -1,7 +1,8 @@
-const connGraph = (data, title) => ({
+/* const connGraph = (data, title) => ({
   title: {
     text: title,
     left: 'center',
+    top: '5%',
   },
   tooltip: {
     formatter: (params) => {
@@ -48,7 +49,7 @@ const connGraph = (data, title) => ({
           label: {
             show: true,
             textStyle: {
-              color: 'rgba(255, 255, 255, 1)',
+              color: 'rgba(0, 0, 0, 1)',
               fontWeight: 'bolder',
             },
           },
@@ -77,6 +78,62 @@ const connGraph = (data, title) => ({
       maxRadius: 50,
       gravity: 1.1,
       scaling: 1.1,
+    },
+  ],
+});
+
+export default connGraph;
+*/
+
+const connGraph = (data, title) => ({
+  title: {
+    text: title,
+    left: 'center',
+    top: '5%',
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: (params) => {
+      const { data } = params.data;
+      return '<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">' +
+        `<div>事件${data.clusterNum}:</div>` +
+        `<div>时间${data.time}</div>` +
+        `<div style="max-height: 150px; overflow: hidden; text-overflow: ellipsis">${data.summary}</div>` +
+      '</div>';
+    },
+    triggerOn: 'mousemove',
+  },
+  series: [
+    {
+      type: 'tree',
+      data: [data],
+      roam: true,
+      left: '10%',
+      right: '10%',
+      symbol: 'circle',
+      symbolSize: 30,
+      label: {
+        position: 'right',
+        left: '50%',
+        verticalAlign: 'middle',
+        align: 'left',
+        fontSize: 14,
+        fontWeight: 'bolder',
+      },
+      leaves: {
+        label: {
+          position: 'right',
+          verticalAlign: 'middle',
+          align: 'left',
+        },
+      },
+      emphasis: {
+        focus: 'descendant',
+      },
+      initialTreeDepth: [-1],
+      expandAndCollapse: true,
+      animationDuration: 550,
+      animationDurationUpdate: 750,
     },
   ],
 });

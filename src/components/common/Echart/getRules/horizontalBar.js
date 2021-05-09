@@ -2,7 +2,7 @@ const horizontalBar = (data, title) => ({
   title: {
     text: title,
     left: 'center',
-    top: '2%',
+    top: '5%',
   },
   tooltip: {
     trigger: 'axis',
@@ -13,7 +13,7 @@ const horizontalBar = (data, title) => ({
     top: '10%',
   },
   grid: {
-    top: '15%',
+    top: '25%',
     left: '5%',
     right: '5%',
     bottom: '5%',
