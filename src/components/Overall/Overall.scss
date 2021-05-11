@@ -1,26 +1,26 @@
 @import "../../config/constant.scss";
 
+.overall-wrap {
+  background: whitesmoke;
+}
 .mts-overall-container {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   height: fit-content;
   min-width: 1000px;
   background: white;
   padding: 8px;
   .back {
-    color: $default-blue;
+    color: $default-light-blue;
     font-size: 16px;
     margin-left: 10px;
     cursor: pointer;
   }
 }
 .search-entry-wrap {
-  background: white;
-  width: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  width: 60%;
   height: 250px;
-  position: absolute;
-  left: 25%;
-  top: calc(50% - 125px);
   border-radius: 20px;
   display: flex;
   justify-content: center;
@@ -32,10 +32,10 @@
     margin-bottom: 50px;
   }
   .title {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bolder;
-    color: $default-blue;
-    margin-bottom: 10px;
+    color: $default-light-blue;
+    margin-bottom: 30px;
   }
   .btn-group {
     display: flex;
@@ -47,4 +47,14 @@
       margin-right: 20px;
     }
   }
+}
+.main-wrap {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  background: url("../../materials/star.gif");
+  height: 100%;
+  width: 100%;
 }

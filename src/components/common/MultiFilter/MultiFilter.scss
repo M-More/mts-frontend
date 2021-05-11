@@ -1,6 +1,22 @@
 @import "../../../config/constant";
 
+.mts-multi-filter-radios {
+  span {
+    font-size: 16px;
+  }
+}
 .mts-multi-filter-container{
+  font-size: 16px;
+  .criteria {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    .criteria-attr {
+      font-size: 16px;
+      display: inline-block;
+      width: 100px;
+    }
+  }
   padding: 32px;
   margin: 0 auto;
   width: 80%;

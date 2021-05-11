@@ -2,7 +2,8 @@ import React from "react";
 import {Table, Button, Input} from "antd";
 import {actions} from "../../../redux/actions";
 import {connect} from "react-redux";
-import './Origin.scss'
+import './Origin.scss';
+import AutofitWrap from "../../common/AutofitWrap/AutofitWrap";
 
 class Origin extends React.Component {
   constructor(props) {
@@ -57,19 +58,25 @@ class Origin extends React.Component {
     const { columns } = this;
     const { curProgramme } = this.props;
     return (
-      <div className="origin-wrap">
-        <div className="origin-new">
-          <Input />
-          <Button type="primary">添加站点</Button>
+      <AutofitWrap
+        minHeight={550}
+        padding={200}
+        className="origin-wrap"
+      >
+        <div className="origin-form">
+          <div className="origin-new">
+            <Input />
+            <Button type="primary">添加站点</Button>
+          </div>
+          <Table
+            className="origin-table"
+            columns={this.columns}
+            dataSource={data}
+            pagination={false}
+            size="small"
+          />
         </div>
-        <Table
-          className="origin-table"
-          columns={this.columns}
-          dataSource={data}
-          pagination={false}
-          size="small"
-        />
-      </div>
+      </AutofitWrap>
     );
   }
 }

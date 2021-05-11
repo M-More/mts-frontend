@@ -6,6 +6,7 @@ import getAmountTrend from '../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../services/request/data/getSensiLayout';
 import getSourceLayout from '../../services/request/data/getSourceLayout';
 import getRegionLayout from '../../services/request/data/getRegionLayout';
+import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -13,9 +14,9 @@ class View extends React.Component {
   constructor() {
     super();
     this.state = {
-      dateRange: 0,
-      startPublishedDay: moment().format(DATE_FORMAT),
-      endPublishedDay: moment().startOf('day').format(DATE_FORMAT),
+      // dateRange: 0,
+      endPublishedDay: moment().format(DATE_FORMAT),
+      startPublishedDay: moment().startOf('year').format(DATE_FORMAT),
       sensiLayout: undefined,
       sourceLayout: undefined,
       totalAmountTrend: undefined,
@@ -42,8 +43,20 @@ class View extends React.Component {
   getRegionLayout = async () => {
     const keyword = '';
     const { startPublishedDay, endPublishedDay } = this.state;
-    const regionLayout = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
-    this.setState({ regionLayout });
+    const regions = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
+    let totals = 0;
+    let cnt = 0;
+    let min = regions[0]?.value || 0;
+    let max = 0;
+    regions.forEach((item) => {
+      totals += item.value;
+      cnt += 1;
+      if (item.value < min) min = item.value;
+      if (item.value > max) max = item.value;
+    });
+    this.setState({ regionLayout: {
+      regions, min, max,
+    }});
   };
 
   getSourceLayout = async () => {
@@ -119,18 +132,22 @@ class View extends React.Component {
   render() {
     const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend } = this.state;
     // console.log( sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend)
-    const height = `${document.body.offsetHeight - 128}px`;
+    // const height = `${document.body.offsetHeight - 128 - 20}px`;
     return (
-      <div className="view-wrap">
+      <AutofitWrap
+        minHeight={600}
+        padding={150}
+        className="view-wrap"
+      >
         <div
           className="left-chart"
-          style={{ height }}
         >
           <div className="sub-item">
             <Echart
               title="敏感度分布"
               type="doughnutPie"
               data={sensiLayout}
+              size="small"
             />
           </div>
           <div className="sub-item">
@@ -138,21 +155,21 @@ class View extends React.Component {
               title="来源分部"
               type="defaultPie"
               data={sourceLayout}
+              size="small"
             />
           </div>
         </div>
         <div
           className="main-chart"
-          style={{ height }}
         >
           <Echart
-            title="来源趋势"
-            type="horizontalBar"
-            data={sourceAmountTrend}
+            title="地域分布"
+            type="chinaMap"
+            data={regionLayout}
+            size="large"
           />
         </div>
         <div
-          style={{ height }}
           className="right-chart"
         >
           <div className="sub-item">
@@ -160,17 +177,17 @@ class View extends React.Component {
               title="总量趋势"
               type="areaLine"
               data={totalAmountTrend}
+              size="small"
             />
-          </div>
-          <div className="sub-item">
             <Echart
-              title="地域分布"
-              type="chinaMap"
-              data={regionLayout}
+              title="来源趋势"
+              type="horizontalBar"
+              data={sourceAmountTrend}
+              size="small"
             />
           </div>
         </div>
-      </div>
+      </AutofitWrap>
     );
   }
 }

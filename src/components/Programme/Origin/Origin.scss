@@ -1,10 +1,11 @@
-.origin-wrap {
-  width: 80%;
+.origin-form {
+  width: 90%;
   margin: 30px auto;
   background: white;
   padding: 16px;
+  height: 90%;
   .origin-table {
-    height: 500px;
+    height: 90%;
     overflow: auto;
   }
   .origin-new {
@@ -12,4 +13,11 @@
     input { width: calc(100% - 100px); }
     button { width: 100px; }
   }
+}
+.origin-wrap {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 }

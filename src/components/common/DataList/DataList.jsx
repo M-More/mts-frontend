@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Table, Modal } from 'antd';
-import { HeartOutlined, TagsOutlined } from '@ant-design/icons';
+import { HeartOutlined, TagsOutlined, LoadingOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
@@ -13,7 +13,6 @@ class DataList extends React.Component {
     this.state = {
       curRecord: undefined,
       visible: false,
-      loading: false,
     };
     this.rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
@@ -27,12 +26,6 @@ class DataList extends React.Component {
         dataIndex: 'title',
         key: 'title',
         render: this.renderTitle,
-      },
-      {
-        title: '地址',
-        dataIndex: 'url',
-        key: 'url',
-        render: this.renderAddr,
       },
       {
         title: '站点',
@@ -60,7 +53,13 @@ class DataList extends React.Component {
         title: '分类',
         dataIndex: 'tag',
         key: 'tag',
-        render: (text) => text || '正在解析...'
+        render: (text) => text || <LoadingOutlined />
+      },
+      {
+        title: '操作',
+        dataIndex: 'url',
+        key: 'url',
+        render: this.renderAddr,
       },
     ];
   }
@@ -71,8 +70,9 @@ class DataList extends React.Component {
   };
 
   renderSensi = (text) => {
-    const options = Lodash.find(criteria, { name: 'sensi' })?.options || [];
-    return Lodash.find(options, { value: text })?.label || '';
+    if (text === '1')
+      return '敏感';
+    return "非敏感"
   };
 
   renderTitle = (text, record) => (
@@ -89,7 +89,7 @@ class DataList extends React.Component {
       className="mts-data-list-addr"
       href={text}
     >
-      {text}
+      点击访问 >
     </a>
   );
 
@@ -124,8 +124,8 @@ class DataList extends React.Component {
 
   render() {
     const data = this.props.data || [];
-    const { loading, visible, curRecord } = this.state;
-    const { dataSize, pageSize } = this.props;
+    const { visible, curRecord } = this.state;
+    const { dataSize, pageSize, loading } = this.props;
     return (
       <div className="mts-data-list">
         <div id="table">
@@ -137,10 +137,11 @@ class DataList extends React.Component {
             pagination={{
               position: ['none', 'bottomRight'],
               total: dataSize,
+              onShowSizeChange: this.props.onPageSizeChange,
             }}
-            footer={this.renderFooter}
             onChange={this.handlePageTurned}
             loading={loading}
+            style={{ fontSize: '16px' }}
           />
           <DataContent
             record={curRecord}

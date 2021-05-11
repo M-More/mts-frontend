@@ -1,17 +1,17 @@
-const horizontalBar = (data, title) => ({
+const horizontalBar = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
-    top: '2%',
+    top: '5%',
   },
   tooltip: {
     trigger: 'axis',
     axisPointer: { type: 'shadow' },
   },
-  legend: {
+  /* legend: {
     data: data.xAxis.map((item) => item.label),
     top: '10%',
-  },
+  }, */
   grid: {
     top: '15%',
     left: '5%',

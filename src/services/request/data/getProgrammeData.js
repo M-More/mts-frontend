@@ -8,15 +8,13 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
   const params = {
     fid,
     keyword,
-    startPublishedDay,
-    endPublishedDay,
     timeOrder,
     pageSize,
     fromType: source,
     cflag: sensi,
     page: pageId,
   };
-  const url = encodeURI(`${requests.getProgrammeData.url}?${qs.stringify(params)}`);
+  const url = encodeURI(`${requests.getProgrammeData.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getProgrammeData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
@@ -30,7 +28,6 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
       ...item,
     })),
   };
-  console.log(params, result);
   return result;
 };
 

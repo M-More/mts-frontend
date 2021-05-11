@@ -11,6 +11,8 @@ import getRegionLayout from '../../../services/request/data/getRegionLayout';
 import getTraceTree from '../../../services/request/data/getTraceTree';
 import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
+import getProgrammeData from '../../../services/request/data/getProgrammeData';
+import AutofitWrap from "../../common/AutofitWrap/AutofitWrap";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -112,7 +114,22 @@ const getEventTree = () => {
       },
     ],
   };
-  rawData.level = 0;
+  const list = [rawData];
+  while (list.length) {
+    const head = list.shift();
+    head.name = `事件${head.clusterNum}: \n${head.time}`;
+    head.children = head.childList;
+    head.data = {
+      clusterNum: head.clusterNum,
+      time: head.time,
+      summary: head.summary,
+    };
+    head.children.forEach((item) => {
+      list.push(item);
+    });
+  }
+  return rawData;
+  /* rawData.level = 0;
   const list = [rawData];
   const nodes = [];
   const links = [];
@@ -148,8 +165,7 @@ const getEventTree = () => {
   }
   const categories = [{ name: '事件' }];
   const data = { nodes, links, categories };
-  console.log(data);
-  return data;
+  return data; */
 };
 
 class View extends React.Component {
@@ -167,6 +183,7 @@ class View extends React.Component {
       traceTree: undefined,
       keywordsCloud: undefined,
       traceTreeFormat: 'defaultTree',
+      data: [],
     };
   }
 
@@ -177,12 +194,21 @@ class View extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.curProgramme.fid !== prevProps.curProgramme.fid) {
-      this.handleSearch();
+      this.setState({
+        sensiLayout: undefined,
+        sourceLayout: undefined,
+        totalAmountTrend: undefined,
+        sourceAmountTrend: undefined,
+        regionLayout: undefined,
+        traceTree: undefined,
+        keywordsCloud: undefined,
+      });
+      // this.handleSearch();
     }
   }
 
   componentDidMount() {
-    this.handleSearch();
+    // this.handleSearch();
     // this.clk = setInterval(() => {
     //   this.handleSearch();
     // }, 5000);
@@ -190,13 +216,16 @@ class View extends React.Component {
       if (e.deltaY > 0) this.carousel.next();
       else this.carousel.prev();
     };
-
     window.addEventListener('mousewheel', this.mouseWheel);
   }
 
   componentWillUnmount() {
     // clearInterval(this.clk);
     window.removeEventListener('mousewheel', this.mouseWheel);
+  }
+
+  handleCarouselChange = (current) => {
+    console.log(current)
   }
 
   handleSearch = () => {
@@ -206,13 +235,34 @@ class View extends React.Component {
     this.getRegionLayout();
     this.getTraceTree();
     this.getKeywordsCloud();
+    this.getLatestInfo();
+  };
+
+  getLatestInfo = async () => {
+    const PAGE_SIZE = 10;
+    const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+    const params = [
+      this.props.curProgramme.fid,
+      '', // keyword
+      null, // source
+      '', // startPublishDay
+      '', // endPublishDay
+      null, // sensitiveFlag
+      1, // timeOrder
+      PAGE_SIZE, // pageSize
+      0, // pageId
+    ];
+    const result = await getProgrammeData(...params);
+    this.setState({
+      data: result.data,
+    });
   };
 
   getKeywordsCloud = async () => {
     const keyword = '';
     const { startPublishedDay, endPublishedDay } = this.state;
     const { fid } = this.props.curProgramme;
-    const wordNumber = 25;
+    const wordNumber = 50;
     const keywordsCloud = await getKeywordsCloud(fid, startPublishedDay, endPublishedDay, wordNumber);
     this.setState({ keywordsCloud });
   };
@@ -297,153 +347,203 @@ class View extends React.Component {
   };
 
   render() {
-    const { sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
-    const height = `${document.body.offsetHeight - 128 - 50}px`;
-    const width = '100%';
+    const { data, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     return (
-      <div className="view-wrap">
-        <Carousel
-          ref={r => this.carousel = r}
-          dotPosition="left"
-          style={{ width, height, background: 'green' }}
-        >
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <WordCloud
-                option={keywordsCloud}
-              />
+      <Carousel
+        ref={r => this.carousel = r}
+        dotPosition="left"
+        dots={{ className: 'dots' }}
+        afterChange={this.handleCarouselChange}
+      >
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <WordCloud
+              option={keywordsCloud}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            {/*<WordCloud
+            option={keywordsCloud}
+          />*/}
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            {/*<WordCloud
+            option={keywordsCloud}
+          />*/}
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            {/*<WordCloud
+            option={keywordsCloud}
+          />*/}
+          </AutofitWrap>
+        </div>
+        {/*<div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="敏感度分布"
+              type="doughnutPie"
+              data={sensiLayout}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="来源分部"
+              type="defaultPie"
+              data={sourceLayout}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="总量趋势"
+              type="areaLine"
+              data={totalAmountTrend}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="来源趋势"
+              type="horizontalBar"
+              data={sourceAmountTrend}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="地域分布"
+              type="chinaMap"
+              data={regionLayout}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <div className="latest-info">
+              <div className="theme">最新舆情</div>
+              {data.map((item) => (
+                <div className="latest-info-item">
+                  <span className="title">{item.title}</span>
+                  <span className="content">{item.content}</span>
+                </div>
+              ))}
             </div>
           </div>
-          <div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="话题溯源"
+              type="circleTree"
+              data={traceTree}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="话题溯源"
+              type="defaultTree"
+              data={traceTree}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="情感分析"
+              type="defaultPie"
+              data={emotionLayout}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+            <Echart
+              title="情感趋势图"
+              type="horizontalBar"
+              data={emotionTrendLayout}
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
             <div
               className="carousel-item"
               style={{ width, height }}
             >
               <Echart
-                title="敏感度分布"
-                type="doughnutPie"
-                data={sensiLayout}
+                title="事件溯源"
+                type="connGraph"
+                data={getEventTree()}
               />
             </div>
           </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="来源分部"
-                type="defaultPie"
-                data={sourceLayout}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="总量趋势"
-                type="areaLine"
-                data={totalAmountTrend}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="来源趋势"
-                type="horizontalBar"
-                data={sourceAmountTrend}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="地域分布"
-                type="chinaMap"
-                data={regionLayout}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="话题溯源"
-                type="circleTree"
-                data={traceTree}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="话题溯源"
-                type="defaultTree"
-                data={traceTree}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="情感分析"
-                type="defaultPie"
-                data={emotionLayout}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="情感趋势图"
-                type="horizontalBar"
-                data={emotionTrendLayout}
-              />
-            </div>
-          </div>
-          <div>
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <div
-                className="carousel-item"
-                style={{ width, height }}
-              >
-                <Echart
-                  title="事件溯源"
-                  type="connGraph"
-                  data={getEventTree()}
-                />
-              </div>
-            </div>
-          </div>
-        </Carousel>
-      </div>
+        </div>*/}
+      </Carousel>
     );
   }
 }

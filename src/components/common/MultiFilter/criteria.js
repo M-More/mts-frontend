@@ -6,7 +6,16 @@ const criteria = [
     options: [
       { label: '不限', value: null },
       { label: '敏感', value: '1' },
-      { label: '非敏感', value: '2' },
+      { label: '非敏感', value: '0' },
+    ],
+  },
+  {
+    name: 'timeOrder',
+    label: '时间排序',
+    defaultValue: 0,
+    options: [
+      { label: '时间顺序', value: 0 },
+      { label: '时间逆序', value: 1 },
     ],
   },
   {
@@ -38,15 +47,7 @@ const criteria = [
       { label: '自定义', value: -1 },
     ],
   },
-  {
-    name: 'timeOrder',
-    label: '时间排序',
-    defaultValue: 0,
-    options: [
-      { label: '时间顺序', value: 0 },
-      { label: '时间逆序', value: 1 },
-    ],
-  },
+
 ];
 
 export default criteria;

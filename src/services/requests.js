@@ -1,7 +1,8 @@
 const domain1 = 'http://192.168.0.19:8082';
 const domain2 = 'http://localhost:3000/api';
-const domain3 = 'http://localhost:8082/';
-const curDomain = domain1;
+const domain3 = 'http://localhost:8082';
+const domain4 = 'http://202.120.40.69:28082';
+const curDomain = domain4;
 
 const requests = {
   getTopics: { url: `${curDomain}/data/getTags`, method: 'GET' },
@@ -23,6 +24,8 @@ const requests = {
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
   getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
+  getProgrammeSensiLayout: { url: `${curDomain}/data/globalSearch/cflagCount2`, method: 'GET' },
+
 };
 
 export default requests;
