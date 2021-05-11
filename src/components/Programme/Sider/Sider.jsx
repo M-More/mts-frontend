@@ -83,13 +83,13 @@ class Sider extends React.Component {
     const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
     return (
       <Layout.Sider
-        theme="light"
         className="programme-sider-wrap"
       >
         <Button
           block="block"
           type="primary"
           className="programme-new-btn"
+          size="large"
           onClick={() => this.handleProgrammeNew('open')}
         >
           <PlusOutlined />

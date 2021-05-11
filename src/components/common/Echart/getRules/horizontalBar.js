@@ -1,4 +1,4 @@
-const horizontalBar = (data, title) => ({
+const horizontalBar = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
@@ -8,12 +8,12 @@ const horizontalBar = (data, title) => ({
     trigger: 'axis',
     axisPointer: { type: 'shadow' },
   },
-  legend: {
+  /* legend: {
     data: data.xAxis.map((item) => item.label),
     top: '10%',
-  },
+  }, */
   grid: {
-    top: '25%',
+    top: '15%',
     left: '5%',
     right: '5%',
     bottom: '5%',

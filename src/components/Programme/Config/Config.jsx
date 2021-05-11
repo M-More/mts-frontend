@@ -130,8 +130,8 @@ class Config extends React.Component {
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
             <Radio.Group size="small">
-              <Radio.Button value="or">或</Radio.Button>
-              <Radio.Button value="and">与</Radio.Button>
+              <Radio value="or">或</Radio>
+              <Radio value="and">与</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
@@ -148,8 +148,8 @@ class Config extends React.Component {
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
             <Radio.Group size="small">
-              <Radio.Button value="or">或</Radio.Button>
-              <Radio.Button value="and">与</Radio.Button>
+              <Radio value="or">或</Radio>
+              <Radio value="and">与</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item

@@ -1,4 +1,4 @@
-const circleTree = (data, title) => ({
+const circleTree = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',

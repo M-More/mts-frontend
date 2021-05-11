@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal } from 'antd';
 import './DataContent.scss';
-import getSensitiveWord from "../../../services/request/data/getSensitiveWord";
-import {Divider} from "antd/es";
-import Lodash from "lodash";
-import criteria from "../MultiFilter/criteria";
+import { Divider } from 'antd/es';
+import Lodash from 'lodash';
+import getSensitiveWord from '../../../services/request/data/getSensitiveWord';
+import criteria from '../MultiFilter/criteria';
 
 class DataContent extends React.Component {
   constructor() {
@@ -49,8 +49,8 @@ class DataContent extends React.Component {
   };
 
   renderSensi = (text) => {
-    const options = Lodash.find(criteria, { name: 'sensi' })?.options || [];
-    return Lodash.find(options, { value: text })?.label || '';
+    if (text === '1') return '敏感';
+    return "非敏感"
   };
 
   render() {
@@ -63,6 +63,7 @@ class DataContent extends React.Component {
         visible={visible}
         onCancel={handleModalCancel}
         wrapClassName="mts-data-list"
+        className="mts-content-modal"
       >
         <div className="attr">
           <span className="title">地址： </span>
@@ -81,13 +82,13 @@ class DataContent extends React.Component {
           <span className="value">{publishedDay}</span>
         </div>
         <Divider />
-        {
-          contentSlice.map((item) =>
-            item.sensitive ?
-              <span className="sensitive">{item.slice}</span> :
-              <span>{item.slice}</span>
-          )
+        <div className="content">
+          {
+          contentSlice.map((item) => (item.sensitive ?
+            <span className="sensitive">{item.slice}</span> :
+            <span>{item.slice}</span>))
         }
+        </div>
       </Modal>
     );
   }

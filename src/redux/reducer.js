@@ -1,11 +1,13 @@
 import { actionTypes } from './actions';
 import { handleAuthChange } from './reducer/user';
 import { handleProgrammeChange } from './reducer/programme';
+import { handleOverallPathChange } from "./reducer/overall";
 
 const initialState = {
   userName: undefined,
   userType: undefined,
   curProgramme: undefined,
+  overallPath: '',
 };
 
 export default (prevState = initialState, actions) => {
@@ -17,6 +19,9 @@ export default (prevState = initialState, actions) => {
       break;
     case actionTypes.ON_PROGRAMME_CHANGE:
       newState = handleProgrammeChange(prevState, data);
+      break;
+    case actionTypes.ON_OVERALL_PATH_CHANGE:
+      newState = handleOverallPathChange(prevState, data);
       break;
     default:
       newState = { ...prevState };

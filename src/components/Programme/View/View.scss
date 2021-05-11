@@ -1,4 +1,9 @@
+@import "../../../config/constant.scss";
+
 .view-wrap {
+  .ant-carousel-vertical .slick-dots li button {
+    background: $default-blue;
+  }
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

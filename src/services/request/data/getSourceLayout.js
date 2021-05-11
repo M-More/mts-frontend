@@ -7,10 +7,9 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getSourceLayout.url}?${qs.stringify(params)}`);
+  const url = encodeURI(`${requests.getSourceLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getSourceLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
-
   const options = [
     { label: '不限', value: null },
     { label: '网站', value: '1' },
@@ -23,11 +22,14 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
   ];
   const sourceLayout =
     Object.keys(rawResult)
+      .map((id) => parseInt(id.slice(-1)))
       .map((id) => ({
         name: options[id].label,
         label: options[id].label,
-        value: rawResult[id],
+        value: rawResult[`fromType${id}`],
       }));
+
+  console.log(sourceLayout);
   return sourceLayout;
 };
 

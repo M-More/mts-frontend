@@ -5,6 +5,7 @@ import './MultiFilter.scss';
 
 class MultiFilter extends React.Component {
   handleSelect = (event, type) => {
+    console.log(type, event.target.value)
     if (this.props.onSelect) {
       this.props.onSelect(type, event.target.value);
     }
@@ -17,6 +18,7 @@ class MultiFilter extends React.Component {
   };
 
   handleDateChange = (moments) => {
+    console.log(moments);
     if (this.props.onDateChange) {
       this.props.onDateChange(moments);
     }
@@ -28,7 +30,7 @@ class MultiFilter extends React.Component {
       <div className="mts-multi-filter-container">
         <Input.Search
           className="mts-multi-filter-input"
-          enterButton
+          enterButton="模糊匹配"
           size="large"
           onSearch={this.handleSearch}
           defaultValue={initialKeyword}
@@ -37,33 +39,101 @@ class MultiFilter extends React.Component {
           labelCol={{ span: 3 }}
           wrapperCol={{ span: 999 }}
         >
-          {criteria.map((item) => (
-            <div key={item.name}>
-              <Form.Item label={item.label}>
-                <Radio.Group
-                  className="mts-multi-filter-radios"
-                  value={current[item.name]}
-                  onChange={(event) => this.handleSelect(event, item.name)}
+          <div className="criteria" style={{ width: '50%'}}>
+            <span className="criteria-attr">{criteria[0].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[0].name]}
+              onChange={(event) => this.handleSelect(event, criteria[0].name)}
+            >
+              {criteria[0].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
                 >
-                  {item.options.map((option) => (
-                    <Radio
-                      value={option.value}
-                      key={option.value}
-                    >
-                      {option.label}
-                    </Radio>
-                  ))}
-                </Radio.Group>
-                {item.name === 'dateRange' && current[item.name] === -1 && (
-                  <DatePicker.RangePicker
-                    className="mts-multi-filter-date-picker"
-                    onChange={this.handleDateChange}
-                  />
-                )}
-              </Form.Item>
-              <Divider className="divider" />
-            </div>
-          ))}
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[0].name === 'dateRange' && current[criteria[0].name] === -1 && (
+              <DatePicker.RangePicker
+                className="mts-multi-filter-date-picker"
+                onChange={this.handleDateChange}
+              />
+            )}
+          </div>
+          <div className="criteria" style={{ width: '50%'}}>
+            <span className="criteria-attr">{criteria[1].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[1].name]}
+              onChange={(event) => this.handleSelect(event, criteria[1].name)}
+            >
+              {criteria[1].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
+                >
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[1].name === 'dateRange' && current[criteria[1].name] === -1 && (
+              <DatePicker.RangePicker
+                className="mts-multi-filter-date-picker"
+                onChange={this.handleDateChange}
+              />
+            )}
+          </div>
+          <Divider className="divider" />
+          <div className="criteria">
+            <span className="criteria-attr">{criteria[2].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[2].name]}
+              onChange={(event) => this.handleSelect(event, criteria[2].name)}
+            >
+              {criteria[2].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
+                >
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[2].name === 'dateRange' && current[criteria[2].name] === -1 && (
+              <DatePicker.RangePicker
+                className="mts-multi-filter-date-picker"
+                onChange={this.handleDateChange}
+              />
+            )}
+          </div>
+          <Divider className="divider" />
+          <div className="criteria">
+            <span className="criteria-attr">{criteria[3].label}: </span>
+            <Radio.Group
+              className="mts-multi-filter-radios"
+              value={current[criteria[3].name]}
+              onChange={(event) => this.handleSelect(event, criteria[3].name)}
+            >
+              {criteria[3].options.map((option) => (
+                <Radio
+                  value={option.value}
+                  key={option.value}
+                >
+                  {option.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+            {criteria[3].name === 'dateRange' && current[criteria[3].name] === -1 && (
+              <DatePicker.RangePicker
+                className="mts-multi-filter-date-picker"
+                onChange={this.handleDateChange}
+              />
+            )}
+          </div>
+          <Divider className="divider" />
         </Form>
       </div>
     );

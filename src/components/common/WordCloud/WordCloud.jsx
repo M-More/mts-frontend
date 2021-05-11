@@ -3,6 +3,7 @@ import * as echarts from 'echarts';
 import 'echarts-wordcloud';
 import React from 'react';
 import './WordCloud.scss';
+import Loading from "../Loading/Loading";
 
 export default class WordCloud extends React.Component {
   wordOption = () => {
@@ -17,7 +18,7 @@ export default class WordCloud extends React.Component {
         {
           type: 'wordCloud',
           gridSize: 1,
-          sizeRange: [12, 55],
+          sizeRange: [20, 100],
           rotationRange: [-0, 0, 0, 90],
           textStyle: {
             color: '#2f54eb',
@@ -38,14 +39,19 @@ export default class WordCloud extends React.Component {
   render() {
     return (
       <div className="word-chart">
-        <ReactEcharts
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
-          option={this.wordOption()}
-          theme="dark"
-        />
+        {
+          this.props.option ?
+            <ReactEcharts
+              style={{
+                width: '100%',
+                height: '100%'
+              }}
+              option={this.wordOption()}
+              theme="dark"
+            /> :
+            <Loading />
+        }
+
       </div>
     );
   }

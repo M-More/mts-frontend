@@ -6,6 +6,10 @@ import requests from '../../services/requests';
 import constant from '../../config/constant';
 import DataContent from '../common/DataContent/DataContent';
 import getOverallData from '../../services/request/data/getOverallData';
+import moment from "moment";
+import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
+import Loading from "../common/Loading/Loading";
+import {LoadingOutlined} from "@ant-design/icons";
 
 const contentStyle = {
   height: '160px',
@@ -22,8 +26,10 @@ class Home extends React.Component {
       curRecord: undefined,
       visible: false,
       tags: [],
-      sensitiveInfo: [],
-      latestInfo: [],
+      sensitiveInfo: undefined,
+      latestInfo: undefined,
+      sensitiveLoading: false,
+      latestLoading: false,
     };
   }
 
@@ -38,13 +44,14 @@ class Home extends React.Component {
   };
 
   getSensitiveInfo = async () => {
+    this.setState({ sensitiveLoading: true })
     const PAGE_SIZE = 10;
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
       '', // keyword
       null, // source
-      null, // startPublishDay
-      null, // endPublishDay
+      '', // startPublishDay
+      '', // endPublishDay
       1, // sensitiveFlag
       1, // timeOrder
       PAGE_SIZE, // pageSize
@@ -53,17 +60,19 @@ class Home extends React.Component {
     const result = await getOverallData(...params);
     this.setState({
       sensitiveInfo: result.data,
+      sensitiveLoading: false,
     });
   };
 
   getLatestInfo = async () => {
+    this.setState({ latestLoading: true })
     const PAGE_SIZE = 10;
     const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
       '', // keyword
       null, // source
-      null, // startPublishDay
-      null, // endPublishDay
+      '', // startPublishDay
+      '', // endPublishDay
       null, // sensitiveFlag
       1, // timeOrder
       PAGE_SIZE, // pageSize
@@ -71,6 +80,7 @@ class Home extends React.Component {
     ];
     const result = await getOverallData(...params);
     this.setState({
+      latestLoading: false,
       latestInfo: result.data,
     });
   };
@@ -118,38 +128,55 @@ class Home extends React.Component {
   };
 
   render() {
-    const { tags, curRecord, visible, sensitiveInfo, latestInfo } = this.state;
+    const { tags, curRecord, visible, sensitiveInfo, latestInfo, sensitiveLoading, latestLoading } = this.state;
     return (
-      <div className="home-wrap">
-        <div className="title">舆情监测系统</div>
-        <Card title="敏感信息列表" className="home-card">
-          {sensitiveInfo.map((item) => (
-            <p
-              className="item"
-              onClick={e => this.handleTitleClick(item)}
-            >
-              {item.title}
-              <span className="addr">[{item.addr}]</span>
-            </p>
-          ))}
+      <AutofitWrap
+        minHeight={600}
+        padding={150}
+        className="home-wrap"
+      >
+        <Card
+          title="敏感信息列表"
+          className="home-card"
+          loading={sensitiveLoading}
+        >
+          {sensitiveInfo ?
+            sensitiveInfo.map((item) => (
+              <p
+                className="item"
+                onClick={e => this.handleTitleClick(item)}
+              >
+                {item.title}
+                <span className="addr">[{moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]</span>
+              </p>
+            )) :
+            <Loading />
+          }
         </Card>
-        <Card title="最新舆情" className="home-card">
-          {latestInfo.map((item) => (
-            <p
-              className="item"
-              onClick={e => this.handleTitleClick(item)}
-            >
-              {item.title}
-              <span className="addr">[{item.addr}]</span>
-            </p>
-          ))}
+        <Card
+          title="最新舆情"
+          className="home-card"
+          loading={latestLoading}
+        >
+          {latestInfo ?
+            latestInfo.map((item) => (
+              <p
+                className="item"
+                onClick={e => this.handleTitleClick(item)}
+              >
+                {item.title}
+                <span className="addr">[{moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]</span>
+              </p>
+            )) :
+            <Loading />
+          }
         </Card>
         <DataContent
           record={curRecord}
           visible={visible}
           handleModalCancel={this.handleModalCancel}
         />
-      </div>
+      </AutofitWrap>
     );
   }
 }

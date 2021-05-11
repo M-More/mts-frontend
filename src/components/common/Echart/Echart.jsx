@@ -12,6 +12,7 @@ import './Echart.scss';
 import defaultTree from './getRules/defaultTree';
 import circleTree from './getRules/circleTree';
 import connGraph from "./getRules/connGraph";
+import Loading from "../Loading/Loading";
 
 class Echart extends React.Component {
   constructor() {
@@ -25,7 +26,7 @@ class Echart extends React.Component {
   }
 
   render() {
-    const { title, data, type } = this.props;
+    const { title, data, type, size } = this.props;
     let getRules;
     switch (type) {
       case 'defaultPie': getRules = defaultPie; break;
@@ -38,7 +39,7 @@ class Echart extends React.Component {
       case 'connGraph': getRules = connGraph; break;
       default: break;
     }
-    const option = data ? getRules(data, title) : {};
+    const option = data ? getRules(data, title, size) : {};
     const { guid } = this.state;
     const width = this.props.width || this.defaultWidth;
     const height = this.props.height || this.defaultHeight;
@@ -47,14 +48,18 @@ class Echart extends React.Component {
         className="common-chart-wrap"
         id={`echart-${guid}`}
       >
-        <ReactEcharts
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
-          option={option}
-          theme="light"
-        />
+        {
+          data ?
+            <ReactEcharts
+              style={{
+                width: '100%',
+                height: '100%'
+              }}
+              option={option}
+              theme="light"
+            /> :
+            <Loading />
+        }
       </div>
     );
   }

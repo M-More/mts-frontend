@@ -4,9 +4,11 @@
   flex-wrap: wrap;
   padding: 10px;
   .main-chart {
+    height: 100%;
     width: 60%;
   }
   .left-chart, .right-chart {
+    height: 100%;
     width: 20%;
     .sub-item {
       height: 50%;

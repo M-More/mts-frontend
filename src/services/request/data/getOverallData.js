@@ -7,15 +7,14 @@ const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 const getOverallData = async (keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId) => {
   const params = {
     keyword,
-    startPublishedDay,
-    endPublishedDay,
     timeOrder,
     pageSize,
     fromType: source,
     cflag: sensi,
     page: pageId,
   };
-  const url = encodeURI(`${requests.getOverallData.url}?${qs.stringify(params)}`);
+  const url = encodeURI(`${requests.getOverallData.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  console.log(url);
   const response = await fetch(url, { method: requests.getOverallData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {

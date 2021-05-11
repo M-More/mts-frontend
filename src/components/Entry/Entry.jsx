@@ -13,7 +13,10 @@ class Entry extends React.Component {
     return (
       <Layout className="mts-app-wrap">
         <Header />
-        <Layout.Content className="mts-app-body">
+        <Layout.Content
+          className="mts-app-body"
+          ref={r => this.body = r}
+        >
           <Switch>
             {getRoutes(userType).map((item) => (
               <Route path={item.link} component={item.component} />

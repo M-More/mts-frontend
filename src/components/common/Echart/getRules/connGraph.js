@@ -1,4 +1,4 @@
-/* const connGraph = (data, title) => ({
+/* const connGraph = (data, title, ) => ({
   title: {
     text: title,
     left: 'center',
@@ -85,7 +85,7 @@
 export default connGraph;
 */
 
-const connGraph = (data, title) => ({
+const connGraph = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
