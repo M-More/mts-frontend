@@ -9,7 +9,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     endPublishedDay,
   }; */
   const url = encodeURI(`${requests.getAmountTrend.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  const response = await fetch(url, { method: requests.getOverallData.method });
+  const response = await fetch(url, { method: requests.getAmountTrend.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 
   const options = [
@@ -23,13 +23,13 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     { label: '新闻', value: '7' },
   ];
   const sourceAmountTrend = {
-    yAxis: rawResult.timeRange.map((str) => {
+    yAxis: rawResult.timeRange ? rawResult.timeRange.map((str) => {
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
       const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
       return avgTime
-    }),
+    }) : [],
     xAxis: Object.keys(rawResult)
       .map((key) => ({
         key,
@@ -43,13 +43,13 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
       })),
   };
   const totalAmountTrend = {
-    xAxis: rawResult.timeRange.map((str) => {
+    xAxis: rawResult.timeRange ? rawResult.timeRange.map((str) => {
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
       const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
       return avgTime;
-    }),
+    }) : [],
     yAxis: rawResult.totalAmountTrend,
   };
   return [totalAmountTrend, sourceAmountTrend];

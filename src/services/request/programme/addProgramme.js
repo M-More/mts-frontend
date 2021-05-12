@@ -13,7 +13,6 @@ const addProgramme = async (rawData) => {
     username: rawData.userName,
     programmeName: rawData.name,
   };
-  console.log(data);
   const url = encodeURI(`${requests.addProgramme.url}`);
   const response = await fetch(url, {
     method: requests.login.method,

@@ -25,7 +25,12 @@ const requests = {
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
   getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
   getProgrammeSensiLayout: { url: `${curDomain}/data/globalSearch/cflagCount2`, method: 'GET' },
-
+  getProgrammeSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount2`, method: 'GET' },
+  getProgrammeAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount2`, method: 'GET' },
+  getProgrammeRegionLayout: { url: `${curDomain}/data/globalSearch/areaCount2`, method: 'GET' },
+  getProgrammeOrigins: { url: `${curDomain}/User/findAllUrl`, method: 'GET' },
+  addProgrammeOrigin: { url: `${curDomain}/User/addUrl`, method: 'POST' },
+  delProgrammeOrigin: { url: `${curDomain}/User/delUrl`, method: 'GET' },
 };
 
 export default requests;

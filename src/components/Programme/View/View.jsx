@@ -13,6 +13,10 @@ import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
 import getProgrammeData from '../../../services/request/data/getProgrammeData';
 import AutofitWrap from "../../common/AutofitWrap/AutofitWrap";
+import getProgrammeSensiLayout from "../../../services/request/programme/getProgrammeSensiLayout";
+import getProgrammeSourceLayout from "../../../services/request/programme/getProgrammeSourceLayout";
+import getProgrammeAmountTrend from "../../../services/request/programme/getProgrammeAmountTrend";
+import getProgrammeRegionLayout from "../../../services/request/programme/getProgrammeRegionLayout";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -173,8 +177,8 @@ class View extends React.Component {
     super();
     this.state = {
       dateRange: 0,
-      startPublishedDay: moment().format(DATE_FORMAT),
-      endPublishedDay: moment().startOf('day').format(DATE_FORMAT),
+      endPublishedDay: moment().format(DATE_FORMAT),
+      startPublishedDay: moment().startOf('year').format(DATE_FORMAT),
       sensiLayout: undefined,
       sourceLayout: undefined,
       totalAmountTrend: undefined,
@@ -183,7 +187,7 @@ class View extends React.Component {
       traceTree: undefined,
       keywordsCloud: undefined,
       traceTreeFormat: 'defaultTree',
-      data: [],
+      data: undefined,
     };
   }
 
@@ -192,7 +196,7 @@ class View extends React.Component {
     this.setState({ traceTreeFormat });
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  shouldComponentUpdate(prevProps, prevState, snapshot) {
     if (this.props.curProgramme.fid !== prevProps.curProgramme.fid) {
       this.setState({
         sensiLayout: undefined,
@@ -202,9 +206,14 @@ class View extends React.Component {
         regionLayout: undefined,
         traceTree: undefined,
         keywordsCloud: undefined,
+      }, () => {
+        this.carousel.goTo(0)
+        this.handleCarouselChange(0);
       });
+      return false
       // this.handleSearch();
     }
+    return true
   }
 
   componentDidMount() {
@@ -212,6 +221,7 @@ class View extends React.Component {
     // this.clk = setInterval(() => {
     //   this.handleSearch();
     // }, 5000);
+    this.handleCarouselChange(0);
     this.mouseWheel = (e) => {
       if (e.deltaY > 0) this.carousel.next();
       else this.carousel.prev();
@@ -225,8 +235,22 @@ class View extends React.Component {
   }
 
   handleCarouselChange = (current) => {
-    console.log(current)
-  }
+    switch (current) {
+      case 0: if (!this.state.keywordsCloud) this.getKeywordsCloud(); break;
+      case 2: if (!this.state.sensiLayout) this.getSensiLayout(); break;
+      case 3: if (!this.state.sourceLayout) this.getSourceLayout(); break;
+      case 4: if (!this.state.totalAmountTrend) this.getAmountTrend(); break;
+      case 5: if (!this.state.sourceAmountTrend) this.getAmountTrend(); break;
+      case 6: if (!this.state.regionLayout) this.getRegionLayout(); break;
+      case 1: if (!this.state.data) this.getLatestInfo(); break;
+      case 7: break; // 情感分布
+      case 8: break; // 情感趋势
+      case 9: break; // 事件溯源
+      case 10: break; // 话题溯源1
+      case 11: break; // 话题溯源2
+      default: break;
+    }
+  };
 
   handleSearch = () => {
     this.getAmountTrend();
@@ -269,37 +293,39 @@ class View extends React.Component {
 
   getTraceTree = async () => {
     const keyword = '';
+    const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const traceTree = await getTraceTree(keyword, startPublishedDay, endPublishedDay);
     this.setState({ traceTree });
   };
 
   getRegionLayout = async () => {
-    const keyword = '';
+    const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
-    const regionLayout = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
+    const regionLayout = await getProgrammeRegionLayout(fid, startPublishedDay, endPublishedDay);
+    console.log(regionLayout);
     this.setState({ regionLayout });
   };
 
   getSourceLayout = async () => {
-    const keyword = '';
+    const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
-    const sourceLayout = await getSourceLayout(keyword, startPublishedDay, endPublishedDay);
+    const sourceLayout = await getProgrammeSourceLayout(fid, startPublishedDay, endPublishedDay);
     this.setState({ sourceLayout });
   };
 
   getSensiLayout = async () => {
-    const keyword = '';
+    const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
-    const sensiLayout = await getSensiLayout(keyword, startPublishedDay, endPublishedDay);
+    const sensiLayout = await getProgrammeSensiLayout(fid, startPublishedDay, endPublishedDay);
     this.setState({ sensiLayout });
   };
 
   getAmountTrend = async () => {
-    const keyword = '';
+    const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const [totalAmountTrend, sourceAmountTrend] =
-      await getAmountTrend(keyword, startPublishedDay, endPublishedDay);
+      await getProgrammeAmountTrend(fid, startPublishedDay, endPublishedDay);
     this.setState({
       totalAmountTrend, sourceAmountTrend,
     });
@@ -354,6 +380,7 @@ class View extends React.Component {
         dotPosition="left"
         dots={{ className: 'dots' }}
         afterChange={this.handleCarouselChange}
+        className="view-wrap"
       >
         <div className="carousel-item">
           <AutofitWrap
@@ -370,112 +397,122 @@ class View extends React.Component {
             minHeight={550}
             padding={200}
           >
-          </AutofitWrap>
-        </div>
-        <div className="carousel-item">
-          <AutofitWrap
-            minHeight={550}
-            padding={200}
-          >
-            {/*<WordCloud
-            option={keywordsCloud}
-          />*/}
-          </AutofitWrap>
-        </div>
-        <div className="carousel-item">
-          <AutofitWrap
-            minHeight={550}
-            padding={200}
-          >
-            {/*<WordCloud
-            option={keywordsCloud}
-          />*/}
-          </AutofitWrap>
-        </div>
-        <div className="carousel-item">
-          <AutofitWrap
-            minHeight={550}
-            padding={200}
-          >
-            {/*<WordCloud
-            option={keywordsCloud}
-          />*/}
-          </AutofitWrap>
-        </div>
-        {/*<div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="敏感度分布"
-              type="doughnutPie"
-              data={sensiLayout}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="来源分部"
-              type="defaultPie"
-              data={sourceLayout}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="总量趋势"
-              type="areaLine"
-              data={totalAmountTrend}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="来源趋势"
-              type="horizontalBar"
-              data={sourceAmountTrend}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="地域分布"
-              type="chinaMap"
-              data={regionLayout}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
             <div className="latest-info">
               <div className="theme">最新舆情</div>
-              {data.map((item) => (
+              {data && data.slice(0, 8).map((item) => (
                 <div className="latest-info-item">
                   <span className="title">{item.title}</span>
                   <span className="content">{item.content}</span>
                 </div>
               ))}
             </div>
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="敏感度分布"
+              type="doughnutPie"
+              data={sensiLayout}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="来源分部"
+              type="defaultPie"
+              data={sourceLayout}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="总量趋势"
+              type="areaLine"
+              data={totalAmountTrend}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="来源趋势"
+              type="horizontalBar"
+              data={sourceAmountTrend}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="地域分布"
+              type="chinaMap"
+              data={regionLayout}
+            />
+          </AutofitWrap>
+        </div>
+
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="情感分析"
+              type="defaultPie"
+              data={emotionLayout}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="情感趋势图"
+              type="horizontalBar"
+              data={emotionTrendLayout}
+            />
+          </AutofitWrap>
+        </div>
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
+          >
+            <Echart
+              title="事件溯源"
+              type="connGraph"
+              data={getEventTree()}
+            />
+          </AutofitWrap>
+        </div>
+        {/*
+        <
+        <div>
+          <div
+            className="carousel-item"
+            style={{ width, height }}
+          >
+
           </div>
         </div>
         <div>
@@ -507,11 +544,7 @@ class View extends React.Component {
             className="carousel-item"
             style={{ width, height }}
           >
-            <Echart
-              title="情感分析"
-              type="defaultPie"
-              data={emotionLayout}
-            />
+
           </div>
         </div>
         <div>

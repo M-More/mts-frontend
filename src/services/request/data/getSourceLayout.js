@@ -29,7 +29,6 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
         value: rawResult[`fromType${id}`],
       }));
 
-  console.log(sourceLayout);
   return sourceLayout;
 };
 

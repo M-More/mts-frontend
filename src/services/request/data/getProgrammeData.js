@@ -19,14 +19,14 @@ const getProgrammeData = async (fid, keyword, source, startPublishedDay, endPubl
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
-    data: rawResult.dataContent.map((item) => ({
+    data: rawResult.dataContent ? rawResult.dataContent.map((item) => ({
       source: item.fromType,
       addr: item.resource,
       url: item.webpageUrl,
       sensi: item.cflag,
       publishedDay: moment(item.publishedDay).add(8, 'hours').format(DATE_FORMAT),
       ...item,
-    })),
+    })) : [],
   };
   return result;
 };

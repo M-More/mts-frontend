@@ -1,21 +1,12 @@
 @import "../../../config/constant.scss";
 
 .view-wrap {
-  .ant-carousel-vertical .slick-dots li button {
-    background: $default-blue;
-  }
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  .carousel-item {
-    //background: #100c2A;
-    background: white;
-    overflow: hidden;
-  }
+
   .latest-info {
     width: 95%;
     margin-left: 5%;
     height: 100%;
+    overflow: hidden;
     .theme {
       color: black;
       font-size: 16px;
@@ -61,4 +52,18 @@
       }
     }
   }
+}
+.dots {
+
+}
+.ant-carousel-vertical .slick-dots li button {
+  background: $default-blue;
+}
+.ant-carousel .slick-dots li.slick-active button {
+  background: $default-dark-blue;
+}
+.carousel-item {
+  //background: #100c2A;
+  background: white;
+  overflow: hidden;
 }

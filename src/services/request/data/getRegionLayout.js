@@ -56,7 +56,21 @@ const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
       name: regionMap.get(key),
       value: rawResult[`from${key}`],
     }));
-  return regionLayout;
+  let totals = 0;
+  let cnt = 0;
+  let min = regionLayout[0]?.value || 0;
+  let max = 0;
+  regionLayout.forEach((item) => {
+    totals += item.value;
+    cnt += 1;
+    if (item.value < min) min = item.value;
+    if (item.value > max) max = item.value;
+  });
+  return {
+    regions: regionLayout,
+    min,
+    max,
+  };
 };
 
 export default getRegionLayout;
