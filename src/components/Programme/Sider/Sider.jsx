@@ -74,12 +74,12 @@ class Sider extends React.Component {
 
   handleProgrammeSelect = (e) => {
     const curProgramme = this.state.programmes.find((item) => item.fid === parseInt(e.key, 10));
-    console.log(curProgramme.fid);
     this.props.onProgrammeChange({ curProgramme });
   };
 
   render() {
     const { curProgramme } = this.props;
+    console.log(curProgramme);
     const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
     return (
       <Layout.Sider

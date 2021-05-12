@@ -1,14 +1,15 @@
 import requests from '../../requests';
 import qs from 'qs';
 
-const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
+const getProgrammeSensiLayout = async (fid, startPublishedDay, endPublishedDay) => {
   const params = {
-    keyword,
+    fid,
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getSensiLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  const response = await fetch(url, { method: requests.getSensiLayout.method });
+  const url = encodeURI(`${requests.getProgrammeSensiLayout.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  console.log(url)
+  const response = await fetch(url, { method: requests.getProgrammeSensiLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   /* const options = [
     { label: '不限', value: null },
@@ -22,6 +23,8 @@ const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
         label: options[id].label,
         value: rawResult[id],
       })); */
+  console.log(rawResult)
+
   const sensiLayout = [
     { name: '敏感', label: '敏感', value: rawResult.cflag1 },
     { name: '非敏感', label: '非敏感', value: rawResult.cflag0 },
@@ -29,4 +32,4 @@ const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
   return sensiLayout;
 };
 
-export default getSensiLayout;
+export default getProgrammeSensiLayout;

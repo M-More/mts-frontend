@@ -2,16 +2,16 @@ import requests from '../../requests';
 import qs from 'qs';
 import moment from "moment";
 
-const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
+const getProgrammeAmountTrend = async (fid, startPublishedDay, endPublishedDay) => {
   /* const params = {
     keyword,
     startPublishedDay,
     endPublishedDay,
   }; */
-  const url = encodeURI(`${requests.getAmountTrend.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  const response = await fetch(url, { method: requests.getAmountTrend.method });
+  const url = encodeURI(`${requests.getProgrammeAmountTrend.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  const response = await fetch(url, { method: requests.getProgrammeAmountTrend.method });
   const rawResult = response.status === 200 ? await response.json() : {};
-
+  console.log(rawResult, url)
   const options = [
     { label: '不限', value: null },
     { label: '网站', value: '1' },
@@ -55,4 +55,4 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
   return [totalAmountTrend, sourceAmountTrend];
 };
 
-export default getAmountTrend;
+export default getProgrammeAmountTrend;

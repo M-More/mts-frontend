@@ -43,20 +43,9 @@ class View extends React.Component {
   getRegionLayout = async () => {
     const keyword = '';
     const { startPublishedDay, endPublishedDay } = this.state;
-    const regions = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
-    let totals = 0;
-    let cnt = 0;
-    let min = regions[0]?.value || 0;
-    let max = 0;
-    regions.forEach((item) => {
-      totals += item.value;
-      cnt += 1;
-      if (item.value < min) min = item.value;
-      if (item.value > max) max = item.value;
-    });
-    this.setState({ regionLayout: {
-      regions, min, max,
-    }});
+    const regionLayout = await getRegionLayout(keyword, startPublishedDay, endPublishedDay);
+
+    this.setState({ regionLayout })
   };
 
   getSourceLayout = async () => {

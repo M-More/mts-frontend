@@ -1,14 +1,14 @@
 import requests from "../../requests";
 import qs from 'qs';
 
-const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
+const getProgrammeRegionLayout = async (fid, startPublishedDay, endPublishedDay) => {
   const params = {
-    keyword,
+    fid,
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getRegionLayout.url}?${qs.stringify(params)}`);
-  const response = await fetch(url, { method: requests.getRegionLayout.method });
+  const url = encodeURI(`${requests.getProgrammeRegionLayout.url}?${qs.stringify(params)}`);
+  const response = await fetch(url, { method: requests.getProgrammeRegionLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 
   const regionMap = new Map();
@@ -73,4 +73,4 @@ const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
   };
 };
 
-export default getRegionLayout;
+export default getProgrammeRegionLayout;

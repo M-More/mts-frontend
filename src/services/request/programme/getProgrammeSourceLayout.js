@@ -1,14 +1,14 @@
 import requests from '../../requests';
 import qs from 'qs';
 
-const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
+const getProgrammeSourceLayout = async (fid, startPublishedDay, endPublishedDay) => {
   const params = {
-    keyword,
+    fid,
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getSourceLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  const response = await fetch(url, { method: requests.getSourceLayout.method });
+  const url = encodeURI(`${requests.getProgrammeSourceLayout.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  const response = await fetch(url, { method: requests.getProgrammeSourceLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const options = [
     { label: '不限', value: null },
@@ -28,8 +28,7 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
         label: options[id].label,
         value: rawResult[`fromType${id}`],
       }));
-
   return sourceLayout;
 };
 
-export default getSourceLayout;
+export default getProgrammeSourceLayout;
