@@ -17,6 +17,7 @@ import getProgrammeSensiLayout from "../../../services/request/programme/getProg
 import getProgrammeSourceLayout from "../../../services/request/programme/getProgrammeSourceLayout";
 import getProgrammeAmountTrend from "../../../services/request/programme/getProgrammeAmountTrend";
 import getProgrammeRegionLayout from "../../../services/request/programme/getProgrammeRegionLayout";
+import getEventTree from "../../../services/request/data/getEventTree";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -45,132 +46,6 @@ const emotionTrendLayout = {
     { 'name': '惊奇', 'label': '惊奇', 'value': [7, 15, 12, 19, 3, 2] },
     { 'name': '无情绪', 'label': '无情绪', 'value': [9, 5, 17, 6, 16, 14] }],
 };
-const getEventTree = () => {
-  const rawData = {
-    'clusterNum': 0,
-    'time': 'null',
-    'summary': 'Rootnode',
-    'childList': [
-      {
-        'clusterNum': 1,
-        'time': '2020-03-10',
-        'summary': null,
-        'childList': [
-          {
-            'clusterNum': 2,
-            'time': '2020-04-24',
-            'summary': null,
-            'childList': [
-              {
-                'clusterNum': 3,
-                'time': '2020-04-28',
-                'summary': null,
-                'childList': [],
-              },
-              {
-                'clusterNum': 4,
-                'time': '2020-05-05',
-                'summary': null,
-                'childList': [],
-              },
-            ],
-          },
-          {
-            'clusterNum': 5,
-            'time': '2020-05-14',
-            'summary': null,
-            'childList': [],
-          },
-          {
-            'clusterNum': 6,
-            'time': '2020-05-21',
-            'summary': null,
-            'childList': [
-              {
-                'clusterNum': 7,
-                'time': '2020-06-10',
-                'summary': null,
-                'childList': [],
-              },
-              {
-                'clusterNum': 8,
-                'time': '2020-07-02',
-                'summary': null,
-                'childList': [
-                  {
-                    'clusterNum': 9,
-                    'time': '2020-07-13',
-                    'summary': null,
-                    'childList': [
-                      {
-                        'clusterNum': 10,
-                        'time': '2020-07-21',
-                        'summary': null,
-                        'childList': [],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-  const list = [rawData];
-  while (list.length) {
-    const head = list.shift();
-    head.name = `事件${head.clusterNum}: \n${head.time}`;
-    head.children = head.childList;
-    head.data = {
-      clusterNum: head.clusterNum,
-      time: head.time,
-      summary: head.summary,
-    };
-    head.children.forEach((item) => {
-      list.push(item);
-    });
-  }
-  return rawData;
-  /* rawData.level = 0;
-  const list = [rawData];
-  const nodes = [];
-  const links = [];
-  let top = 0;
-  let curLevel = 0;
-  while (list.length) {
-    const head = list.shift();
-    if (curLevel !== head.level) {
-      top = 0;
-      curLevel = head.level;
-    }
-    nodes.push({
-      id: head.clusterNum.toString(),
-      category: 0,
-      name: `${head.clusterNum}\n${head.time}`,
-      symbolSize: 40,
-      time: head.time,
-      summary: head.summary,
-      x: curLevel * 100,
-      y: top,
-      show: true,
-    });
-    top -= 100;
-    head.childList.forEach(child => {
-      links.push({
-        source: head.clusterNum.toString(),
-        target: child.clusterNum.toString(),
-        name: '',
-      });
-      child.level = head.level + 1;
-      list.push(child);
-    });
-  }
-  const categories = [{ name: '事件' }];
-  const data = { nodes, links, categories };
-  return data; */
-};
 
 class View extends React.Component {
   constructor() {
@@ -191,6 +66,61 @@ class View extends React.Component {
     };
   }
 
+  formatEventTree = (rawData) => {
+    const list = [rawData];
+    while (list.length) {
+      const head = list.shift();
+      head.name = `事件${head.clusterNum}: \n${head.time}`;
+      head.children = head.childList;
+      head.data = {
+        clusterNum: head.clusterNum,
+        time: head.time,
+        summary: head.summary,
+      };
+      head.children && head.children.forEach((item) => {
+        list.push(item);
+      });
+    }
+    return rawData;
+    /* rawData.level = 0;
+    const list = [rawData];
+    const nodes = [];
+    const links = [];
+    let top = 0;
+    let curLevel = 0;
+    while (list.length) {
+      const head = list.shift();
+      if (curLevel !== head.level) {
+        top = 0;
+        curLevel = head.level;
+      }
+      nodes.push({
+        id: head.clusterNum.toString(),
+        category: 0,
+        name: `${head.clusterNum}\n${head.time}`,
+        symbolSize: 40,
+        time: head.time,
+        summary: head.summary,
+        x: curLevel * 100,
+        y: top,
+        show: true,
+      });
+      top -= 100;
+      head.childList.forEach(child => {
+        links.push({
+          source: head.clusterNum.toString(),
+          target: child.clusterNum.toString(),
+          name: '',
+        });
+        child.level = head.level + 1;
+        list.push(child);
+      });
+    }
+    const categories = [{ name: '事件' }];
+    const data = { nodes, links, categories };
+    return data; */
+  };
+
   changeTraceTreeFormat = () => {
     const traceTreeFormat = this.state.traceTreeFormat === 'defaultTree' ? 'circleTree' : 'defaultTree';
     this.setState({ traceTreeFormat });
@@ -206,6 +136,7 @@ class View extends React.Component {
         regionLayout: undefined,
         traceTree: undefined,
         keywordsCloud: undefined,
+        eventTree: undefined,
       }, () => {
         this.carousel.goTo(0)
         this.handleCarouselChange(0);
@@ -245,9 +176,9 @@ class View extends React.Component {
       case 1: if (!this.state.data) this.getLatestInfo(); break;
       case 7: break; // 情感分布
       case 8: break; // 情感趋势
-      case 9: break; // 事件溯源
-      case 10: break; // 话题溯源1
-      case 11: break; // 话题溯源2
+      case 9:  if (!this.state.eventTree) this.getEventTree(); break; // 事件溯源
+      case 10: if (!this.state.traceTree) this.getTraceTree(); break; // 话题溯源1
+      case 11: if (!this.state.traceTree) this.getTraceTree(); break; // 话题溯源2
       default: break;
     }
   };
@@ -292,10 +223,18 @@ class View extends React.Component {
   };
 
   getTraceTree = async () => {
-    const keyword = '';
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
-    const traceTree = await getTraceTree(keyword, startPublishedDay, endPublishedDay);
+    const traceTree = await getTraceTree(fid, startPublishedDay, endPublishedDay);
+    if (traceTree.children && !traceTree.children.length) traceTree.children = [{ name: '无信息'}];
+    // if (traceTree.children && traceTree.children.length > 50) traceTree.children = traceTree.children.slice(0, 50);
+    if (traceTree.children && traceTree.children.length > 20) {
+      const withChildren = traceTree.children.filter(item => item.children.length);
+      const noChildren = traceTree.children.filter(item => !item.children.length);
+      console.log(withChildren);
+      if (withChildren.length > 20) traceTree.children = withChildren.slice(0, 20);
+      else traceTree.children = withChildren.concat(noChildren.slice(0, 20 - withChildren.length));
+    }
     this.setState({ traceTree });
   };
 
@@ -303,7 +242,6 @@ class View extends React.Component {
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const regionLayout = await getProgrammeRegionLayout(fid, startPublishedDay, endPublishedDay);
-    console.log(regionLayout);
     this.setState({ regionLayout });
   };
 
@@ -329,6 +267,14 @@ class View extends React.Component {
     this.setState({
       totalAmountTrend, sourceAmountTrend,
     });
+  };
+
+  getEventTree = async () => {
+    const { fid } = this.props.curProgramme;
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
+    const formatedEventTree = this.formatEventTree(eventTree);
+    this.setState({ eventTree })
   };
 
   handleDateChange = (moments) => {
@@ -373,7 +319,7 @@ class View extends React.Component {
   };
 
   render() {
-    const { data, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const { data, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     return (
       <Carousel
         ref={r => this.carousel = r}
@@ -501,81 +447,34 @@ class View extends React.Component {
             <Echart
               title="事件溯源"
               type="connGraph"
-              data={getEventTree()}
+              data={eventTree}
             />
           </AutofitWrap>
         </div>
-        {/*
-        <
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <Echart
-              title="话题溯源"
-              type="circleTree"
-              data={traceTree}
-            />
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
           >
             <Echart
               title="话题溯源"
               type="defaultTree"
               data={traceTree}
             />
-          </div>
+          </AutofitWrap>
         </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-
-          </div>
-        </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
+        <div className="carousel-item">
+          <AutofitWrap
+            minHeight={550}
+            padding={200}
           >
             <Echart
-              title="情感趋势图"
-              type="horizontalBar"
-              data={emotionTrendLayout}
+              title="话题溯源"
+              type="circleTree"
+              data={traceTree}
             />
-          </div>
+          </AutofitWrap>
         </div>
-        <div>
-          <div
-            className="carousel-item"
-            style={{ width, height }}
-          >
-            <div
-              className="carousel-item"
-              style={{ width, height }}
-            >
-              <Echart
-                title="事件溯源"
-                type="connGraph"
-                data={getEventTree()}
-              />
-            </div>
-          </div>
-        </div>*/}
       </Carousel>
     );
   }

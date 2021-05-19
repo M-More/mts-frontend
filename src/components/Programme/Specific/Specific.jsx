@@ -37,13 +37,12 @@ class Specific extends React.Component {
     this.handleSearch();
   }
 
-  shouldComponentUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.curProgramme?.fid !== this.props.curProgramme?.fid) {
       this.handleSearch();
-      return false;
     }
-    return true;
   }
+
 
   handleSearch = async () => {
     this.setState({ loading: true });

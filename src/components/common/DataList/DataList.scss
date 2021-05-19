@@ -26,4 +26,9 @@
 }
 .ant-table {
   font-size: 16px;
+  .title-content {
+    height: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

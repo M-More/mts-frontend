@@ -31,6 +31,16 @@ const horizontalBar = (data, title, size) => ({
     name: item.name,
     // label: { show: true },
     barWidth: 20,
+    /* label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 18 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    }, */
   })),
 });
 

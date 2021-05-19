@@ -9,6 +9,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     endPublishedDay,
   }; */
   const url = encodeURI(`${requests.getAmountTrend.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  console.log(url);
   const response = await fetch(url, { method: requests.getAmountTrend.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 

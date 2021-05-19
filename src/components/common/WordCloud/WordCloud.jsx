@@ -37,7 +37,6 @@ export default class WordCloud extends React.Component {
   };
 
   render() {
-    console.log('childrnd', this.props.option?.length)
     return (
       <div className="word-chart">
         {

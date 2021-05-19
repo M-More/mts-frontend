@@ -21,6 +21,7 @@ class DataContent extends React.Component {
   getSensitiveWord = async () => {
     const { content } = this.props.record || {};
     const result = await getSensitiveWord(content);
+    console.log(result);
     const contentSlice = [];
     let prevEnd = 0;
     result.forEach(item => {
@@ -30,7 +31,7 @@ class DataContent extends React.Component {
           slice: content.slice(prevEnd, item.st),
         });
       }
-      prevEnd = item.st;
+      prevEnd = item.ed;
       contentSlice.push({
         sensitive: true,
         slice: content.slice(item.st, item.ed),

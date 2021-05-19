@@ -10,7 +10,16 @@ const circleTree = (data, title, size) => ({
   },
   series: [
     {
-
+      label: {
+        'normal': {
+          'show': true,
+          'textStyle': {
+            'fontSize': 14 },
+        },
+        'emphasis': {
+          'show': true,
+        },
+      },
       type: 'tree',
       data: [data],
       top: '18%',

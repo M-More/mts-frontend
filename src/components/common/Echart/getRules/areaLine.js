@@ -14,6 +14,16 @@ const areaLine = (data, title, size) => ({
     data: data.yAxis,
     type: 'line',
     areaStyle: {},
+    label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 18 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    },
     smooth: 0.6,
   }],
 });

@@ -9,7 +9,9 @@ import getOverallData from '../../services/request/data/getOverallData';
 import moment from "moment";
 import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
 import Loading from "../common/Loading/Loading";
-import {LoadingOutlined} from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
+import Lodash from "lodash";
+import criteria from "../common/MultiFilter/criteria";
 
 const contentStyle = {
   height: '160px',
@@ -36,6 +38,7 @@ class Home extends React.Component {
   componentDidMount() {
     // this.handleRefresh();
     this.handleSearch();
+    this.event = setInterval(this.handleSearch, 20000);
   }
 
   handleSearch = () => {
@@ -127,12 +130,15 @@ class Home extends React.Component {
     });
   };
 
+  renderSource = (text) => {
+    const options = Lodash.find(criteria, { name: 'source' })?.options || [];
+    return Lodash.find(options, { value: text })?.label || '';
+  };
+
   render() {
     const { tags, curRecord, visible, sensitiveInfo, latestInfo, sensitiveLoading, latestLoading } = this.state;
     return (
-      <AutofitWrap
-        minHeight={600}
-        padding={150}
+      <div
         className="home-wrap"
       >
         <Card
@@ -142,13 +148,30 @@ class Home extends React.Component {
         >
           {sensitiveInfo ?
             sensitiveInfo.map((item) => (
-              <p
+              /* <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}
               >
-                {item.title}
-                <span className="addr">[{moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]</span>
-              </p>
+                <div className="subtitle">{item.title}</div>
+                <span className="addr">
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                </span>
+                <div className="content">
+                  {item.content}
+                </div>
+              </div> */
+              <div
+                className="item"
+                onClick={e => this.handleTitleClick(item)}
+              >
+                <span className="subtitle2">{item.title}</span>
+                <span className="addr2">
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                </span>
+                <span className="content2">
+                  {item.content}
+                </span>
+              </div>
             )) :
             <Loading />
           }
@@ -160,13 +183,30 @@ class Home extends React.Component {
         >
           {latestInfo ?
             latestInfo.map((item) => (
-              <p
+              /* <div
                 className="item"
                 onClick={e => this.handleTitleClick(item)}
               >
-                {item.title}
-                <span className="addr">[{moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]</span>
-              </p>
+                <div className="subtitle">{item.title}</div>
+                <span className="addr">
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                </span>
+                <div className="content">
+                  {item.content}
+                </div>
+              </div> */
+              <div
+                className="item"
+                onClick={e => this.handleTitleClick(item)}
+              >
+                <span className="subtitle2">{item.title}</span>
+                <span className="addr2">
+                  [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
+                </span>
+                <span className="content2">
+                  {item.content}
+                </span>
+              </div>
             )) :
             <Loading />
           }
@@ -176,7 +216,7 @@ class Home extends React.Component {
           visible={visible}
           handleModalCancel={this.handleModalCancel}
         />
-      </AutofitWrap>
+      </div>
     );
   }
 }

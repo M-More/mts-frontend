@@ -4,17 +4,16 @@ import qs from 'qs';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-const getOverallData = async (keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId) => {
+const getWeiboUserData = async (fid, username, pageSize, pageId) => {
   const params = {
-    keyword,
-    timeOrder,
+    fid,
+    username,
     pageSize,
-    fromType: source,
-    cflag: sensi,
-    page: pageId,
+    pageId,
   };
-  const url = encodeURI(`${requests.getOverallData.url}?${qs.stringify(params)}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  const response = await fetch(url, { method: requests.getOverallData.method });
+  const url = encodeURI(`${requests.getWeiboUserData.url}?${qs.stringify(params)}`);
+  console.log(url);
+  const response = await fetch(url, { method: requests.getWeiboUserData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {
     dataSize: rawResult.hitNumber,
@@ -30,4 +29,4 @@ const getOverallData = async (keyword, source, startPublishedDay, endPublishedDa
   return result;
 };
 
-export default getOverallData;
+export default getWeiboUserData;

@@ -13,6 +13,8 @@ import defaultTree from './getRules/defaultTree';
 import circleTree from './getRules/circleTree';
 import connGraph from "./getRules/connGraph";
 import Loading from "../Loading/Loading";
+import stackLine from "./getRules/stackLine";
+import basicLine from "./getRules/basicLine";
 
 class Echart extends React.Component {
   constructor() {
@@ -37,6 +39,8 @@ class Echart extends React.Component {
       case 'defaultTree': getRules = defaultTree; break;
       case 'circleTree': getRules = circleTree; break;
       case 'connGraph': getRules = connGraph; break;
+      case 'stackLine': getRules = stackLine; break;
+      case 'basicLine': getRules = basicLine; break;
       default: break;
     }
     const option = data ? getRules(data, title, size) : {};

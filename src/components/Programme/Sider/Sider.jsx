@@ -79,7 +79,6 @@ class Sider extends React.Component {
 
   render() {
     const { curProgramme } = this.props;
-    console.log(curProgramme);
     const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
     return (
       <Layout.Sider
@@ -96,12 +95,12 @@ class Sider extends React.Component {
           添加方案
         </Button>
         <Modal
-          title="Basic Modal"
+          title="添加方案"
           visible={newProgrammeVisible}
           onCancel={() => this.handleProgrammeNew('cancel')}
           onOk={() => this.handleProgrammeNew('ok')}
         >
-          <span>添加分类</span>
+          <div style={{ fontSize: '16px', marginBottom: '5px' }}>方案名称</div>
           <Input
             value={newProgrammeName}
             onChange={e => this.handleProgrammeNew('name', { name: e.target.value })}

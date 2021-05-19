@@ -117,9 +117,10 @@ const connGraph = (data, title, size) => ({
         left: '50%',
         verticalAlign: 'middle',
         align: 'left',
-        fontSize: 14,
+        fontSize: 18,
         fontWeight: 'bolder',
       },
+
       leaves: {
         label: {
           position: 'right',
@@ -134,6 +135,7 @@ const connGraph = (data, title, size) => ({
       expandAndCollapse: true,
       animationDuration: 550,
       animationDurationUpdate: 750,
+
     },
   ],
 });
