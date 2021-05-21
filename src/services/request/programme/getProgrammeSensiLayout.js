@@ -8,7 +8,6 @@ const getProgrammeSensiLayout = async (fid, startPublishedDay, endPublishedDay) 
     endPublishedDay,
   };
   const url = encodeURI(`${requests.getProgrammeSensiLayout.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
-  console.log(url)
   const response = await fetch(url, { method: requests.getProgrammeSensiLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   /* const options = [
@@ -23,8 +22,6 @@ const getProgrammeSensiLayout = async (fid, startPublishedDay, endPublishedDay) 
         label: options[id].label,
         value: rawResult[id],
       })); */
-  console.log(rawResult)
-
   const sensiLayout = [
     { name: '敏感', label: '敏感', value: rawResult.cflag1 },
     { name: '非敏感', label: '非敏感', value: rawResult.cflag0 },

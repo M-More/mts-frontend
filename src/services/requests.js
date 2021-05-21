@@ -33,6 +33,8 @@ const requests = {
   delProgrammeOrigin: { url: `${curDomain}/User/delUrl`, method: 'GET' },
   getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
   getEventTree: { url: `${curDomain}/data/getEventTree`, method: 'GET' },
+  getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'POST' },
+  getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'POST' }
 };
 
 export default requests;

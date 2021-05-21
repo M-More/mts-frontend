@@ -12,40 +12,19 @@ import getTraceTree from '../../../services/request/data/getTraceTree';
 import WordCloud from '../../common/WordCloud/WordCloud';
 import getKeywordsCloud from '../../../services/request/data/getKeywordsCloud';
 import getProgrammeData from '../../../services/request/data/getProgrammeData';
-import AutofitWrap from "../../common/AutofitWrap/AutofitWrap";
-import getProgrammeSensiLayout from "../../../services/request/programme/getProgrammeSensiLayout";
-import getProgrammeSourceLayout from "../../../services/request/programme/getProgrammeSourceLayout";
-import getProgrammeAmountTrend from "../../../services/request/programme/getProgrammeAmountTrend";
-import getProgrammeRegionLayout from "../../../services/request/programme/getProgrammeRegionLayout";
-import getEventTree from "../../../services/request/data/getEventTree";
+import AutofitWrap from '../../common/AutofitWrap/AutofitWrap';
+import getProgrammeSensiLayout from '../../../services/request/programme/getProgrammeSensiLayout';
+import getProgrammeSourceLayout from '../../../services/request/programme/getProgrammeSourceLayout';
+import getProgrammeAmountTrend from '../../../services/request/programme/getProgrammeAmountTrend';
+import getProgrammeRegionLayout from '../../../services/request/programme/getProgrammeRegionLayout';
+import getEventTree from '../../../services/request/data/getEventTree';
+import getProgrammeSentimentLayout from '../../../services/request/programme/getProgrammeSentimentLayout';
+import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-const contentStyle = {
-  color: '#fff',
-  background: '#364d79',
-};
-
 // 临时数据
 
-const emotionLayout = [
-  { name: '积极', label: '积极', value: 76 },
-  { name: '愤怒', label: '愤怒', value: 91 },
-  { name: '悲伤', label: '悲伤', value: 61 },
-  { name: '恐惧', label: '恐惧', value: 66 },
-  { name: '惊奇', label: '惊奇', value: 57 },
-  { name: '无情绪', label: '无情绪', value: 41 },
-];
-const emotionTrendLayout = {
-  'yAxis': ['1993-', '1980-', '2003-', '1981-', '1984-', '2007-'],
-  'xAxis': [
-    { 'name': '积极', 'label': '积极', 'value': [14, 10, 6, 12, 13, 9] },
-    { 'name': '愤怒', 'label': '愤怒', 'value': [16, 7, 14, 11, 6, 19] },
-    { 'name': '悲伤', 'label': '悲伤', 'value': [15, 4, 12, 14, 15, 9] },
-    { 'name': '恐惧', 'label': '恐惧', 'value': [6, 14, 8, 11, 3, 3] },
-    { 'name': '惊奇', 'label': '惊奇', 'value': [7, 15, 12, 19, 3, 2] },
-    { 'name': '无情绪', 'label': '无情绪', 'value': [9, 5, 17, 6, 16, 14] }],
-};
 
 class View extends React.Component {
   constructor() {
@@ -62,6 +41,8 @@ class View extends React.Component {
       traceTree: undefined,
       keywordsCloud: undefined,
       traceTreeFormat: 'defaultTree',
+      emotionLayout: undefined,
+      emotionTrend: undefined,
       data: undefined,
     };
   }
@@ -137,14 +118,17 @@ class View extends React.Component {
         traceTree: undefined,
         keywordsCloud: undefined,
         eventTree: undefined,
+        emotionLayout: undefined,
+        emotionTrend: undefined,
+        data: undefined,
       }, () => {
-        this.carousel.goTo(0)
+        this.carousel.goTo(0);
         this.handleCarouselChange(0);
       });
-      return false
+      return false;
       // this.handleSearch();
     }
-    return true
+    return true;
   }
 
   componentDidMount() {
@@ -174,9 +158,9 @@ class View extends React.Component {
       case 5: if (!this.state.sourceAmountTrend) this.getAmountTrend(); break;
       case 6: if (!this.state.regionLayout) this.getRegionLayout(); break;
       case 1: if (!this.state.data) this.getLatestInfo(); break;
-      case 7: break; // 情感分布
-      case 8: break; // 情感趋势
-      case 9:  if (!this.state.eventTree) this.getEventTree(); break; // 事件溯源
+      case 7: if (!this.state.emotionLayout) this.getEmotionLayout(); break; // 情感分布
+      case 8: if (!this.state.emotionTrend) this.getEmotionTrend(); break; // 情感趋势
+      case 9: if (!this.state.eventTree) this.getEventTree(); break; // 事件溯源
       case 10: if (!this.state.traceTree) this.getTraceTree(); break; // 话题溯源1
       case 11: if (!this.state.traceTree) this.getTraceTree(); break; // 话题溯源2
       default: break;
@@ -195,7 +179,6 @@ class View extends React.Component {
 
   getLatestInfo = async () => {
     const PAGE_SIZE = 10;
-    const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const params = [
       this.props.curProgramme.fid,
       '', // keyword
@@ -213,8 +196,21 @@ class View extends React.Component {
     });
   };
 
+  getEmotionTrend = async () => {
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const { fid } = this.props.curProgramme;
+    const emotionTrend = await getProgrammeSentimentTrend(fid, startPublishedDay, endPublishedDay);
+    this.setState({ emotionTrend });
+  };
+
+  getEmotionLayout = async () => {
+    const { startPublishedDay, endPublishedDay } = this.state;
+    const { fid } = this.props.curProgramme;
+    const emotionLayout = await getProgrammeSentimentLayout(fid, startPublishedDay, endPublishedDay);
+    this.setState({ emotionLayout });
+  };
+
   getKeywordsCloud = async () => {
-    const keyword = '';
     const { startPublishedDay, endPublishedDay } = this.state;
     const { fid } = this.props.curProgramme;
     const wordNumber = 50;
@@ -226,7 +222,7 @@ class View extends React.Component {
     const { fid } = this.props.curProgramme;
     const { startPublishedDay, endPublishedDay } = this.state;
     const traceTree = await getTraceTree(fid, startPublishedDay, endPublishedDay);
-    if (traceTree.children && !traceTree.children.length) traceTree.children = [{ name: '无信息'}];
+    if (traceTree.children && !traceTree.children.length) traceTree.children = [{ name: '无信息' }];
     // if (traceTree.children && traceTree.children.length > 50) traceTree.children = traceTree.children.slice(0, 50);
     if (traceTree.children && traceTree.children.length > 20) {
       const withChildren = traceTree.children.filter(item => item.children.length);
@@ -274,7 +270,7 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
     const formatedEventTree = this.formatEventTree(eventTree);
-    this.setState({ eventTree })
+    this.setState({ eventTree });
   };
 
   handleDateChange = (moments) => {
@@ -319,7 +315,7 @@ class View extends React.Component {
   };
 
   render() {
-    const { data, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const { data, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     return (
       <Carousel
         ref={r => this.carousel = r}
@@ -435,7 +431,7 @@ class View extends React.Component {
             <Echart
               title="情感趋势图"
               type="horizontalBar"
-              data={emotionTrendLayout}
+              data={emotionTrend}
             />
           </AutofitWrap>
         </div>
