@@ -9,6 +9,7 @@ const login = async (userName, password, role) => {
       password,
       role,
     }),
+    withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Credentials': true,

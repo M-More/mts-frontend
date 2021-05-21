@@ -7,7 +7,7 @@ const curDomain = domain4;
 const requests = {
   getTopics: { url: `${curDomain}/data/getTags`, method: 'GET' },
   getOverallData: { url: `${curDomain}/data/globalSearch/dataSearch`, method: 'GET' },
-  getProgrammeData: { url: `${curDomain}/data/singleSearch/findByFangAn`, method: 'GET' },
+  getProgrammeData: { url: `${curDomain}/data/singleSearch/findByFangAn2`, method: 'GET' },
   getSensiLayout: { url: `${curDomain}/data/globalSearch/cflagCount`, method: 'GET' },
   getSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount`, method: 'GET' },
   getAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount`, method: 'GET' },
@@ -31,6 +31,10 @@ const requests = {
   getProgrammeOrigins: { url: `${curDomain}/User/findAllUrl`, method: 'GET' },
   addProgrammeOrigin: { url: `${curDomain}/User/addUrl`, method: 'POST' },
   delProgrammeOrigin: { url: `${curDomain}/User/delUrl`, method: 'GET' },
+  getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
+  getEventTree: { url: `${curDomain}/data/getEventTree`, method: 'GET' },
+  getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'POST' },
+  getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'POST' }
 };
 
 export default requests;

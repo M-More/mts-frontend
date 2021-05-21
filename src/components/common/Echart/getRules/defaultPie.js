@@ -14,6 +14,16 @@ const defaultPie = (data, title, size) => ({
     type: 'pie',
     radius: '50%',
     data,
+    label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 16 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    },
   }],
 });
 

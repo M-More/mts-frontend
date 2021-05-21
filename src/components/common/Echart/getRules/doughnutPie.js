@@ -14,9 +14,18 @@ const doughnutPie = (data, title, size) => ({
     type: 'pie',
     radius: ['40%', '50%'],
     avoidLabelOverlap: false,
-    label: { show: false },
     labelLine: { show: false },
     data,
+    label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 16 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    },
   }],
 });
 

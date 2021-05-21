@@ -3,6 +3,7 @@ import requests from '../../requests';
 
 const getProgrammes = async (username) => {
   const url = encodeURI(`${requests.getProgrammes.url}?${qs.stringify({ username })}`);
+  console.log(url)
   const response = await fetch(url, { method: requests.getOverallData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = rawResult.data.map((item) => ({

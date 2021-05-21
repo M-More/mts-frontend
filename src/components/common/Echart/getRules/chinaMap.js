@@ -21,6 +21,16 @@ const chinaMap = (data, title, size) => ({
     calculable: true,
   },
   series: [{
+    /* label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 18 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    }, */
     name: '舆情数量',
     type: 'map',
     mapType: 'china',

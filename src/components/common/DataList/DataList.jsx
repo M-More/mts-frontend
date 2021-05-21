@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
 import './DataList.scss';
-import DataContent from "../DataContent/DataContent";
+import moment from "moment";
+import DataContent from '../DataContent/DataContent';
 
 class DataList extends React.Component {
   constructor() {
@@ -22,47 +23,65 @@ class DataList extends React.Component {
     };
     this.columnsRender = [
       {
-        title: '标题',
+        title: '内容',
         dataIndex: 'title',
         key: 'title',
         render: this.renderTitle,
       },
-      {
+      /* {
         title: '站点',
         dataIndex: 'addr',
         key: 'addr',
-      },
+        width: 100,
+      }, */
       {
-        title: '来源',
+        title: '站点',
         dataIndex: 'source',
         key: 'source',
         render: this.renderSource,
+        width: 100
       },
       {
         title: '敏感度',
         dataIndex: 'sensi',
         key: 'sensi',
         render: this.renderSensi,
+        width: 100
       },
       {
         title: '发布时间',
         dataIndex: 'publishedDay',
         key: 'publishedDay',
+        render: this.renderMoment,
+        width: 100
       },
       {
         title: '分类',
         dataIndex: 'tag',
         key: 'tag',
-        render: (text) => text || <LoadingOutlined />
+        render: (text) => text || <LoadingOutlined />,
+        width: 100
+
       },
       {
         title: '操作',
         dataIndex: 'url',
         key: 'url',
         render: this.renderAddr,
+        width: 100
       },
     ];
   }
+
+
+  // eslint-disable-next-line react/no-deprecated
+  componentWillMount() {
+    const { disableTag, disableSource } = this.props;
+    if (disableTag) this.columnsRender = this.columnsRender.filter(item => item.key !== 'tag');
+    if (disableSource) this.columnsRender = this.columnsRender.filter(item => item.key !== 'source');
+  }
+
+  renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'))
 
   renderSource = (text) => {
     const options = Lodash.find(criteria, { name: 'source' })?.options || [];
@@ -70,19 +89,27 @@ class DataList extends React.Component {
   };
 
   renderSensi = (text) => {
-    if (text === '1')
-      return '敏感';
-    return "非敏感"
+    if (text === '1') return <span style={{ color: 'red' }}>敏感</span>;
+    return <span>非敏感</span>;
   };
 
-  renderTitle = (text, record) => (
-    <a
-      className="mts-data-list-title"
-      onClick={() => this.handleTitleClicked(record)}
-    >
-      {text}
-    </a>
-  );
+  renderTitle = (text, record) => {
+    const { content, source } = record;
+    let renderTxt = '';
+    renderTxt = `${content.slice(0, 100)}`
+    return (
+      <div
+        onClick={() => this.handleTitleClicked(record)}
+        className="title-content"
+      >
+        <a>
+          {text}
+        </a>
+        <div style={{ color: 'gray' }}>{renderTxt}</div>
+      </div>
+
+    );
+  };
 
   renderAddr = (text) => (
     <a

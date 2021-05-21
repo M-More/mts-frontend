@@ -40,7 +40,10 @@
         padding: 0px 10px ;
         width: 20%;
         float: left;
+        white-space: nowrap;
         line-height: 50px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
       .content {
         white-space: nowrap;

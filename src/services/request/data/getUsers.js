@@ -10,7 +10,6 @@ const getUsers = async () => {
     },
   });
   const rawResult = response.status === 200 ? await response.json() : {};
-  console.log(rawResult);
   const result = rawResult.map((item) => ({
     ...item,
     userName: item.username,
