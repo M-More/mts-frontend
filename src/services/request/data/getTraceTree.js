@@ -10,7 +10,6 @@ const getTraceTree = async (fid, startPublishedDay, endPublishedDay) => {
   const url = encodeURI(`${requests.getTraceTree.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getTraceTree.method });
   const rawResult = response.status === 200 ? await response.json() : {};
-  console.log(rawResult)
   return rawResult;
 };
 

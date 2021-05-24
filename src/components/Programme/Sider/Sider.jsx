@@ -13,12 +13,11 @@ class Sider extends React.Component {
     this.state = {
       newProgrammeVisible: false,
       newProgrammeName: '',
-      programmes: [],
     };
   }
 
   componentDidMount() {
-    this.getProgrammes();
+    this.getProgrammes('init');
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -30,11 +29,25 @@ class Sider extends React.Component {
     }
   }
 
-  getProgrammes = async () => {
+  getProgrammes = async (type) => {
     const programmes = await getProgrammes(this.props.userName);
-    this.setState({ programmes });
-    if (!this.props.curProgramme)
-      if (programmes[0]) this.props.onProgrammeChange({ curProgramme: programmes[0] });
+    const { curProgramme } = this.props;
+    if (type === 'new') {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme: programmes[programmes.length - 1],
+      });
+    } else if (type === 'init') {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme: curProgramme || programmes[0],
+      });
+    } else {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme,
+      });
+    }
   };
 
   handleProgrammeNew = (type, data) => {
@@ -68,18 +81,20 @@ class Sider extends React.Component {
     const result = await addProgramme({ userName, name });
     if (result.addProgramme !== 1) { alert('添加失败'); } else {
       alert('添加成功');
-      this.getProgrammes();
+      this.getProgrammes('new');
+      this.props.onPageTagChange({ curPageTag: 'config' });
     }
   };
 
   handleProgrammeSelect = (e) => {
-    const curProgramme = this.state.programmes.find((item) => item.fid === parseInt(e.key, 10));
+    const curProgramme = this.props.programmes.find((item) => item.fid === parseInt(e.key, 10));
     this.props.onProgrammeChange({ curProgramme });
   };
 
   render() {
-    const { curProgramme } = this.props;
-    const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
+    const { curProgramme, programmes } = this.props;
+    console.log(programmes);
+    const { newProgrammeVisible, newProgrammeName } = this.state;
     return (
       <Layout.Sider
         className="programme-sider-wrap"
@@ -122,10 +137,13 @@ class Sider extends React.Component {
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
-  curProgramme: state.curProgramme
+  curProgramme: state.curProgramme,
+  programmes: state.programmes,
 });
 const mapDispatchToProps = {
+  onProgrammesChange: actions.onProgrammesChange,
   onProgrammeChange: actions.onProgrammeChange,
+  onPageTagChange: actions.onPageTagChange,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Sider);

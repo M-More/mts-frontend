@@ -12,7 +12,6 @@ const getWeiboUserData = async (fid, username, pageSize, pageId) => {
     pageId,
   };
   const url = encodeURI(`${requests.getWeiboUserData.url}?${qs.stringify(params)}`);
-  console.log(url);
   const response = await fetch(url, { method: requests.getWeiboUserData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const result = {

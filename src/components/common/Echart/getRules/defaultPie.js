@@ -11,6 +11,9 @@ const defaultPie = (data, title, size) => ({
     data: data.map((item) => item.label),
   }, */
   series: [{
+    color: data[0].color ? [
+      'pink', 'red', 'blue', 'yellow', 'green', 'darkgray'
+    ] : undefined,
     type: 'pie',
     radius: '50%',
     data,

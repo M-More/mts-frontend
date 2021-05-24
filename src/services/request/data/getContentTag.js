@@ -4,7 +4,6 @@ const getContentTag = async (contents, pageId) => {
   // const url = encodeURI(`${requests.getKeywordsCloud.url}?${qs.stringify(params)}`);
   const url = encodeURI(requests.getContentTag.url);
   const data = { textList: contents };
-  console.log(url);
   const response = await fetch(url, {
     method: requests.getContentTag.method,
     body: JSON.stringify(data),

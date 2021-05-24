@@ -3,9 +3,9 @@ import requests from '../../requests';
 
 const getProgrammes = async (username) => {
   const url = encodeURI(`${requests.getProgrammes.url}?${qs.stringify({ username })}`);
-  console.log(url)
   const response = await fetch(url, { method: requests.getOverallData.method });
   const rawResult = response.status === 200 ? await response.json() : {};
+  console.log(rawResult)
   const result = rawResult.data.map((item) => ({
     fid: item.fid,
     name: item.programmeName,
