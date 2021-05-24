@@ -11,7 +11,6 @@ const getProgrammeAmountTrend = async (fid, startPublishedDay, endPublishedDay) 
   const url = encodeURI(`${requests.getProgrammeAmountTrend.url}?fid=${fid}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
   const response = await fetch(url, { method: requests.getProgrammeAmountTrend.method });
   const rawResult = response.status === 200 ? await response.json() : {};
-  console.log(rawResult, url)
   const options = [
     { label: '不限', value: null },
     { label: '网站', value: '1' },

@@ -6,6 +6,7 @@ import modifyProgramme from "../../../services/request/programme/modifyProgamme"
 import delProgramme from "../../../services/request/programme/delProgramme";
 import { connect } from "react-redux";
 import { actions } from "../../../redux/actions";
+import getProgrammes from "../../../services/request/programme/getProgrammes";
 
 class Config extends React.Component {
   constructor() {
@@ -48,17 +49,26 @@ class Config extends React.Component {
       userName,
       ...rawData,
     };
-    console.log(rawData.name);
     const result = await modifyProgramme(data);
     if (result.modifyProgramme !== 1) { alert('提交失败！'); }
     else {
-      this.props.onProgrammeChange({ curProgramme: {
-        ...curProgramme,
-        name: rawData.name,
-      }});
       alert('提交成功！');
+      await this.getProgrammes();
+      const { programmes } = this.props;
+      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid)
+      this.props.onProgrammeChange({ curProgramme })
     }
   }
+
+  getProgrammes = async () => {
+    const programmes = await getProgrammes(this.props.userName);
+    const { curProgramme } = this.props;
+    await this.props.onProgrammesChange({
+      programmes,
+      curProgramme: curProgramme || programmes[programmes.length - 1],
+    });
+  };
+
 
   delProgramme = async () => {
     const { userName } = this.props;
@@ -203,9 +213,11 @@ class Config extends React.Component {
 const mapStateToProps = (state) => ({
   userName: state.userName,
   curProgramme: state.curProgramme,
+  programmes: state.programmes,
 });
 const mapDispatchToProps = {
   onProgrammeChange: actions.onProgrammeChange,
+  onProgrammesChange: actions.onProgrammesChange,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Config);

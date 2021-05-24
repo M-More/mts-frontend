@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Lodash from 'lodash';
 import criteria from '../MultiFilter/criteria';
 import './DataList.scss';
-import moment from "moment";
+import moment from 'moment';
 import DataContent from '../DataContent/DataContent';
 
 class DataList extends React.Component {
@@ -39,28 +39,36 @@ class DataList extends React.Component {
         dataIndex: 'source',
         key: 'source',
         render: this.renderSource,
-        width: 100
-      },
-      {
-        title: '敏感度',
-        dataIndex: 'sensi',
-        key: 'sensi',
-        render: this.renderSensi,
-        width: 100
+        width: 100,
       },
       {
         title: '发布时间',
         dataIndex: 'publishedDay',
         key: 'publishedDay',
         render: this.renderMoment,
-        width: 100
+        width: 100,
       },
+      {
+        title: '敏感度',
+        dataIndex: 'sensi',
+        key: 'sensi',
+        render: this.renderSensi,
+        width: 100,
+      },
+      {
+        title: '情感',
+        dataIndex: 'emotion',
+        key: 'emotion',
+        render: this.renderEmotion,
+        width: 100,
+      },
+
       {
         title: '分类',
         dataIndex: 'tag',
         key: 'tag',
         render: (text) => text || <LoadingOutlined />,
-        width: 100
+        width: 100,
 
       },
       {
@@ -68,11 +76,10 @@ class DataList extends React.Component {
         dataIndex: 'url',
         key: 'url',
         render: this.renderAddr,
-        width: 100
+        width: 100,
       },
     ];
   }
-
 
   // eslint-disable-next-line react/no-deprecated
   componentWillMount() {
@@ -81,11 +88,20 @@ class DataList extends React.Component {
     if (disableSource) this.columnsRender = this.columnsRender.filter(item => item.key !== 'source');
   }
 
-  renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'))
+  renderMoment = (text) => (moment(text).format('YYYY-MM-DD hh:mm'));
 
   renderSource = (text) => {
     const options = Lodash.find(criteria, { name: 'source' })?.options || [];
     return Lodash.find(options, { value: text })?.label || '';
+  };
+
+  renderEmotion = (text) => {
+    if (text === 'happy') return '🥰';
+    if (text === 'angry') return '😡';
+    if (text === 'sad') return '😭';
+    if (text === 'fear') return '😰';
+    if (text === 'surprise') return '😮';
+    return '';
   };
 
   renderSensi = (text) => {
@@ -96,7 +112,7 @@ class DataList extends React.Component {
   renderTitle = (text, record) => {
     const { content, source } = record;
     let renderTxt = '';
-    renderTxt = `${content.slice(0, 100)}`
+    renderTxt = `${content.slice(0, 100)}`;
     return (
       <div
         onClick={() => this.handleTitleClicked(record)}
@@ -158,7 +174,6 @@ class DataList extends React.Component {
         <div id="table">
           <Table
             rowKey={(record) => record.id}
-            rowSelection={this.rowSelection}
             columns={this.columnsRender}
             dataSource={data}
             pagination={{

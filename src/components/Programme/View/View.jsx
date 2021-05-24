@@ -49,8 +49,10 @@ class View extends React.Component {
 
   formatEventTree = (rawData) => {
     const list = [rawData];
+    console.log(rawData);
     while (list.length) {
       const head = list.shift();
+      console.log(head);
       head.name = `事件${head.clusterNum}: \n${head.time}`;
       head.children = head.childList;
       head.data = {
@@ -63,43 +65,6 @@ class View extends React.Component {
       });
     }
     return rawData;
-    /* rawData.level = 0;
-    const list = [rawData];
-    const nodes = [];
-    const links = [];
-    let top = 0;
-    let curLevel = 0;
-    while (list.length) {
-      const head = list.shift();
-      if (curLevel !== head.level) {
-        top = 0;
-        curLevel = head.level;
-      }
-      nodes.push({
-        id: head.clusterNum.toString(),
-        category: 0,
-        name: `${head.clusterNum}\n${head.time}`,
-        symbolSize: 40,
-        time: head.time,
-        summary: head.summary,
-        x: curLevel * 100,
-        y: top,
-        show: true,
-      });
-      top -= 100;
-      head.childList.forEach(child => {
-        links.push({
-          source: head.clusterNum.toString(),
-          target: child.clusterNum.toString(),
-          name: '',
-        });
-        child.level = head.level + 1;
-        list.push(child);
-      });
-    }
-    const categories = [{ name: '事件' }];
-    const data = { nodes, links, categories };
-    return data; */
   };
 
   changeTraceTreeFormat = () => {
@@ -270,7 +235,8 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
     const formatedEventTree = this.formatEventTree(eventTree);
-    this.setState({ eventTree });
+    console.log(formatedEventTree)
+    this.setState({ eventTree: formatedEventTree });
   };
 
   handleDateChange = (moments) => {

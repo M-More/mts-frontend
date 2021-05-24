@@ -12,27 +12,19 @@ import Alert from "../Alert/Alert";
 import Trace from "../Trace/Trace";
 
 class Content extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      curTabPage: 'info',
-    };
-  }
-
   handleTabPageSelect = (e) => {
-    this.setState({
-      curTabPage: e.key,
+    this.props.onPageTagChange({
+      curPageTag: e.key,
     });
   };
 
   render() {
-    const { curTabPage } = this.state;
-    const { curProgramme } = this.props;
+    const { curProgramme, curPageTag } = this.props;
     return (
       <Layout.Content>
         <Menu
           theme="light"
-          defaultSelectedKeys={curTabPage}
+          defaultSelectedKeys={curPageTag}
           mode="horizontal"
           onClick={this.handleTabPageSelect}
           className="mts-programme-content-menu"
@@ -45,12 +37,12 @@ class Content extends React.Component {
           <Menu.Item key="view">事件分析</Menu.Item>
         </Menu>
         <Layout.Content className="site-layout-background">
-          {curTabPage === 'info' && curProgramme && <Specific />}
-          {curTabPage === 'view' && curProgramme && <View />}
-          {curTabPage === 'config' && curProgramme && <Config />}
-          {curTabPage === 'alert' && curProgramme && <Alert />}
-          {curTabPage === 'trace' && curProgramme && <Trace />}
-          {curTabPage === 'origin' && curProgramme && <Origin />}
+          {curPageTag === 'info' && curProgramme && <Specific />}
+          {curPageTag === 'view' && curProgramme && <View />}
+          {curPageTag === 'config' && curProgramme && <Config />}
+          {curPageTag === 'alert' && curProgramme && <Alert />}
+          {curPageTag === 'trace' && curProgramme && <Trace />}
+          {curPageTag === 'origin' && curProgramme && <Origin />}
         </Layout.Content>
       </Layout.Content>
     );
@@ -59,8 +51,10 @@ class Content extends React.Component {
 
 const mapStateToProps = (state) => ({
   curProgramme: state.curProgramme,
+  curPageTag: state.curPageTag,
 });
 const mapDispatchToProps = {
+  onPageTagChange: actions.onPageTagChange,
   onProgrammeChange: actions.onProgrammeChange,
 };
 

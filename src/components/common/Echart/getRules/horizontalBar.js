@@ -29,6 +29,7 @@ const horizontalBar = (data, title, size) => ({
     stack: 'total',
     data: item.value,
     name: item.name,
+    color: item.color,
     // label: { show: true },
     barWidth: 20,
     /* label: {

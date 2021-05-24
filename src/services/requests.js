@@ -24,6 +24,7 @@ const requests = {
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
   getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
+  getContentEmotion: { url: `${curDomain}/data/sentimentAnalysis`, method: 'POST' },
   getProgrammeSensiLayout: { url: `${curDomain}/data/globalSearch/cflagCount2`, method: 'GET' },
   getProgrammeSourceLayout: { url: `${curDomain}/data/globalSearch/resourceCount2`, method: 'GET' },
   getProgrammeAmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount2`, method: 'GET' },
@@ -33,8 +34,9 @@ const requests = {
   delProgrammeOrigin: { url: `${curDomain}/User/delUrl`, method: 'GET' },
   getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
   getEventTree: { url: `${curDomain}/data/getEventTree`, method: 'GET' },
-  getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'POST' },
-  getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'POST' }
+  getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'GET' },
+  getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
+
 };
 
 export default requests;

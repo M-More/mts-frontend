@@ -9,6 +9,7 @@ import MultiFilter from '../common/MultiFilter/MultiFilter';
 import DataList from '../common/DataList/DataList';
 import getOverallData from '../../services/request/data/getOverallData';
 import getContentTag from '../../services/request/data/getContentTag';
+import getContentEmotion from "../../services/request/data/getContentEmotion";
 import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 import './Overall.scss';
 
@@ -68,6 +69,28 @@ class Overall extends Component {
       };
     });
     this.getContentTag();
+    this.getContentEmotion();
+  };
+
+  getContentEmotion = async () => {
+    const contents = this.state.data.map((item) => item.content);
+    const { pageId } = this.state;
+    const tagResult = await getContentEmotion(contents, pageId);
+    this.setState(prevState => {
+      if (prevState.pageId !== pageId) {
+        console.log('请求超时：用户翻页');
+        return {};
+      }
+      const newData = [...prevState.data];
+      const tags = tagResult.result;
+      newData.forEach((item, index) => {
+        const tag = tags[index.toString()];
+        item.emotion = tag || '';
+      });
+      return {
+        data: newData,
+      };
+    });
   };
 
   getContentTag = async () => {
