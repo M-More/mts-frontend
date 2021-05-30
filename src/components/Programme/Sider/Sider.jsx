@@ -93,7 +93,6 @@ class Sider extends React.Component {
 
   render() {
     const { curProgramme, programmes } = this.props;
-    console.log(programmes);
     const { newProgrammeVisible, newProgrammeName } = this.state;
     return (
       <Layout.Sider

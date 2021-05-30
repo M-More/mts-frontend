@@ -21,9 +21,35 @@ class DataContent extends React.Component {
   getSensitiveWord = async () => {
     const { content } = this.props.record || {};
     const result = await getSensitiveWord(content);
-    console.log(result);
-    const contentSlice = [];
-    let prevEnd = 0;
+    let contentSlice = [{
+      sensitive: false,
+      slice: content,
+    }];
+    const sensitiveWord = result.map((item) => item.sw);
+    sensitiveWord.forEach((word) => {
+      const newContentSlice = [];
+      contentSlice.forEach((item) => {
+        if (item.sensitive === true) newContentSlice.push(item);
+        else if (item.slice.includes(word) === false) newContentSlice.push(item);
+        else {
+          item.slice.split(word).forEach((slice, index, array) => {
+            newContentSlice.push({
+              sensitive: false,
+              slice,
+            });
+            if (index !== array.length - 1) {
+              newContentSlice.push({
+                sensitive: true,
+                slice: word,
+              });
+            }
+          });
+        }
+      });
+      contentSlice = newContentSlice;
+    });
+    this.setState({contentSlice});
+    /* let prevEnd = 0;
     result.forEach(item => {
       if (item.st !== prevEnd) {
         contentSlice.push({
@@ -41,7 +67,7 @@ class DataContent extends React.Component {
       sensitive: false,
       slice: content.slice(prevEnd),
     });
-    this.setState({ contentSlice });
+    this.setState({ contentSlice }); */
   };
 
   renderSource = (text) => {

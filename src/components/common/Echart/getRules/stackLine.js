@@ -9,7 +9,7 @@ const stackLine = (data, title, size) => ({
   },
   legend: {
     data: data.yAxis.map((item) => item.name),
-    left: 'right'
+    left: 'right',
   },
   xAxis: {
     type: 'category',
@@ -19,7 +19,7 @@ const stackLine = (data, title, size) => ({
   yAxis: {
     type: 'value',
     axisLabel: {
-      formatter: '{value} °C',
+      formatter: '{value}',
     },
   },
   series: data.yAxis.map(item => ({

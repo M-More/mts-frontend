@@ -5,7 +5,6 @@ import './MultiFilter.scss';
 
 class MultiFilter extends React.Component {
   handleSelect = (event, type) => {
-    console.log(type, event.target.value)
     if (this.props.onSelect) {
       this.props.onSelect(type, event.target.value);
     }

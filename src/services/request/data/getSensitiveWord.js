@@ -10,7 +10,7 @@ const getSensitiveWord = async (text) => {
     },
   });
   const result = response.status === 200 ? await response.json() : {};
-
+  console.log(result);
   return result;
 };
 

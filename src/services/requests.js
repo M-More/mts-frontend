@@ -32,11 +32,15 @@ const requests = {
   getProgrammeOrigins: { url: `${curDomain}/User/findAllUrl`, method: 'GET' },
   addProgrammeOrigin: { url: `${curDomain}/User/addUrl`, method: 'POST' },
   delProgrammeOrigin: { url: `${curDomain}/User/delUrl`, method: 'GET' },
-  getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
   getEventTree: { url: `${curDomain}/data/getEventTree`, method: 'GET' },
   getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'GET' },
   getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
 
+  getSensitiveType: { url: `${domain3}/data/textAlert`, method: 'POST' },
+  getSensitiveData: { url: `${domain3}/data/sensitiveCount`, method: 'GET'},
+  get48AmountTrend: { url: `${domain3}/data/globalSearch/amountTrendCount3`, method: 'GET' },
+  getActiveWeiboUser: { url: `${domain3}/data/getActivateUser`, method: 'GET' },
+  getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
 };
 
 export default requests;

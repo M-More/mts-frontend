@@ -9,7 +9,7 @@ import MultiFilter from '../common/MultiFilter/MultiFilter';
 import DataList from '../common/DataList/DataList';
 import getOverallData from '../../services/request/data/getOverallData';
 import getContentTag from '../../services/request/data/getContentTag';
-import getContentEmotion from "../../services/request/data/getContentEmotion";
+import getContentEmotion from '../../services/request/data/getContentEmotion';
 import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 import './Overall.scss';
 
@@ -31,86 +31,62 @@ class Overall extends Component {
       sensi: null,
       dateRange: null,
       timeOrder: 0,
-      dataSize: 0,
-      data: [],
+      data: {},
       loading: false,
     };
-    this.data = {};
   }
 
-  componentDidMount() {
-    // this.handleSearch();
-  }
+  getCriteria = () => {
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId } = this.state;
+    const criteria = { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId };
+    return JSON.stringify(criteria);
+  };
 
   handleSearch = async () => {
-    this.setState({ loading: true })
-    const params = [
-      this.state.keyword,
-      this.state.source,
-      this.state.startPublishedDay,
-      this.state.endPublishedDay,
-      this.state.sensi,
-      this.state.timeOrder,
-      this.state.pageSize,
-      this.state.pageId,
-    ];
+    await this.setState({ loading: true });
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
+    const params = [keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId];
     this.props.onOverallPathChange({ path: '/result' });
     const result = await getOverallData(...params);
-    const { pageId } = this.state;
-    this.setState((prevState) => {
-      if (prevState.pageId !== pageId) {
-        console.log('请求超时：用户翻页');
-        return { loading: false };
-      }
-      return {
-        loading: false,
-        data: result.data,
-        dataSize: result.dataSize,
-      };
+    const newData = { ...data };
+    newData[this.getCriteria()] = result;
+    this.setState({
+      loading: false,
+      data: newData,
     });
     this.getContentTag();
     this.getContentEmotion();
   };
 
   getContentEmotion = async () => {
-    const contents = this.state.data.map((item) => item.content);
-    const { pageId } = this.state;
-    const tagResult = await getContentEmotion(contents, pageId);
-    this.setState(prevState => {
-      if (prevState.pageId !== pageId) {
-        console.log('请求超时：用户翻页');
-        return {};
-      }
-      const newData = [...prevState.data];
-      const tags = tagResult.result;
-      newData.forEach((item, index) => {
-        const tag = tags[index.toString()];
-        item.emotion = tag || '';
-      });
-      return {
-        data: newData,
-      };
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentEmotion(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria].data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.emotion = tag || '';
+    });
+    this.setState({
+      data: newData,
     });
   };
 
   getContentTag = async () => {
-    const contents = this.state.data.map((item) => item.content);
-    const { pageId } = this.state;
-    const tagResult = await getContentTag(contents, pageId);
-    this.setState(prevState => {
-      if (prevState.pageId !== pageId) {
-        console.log('请求超时：用户翻页');
-        return {};
-      }
-      const newData = [...prevState.data];
-      const tags = tagResult.result;
-      newData.forEach((item, index) => {
-        const tag = tags[index.toString()];
-        item.tag = tag || '';
-      });
-      return {
-        data: newData,
-      };
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentTag(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria].data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.tag = tag || '';
+    });
+    this.setState({
+      data: newData,
     });
   };
 
@@ -120,7 +96,7 @@ class Overall extends Component {
         startPublishedDay: '',
         endPublishedDay: '',
       });
-      return
+      return;
     }
     const [startMoment, endMoment] = moments;
     this.setState({
@@ -154,6 +130,7 @@ class Overall extends Component {
           break;
       }
     }
+    this.handleSearch();
   };
 
   handlePageChange = (pageId) => {
@@ -174,18 +151,14 @@ class Overall extends Component {
     });
   };
 
-  /* handleBack = () => {
-    this.setState({
-      curPath: '',
-      keyword: '',
-    });
-  }; */
-
   render() {
     const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
-    const current = Lodash.pick(this.state, params);
-    const { data, dataSize, pageSize, keyword, loading } = this.state;
+    const criteria = this.getCriteria();
     const curPath = this.props.overallPath;
+    const current = Lodash.pick(this.state, params);
+    const { pageSize, keyword, loading } = this.state;
+    const data = this.state.data[criteria]?.data || [];
+    const dataSize = this.state.data[criteria]?.dataSize || 0;
 
     switch (curPath) {
       case '/result':

@@ -6,27 +6,27 @@ import { actions } from '../../../redux/actions';
 import DataList from '../../common/DataList/DataList';
 import './Alert.scss'
 import Echart from "../../common/Echart/Echart";
+import moment from "moment";
+import getProgrammeSentimentLayout from "../../../services/request/programme/getProgrammeSentimentLayout";
+import get48AmountTrend from "../../../services/request/data/get48AmountTrend";
+import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
+import getSensitiveData from "../../../services/request/programme/getSensitiveData";
 
-const sensiLayout = [
-  { name: '正常', label: '正常', value: 376 },
-  { name: '政治敏感', label: '政治敏感', value: 91 },
-  { name: '色情低俗', label: '色情低俗', value: 61 },
-  { name: '非法营销', label: '非法营销', value: 66 },
-  { name: '人身攻击', label: '人身攻击', value: 57 },
-  { name: '消息传闻', label: '消息传闻', value: 41 },
-];
-const emotionTrendLayout = {
-  'yAxis': ['1993-', '1980-', '2003-', '1981-', '1984-', '2007-'],
-  'xAxis': [
-    { 'name': '积极', 'label': '积极', 'value': [14, 10, 6, 12, 13, 9] },
-    { 'name': '愤怒', 'label': '愤怒', 'value': [16, 7, 14, 11, 6, 19] },
-    { 'name': '悲伤', 'label': '悲伤', 'value': [15, 4, 12, 14, 15, 9] },
-    { 'name': '恐惧', 'label': '恐惧', 'value': [6, 14, 8, 11, 3, 3] },
-    { 'name': '惊奇', 'label': '惊奇', 'value': [7, 15, 12, 19, 3, 2] },
-    { 'name': '无情绪', 'label': '无情绪', 'value': [9, 5, 17, 6, 16, 14] }],
-};
+const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
 
 class Alert extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      amountTrend: {},
+      emotionTrend: {},
+      sensiLayout: {},
+    };
+
+    this.endPublishedDay = moment().format(DATE_FORMAT);
+    this.startPublishedDay = moment().subtract(2, 'days').format(DATE_FORMAT);
+  }
   formatEmotionTrendLayout = (raw) => {
     const yAxis = [];
     yAxis.push({
@@ -44,14 +44,65 @@ class Alert extends React.Component {
       name: '中立',
       data: raw.xAxis[5].value,
     });
-    console.log(yAxis);
     return {
       xAxis: raw.yAxis,
       yAxis,
     };
   };
 
+  componentDidMount() {
+    this.handleSearch();
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.curProgramme?.fid !== this.props.curProgramme?.fid) {
+      this.handleSearch();
+    }
+  }
+
+  handleSearch = async () => {
+    this.getAmountTrend();
+    this.getEmotionTrend();
+    this.getSensitiveData();
+  };
+
+  getEmotionTrend = async () => {
+    const { startPublishedDay, endPublishedDay } = this;
+    const { fid } = this.props.curProgramme;
+    const emotionTrend = await getProgrammeSentimentTrend(fid, startPublishedDay, endPublishedDay);
+    const newData = { ...this.state.emotionTrend };
+    newData[fid] = this.formatEmotionTrendLayout(emotionTrend);
+    this.setState({ emotionTrend: newData });
+  };
+
+  getAmountTrend = async () => {
+    const { startPublishedDay, endPublishedDay } = this;
+    const fid = this.props.curProgramme?.fid;
+    const amountTrend = (await get48AmountTrend(fid, startPublishedDay, endPublishedDay))[0];
+    const newData = { ...this.state.amountTrend };
+    newData[fid] = amountTrend;
+    this.setState({ amountTrend: newData });
+  };
+
+  getSensitiveData = async () => {
+    const fid = this.props.curProgramme?.fid;
+    const sensitiveData = await getSensitiveData(fid);
+    const sensiLayout = [
+      { name: '正常信息', label: '正常信息', value: sensitiveData['正常信息'] || 0 },
+      { name: '政治敏感', label: '政治敏感', value: sensitiveData['政治敏感'].length || 0 },
+      { name: '低俗信息', label: '低俗信息', value: sensitiveData['低俗信息'].length || 0 },
+      { name: '广告营销', label: '广告营销', value: sensitiveData['广告营销'].length || 0 },
+      { name: '人身攻击', label: '人身攻击', value: sensitiveData['人身攻击'].length || 0 },
+    ];
+    const newData = { ...this.state.sensiLayout };
+    newData[fid] = sensiLayout;
+    this.setState({ sensiLayout: newData });
+  };
+
   render() {
+    const { amountTrend, emotionTrend, sensiLayout } = this.state;
+    const fid = this.props.curProgramme?.fid;
+    console.log(sensiLayout);
     return (
       <div
         padding={200}
@@ -64,7 +115,7 @@ class Alert extends React.Component {
               <Echart
                 title="话题走势图"
                 type="basicLine"
-                data={[]}
+                data={amountTrend[fid]}
               />
             </div>
             <div className="right-graph">
@@ -72,14 +123,14 @@ class Alert extends React.Component {
                 <Echart
                   title="情感趋势图"
                   type="stackLine"
-                  data={this.formatEmotionTrendLayout(emotionTrendLayout)}
+                  data={emotionTrend[fid]}
                 />
               </div>
               <div className="bottom-graph">
                 <Echart
                   title="敏感信息分布"
                   type="defaultPie"
-                  data={sensiLayout}
+                  data={sensiLayout[fid]}
                 />
               </div>
             </div>
