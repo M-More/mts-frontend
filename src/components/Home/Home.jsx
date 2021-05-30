@@ -41,6 +41,10 @@ class Home extends React.Component {
     this.event = setInterval(this.handleSearch, 20000);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.event);
+  }
+
   handleSearch = () => {
     this.getSensitiveInfo();
     this.getLatestInfo();
@@ -56,7 +60,7 @@ class Home extends React.Component {
       '', // startPublishDay
       '', // endPublishDay
       1, // sensitiveFlag
-      1, // timeOrder
+      0, // timeOrder
       PAGE_SIZE, // pageSize
       0, // pageId
     ];
@@ -77,7 +81,7 @@ class Home extends React.Component {
       '', // startPublishDay
       '', // endPublishDay
       null, // sensitiveFlag
-      1, // timeOrder
+      0, // timeOrder
       PAGE_SIZE, // pageSize
       0, // pageId
     ];

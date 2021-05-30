@@ -4,12 +4,13 @@ import Lodash from 'lodash';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import getProgrammeData from '../../../services/request/data/getProgrammeData';
-import getContentEmotion from "../../../services/request/data/getContentEmotion";
+import getContentEmotion from '../../../services/request/data/getContentEmotion';
 import MultiFilter from '../../common/MultiFilter/MultiFilter';
 import DataList from '../../common/DataList/DataList';
 import './Specific.scss';
 import { actions } from '../../../redux/actions';
 import getContentTag from '../../../services/request/data/getContentTag';
+import getOverallData from '../../../services/request/data/getOverallData';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -28,92 +29,73 @@ class Specific extends React.Component {
       dateRange: null,
       loading: false,
       timeOrder: 0,
-      dataSize: 0,
-      data: [],
+      data: {},
     };
   }
+
+  getCriteria = () => {
+    const fid = this.props.curProgramme?.fid;
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId } = this.state;
+    const criteria = { fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId };
+    return JSON.stringify(criteria);
+  };
 
   componentDidMount() {
     this.handleSearch();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.curProgramme?.fid !== this.props.curProgramme?.fid) {
+    const criteria = this.getCriteria();
+    if (!this.state.data[criteria] && !this.state.loading) {
       this.handleSearch();
     }
   }
 
-
   handleSearch = async () => {
-    this.setState({ loading: true });
-    const { curProgramme } = this.props;
-    const params = [
-      this.props.curProgramme.fid,
-      this.state.keyword,
-      this.state.source,
-      this.state.startPublishedDay,
-      this.state.endPublishedDay,
-      this.state.sensi,
-      this.state.timeOrder,
-      this.state.pageSize,
-      this.state.pageId,
-    ];
+    await this.setState({ loading: true });
+    const fid = this.props.curProgramme?.fid;
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
+    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId];
     const result = await getProgrammeData(...params);
-    const { pageId } = this.state;
-    this.setState(prevState => {
-      if (this.props.curProgramme !== curProgramme || prevState.pageId !== pageId) {
-        console.log('请求超时, 用户切换项目');
-        return { loading: false };
-      }
-      return {
-        loading: false,
-        data: result.data,
-        dataSize: result.dataSize,
-      };
+    const newData = { ...data };
+    newData[this.getCriteria()] = result;
+    this.setState({
+      loading: false,
+      data: newData,
     });
-    this.getContentEmotion();
     this.getContentTag();
+    this.getContentEmotion();
   };
 
   getContentEmotion = async () => {
-    const contents = this.state.data.map((item) => item.content);
-    const { pageId } = this.state;
-    const tagResult = await getContentEmotion(contents, pageId);
-    this.setState(prevState => {
-      if (prevState.pageId !== pageId) {
-        console.log('请求超时：用户翻页');
-        return {};
-      }
-      const newData = [...prevState.data];
-      const tags = tagResult.result;
-      newData.forEach((item, index) => {
-        const tag = tags[index.toString()];
-        item.emotion = tag || '';
-      });
-      return {
-        data: newData,
-      };
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentEmotion(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria]?.data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.emotion = tag || '';
+    });
+    this.setState({
+      data: newData,
     });
   };
 
   getContentTag = async () => {
-    const contents = this.state.data.map((item) => item.content);
-    const { pageId } = this.state;
-    const tagResult = await getContentTag(contents, pageId);
-    this.setState(prevState => {
-      if (prevState.pageId !== pageId) {
-        console.log('请求超时：用户翻页');
-        return {};
-      }
-      const newData = [...prevState.data];
-      const tags = tagResult.result;
-      newData.forEach((item, index) => {
-        const tag = tags[index.toString()];
-        item.tag = tag || '';
-      });
-      return {
-        data: newData,
-      };
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentTag(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria]?.data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.tag = tag || '';
+    });
+    this.setState({
+      data: newData,
     });
   };
 
@@ -157,6 +139,7 @@ class Specific extends React.Component {
           break;
       }
     }
+    this.handleSearch();
   };
 
   handlePageChange = (pageId) => {
@@ -180,8 +163,12 @@ class Specific extends React.Component {
   render() {
     const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
+    const criteria = this.getCriteria();
     const { curProgramme } = this.props;
-    const { data, dataSize, pageSize, loading } = this.state;
+    const { pageSize, loading } = this.state;
+    const data = this.state.data[criteria]?.data || [];
+    const dataSize = this.state.data[criteria]?.dataSize || 0;
+
     return (
       <Layout className="programme-specific-wrap">
         <MultiFilter

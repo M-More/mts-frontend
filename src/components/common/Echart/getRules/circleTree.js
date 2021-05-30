@@ -7,6 +7,10 @@ const circleTree = (data, title, size) => ({
   tooltip: {
     trigger: 'item',
     triggerOn: 'mousemove',
+    formatter: (params) => {
+      const { data } = params.data;
+      return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data?.author || 'root'}\n${data?.content}</div>`;
+    },
   },
   series: [
     {

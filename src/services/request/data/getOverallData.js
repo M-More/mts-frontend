@@ -23,7 +23,7 @@ const getOverallData = async (keyword, source, startPublishedDay, endPublishedDa
       addr: item.resource,
       url: item.webpageUrl,
       sensi: item.cflag,
-      publishedDay: moment(item.publishedDay).add(8, 'hours').format(DATE_FORMAT),
+      publishedDay: moment(item.publishedDay).format(DATE_FORMAT),
       ...item,
     })) : [],
   };

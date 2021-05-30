@@ -7,13 +7,16 @@ const basicLine = (data, title, size) => {
     },
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: data.xAxis,
     },
     yAxis: {
       type: 'value',
     },
+    tooltip: {
+      trigger: 'axis',
+    },
     series: [{
-      data: [150, 230, 224, 218, 135, 147, 260],
+      data: data.yAxis,
       type: 'line',
     }],
   };

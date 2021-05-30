@@ -83,8 +83,9 @@ class DataList extends React.Component {
 
   // eslint-disable-next-line react/no-deprecated
   componentWillMount() {
-    const { disableTag, disableSource } = this.props;
+    const { disableTag, disableSource, disableEmotion } = this.props;
     if (disableTag) this.columnsRender = this.columnsRender.filter(item => item.key !== 'tag');
+    if (disableEmotion) this.columnsRender = this.columnsRender.filter(item => item.key !== 'emotion');
     if (disableSource) this.columnsRender = this.columnsRender.filter(item => item.key !== 'source');
   }
 
@@ -96,12 +97,13 @@ class DataList extends React.Component {
   };
 
   renderEmotion = (text) => {
-    if (text === 'happy') return '🥰';
-    if (text === 'angry') return '😡';
-    if (text === 'sad') return '😭';
-    if (text === 'fear') return '😰';
-    if (text === 'surprise') return '😮';
-    return '';
+    if (text === 'happy') return '积极 🥰';
+    if (text === 'angry') return '愤怒 😡';
+    if (text === 'sad') return '悲伤 😭';
+    if (text === 'fear') return '恐惧 😰';
+    if (text === 'surprise') return '惊讶 😮';
+    if (text === 'neutral') return '中立 😐';
+    return <LoadingOutlined />;
   };
 
   renderSensi = (text) => {
@@ -178,7 +180,7 @@ class DataList extends React.Component {
             dataSource={data}
             pagination={{
               position: ['none', 'bottomRight'],
-              total: dataSize,
+              total: dataSize - 1,
               onShowSizeChange: this.props.onPageSizeChange,
             }}
             onChange={this.handlePageTurned}
