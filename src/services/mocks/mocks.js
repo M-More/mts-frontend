@@ -34,7 +34,7 @@ mockFetch(Mock);
 // Mock.mock(requests.logout.url, requests.logout.method, logout);
 // Mock.mock(requests.login.url, requests.login.method, login());
 // Mock.mock(requests.register.url, requests.register.method, register());
-Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
+// Mock.mock(requests.getUsers.url, requests.getUsers.method, getUsers());
 // Mock.mock(requests.delProgramme.url, requests.delProgramme.method, delProgramme());
 // Mock.mock(requests.addProgramme.url, requests.addProgramme.method, addProgramme());
 // Mock.mock(requests.modifyProgramme.url, requests.modifyProgramme.method, modifyProgramme());

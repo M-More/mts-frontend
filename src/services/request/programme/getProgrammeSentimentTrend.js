@@ -8,7 +8,13 @@ const getProgrammeSentimentTrend = async (fid, startPublishedDay, endPublishedDa
   });
   const rawResult = response.status === 200 ? await response.json() : {};
   const emotionTrendLayout = {
-    'yAxis': rawResult.timeRange,
+    'yAxis': rawResult.timeRange ? rawResult.timeRange.map((str) => {
+      const moments = str.split(' to ');
+      const fromMoment = moment(moments[0]);
+      const toMoment = moment(moments[1]);
+      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      return avgTime
+    }) : [],
     'xAxis': [
       { 'name': '积极', 'label': '积极', 'value': rawResult.happyTrend, color: 'pink' },
       { 'name': '愤怒', 'label': '愤怒', 'value': rawResult.angryTrend, color: 'red' },

@@ -16,7 +16,7 @@ class View extends React.Component {
     this.state = {
       // dateRange: 0,
       endPublishedDay: moment().format(DATE_FORMAT),
-      startPublishedDay: moment().startOf('year').format(DATE_FORMAT),
+      startPublishedDay: moment().startOf('week').format(DATE_FORMAT),
       sensiLayout: undefined,
       sourceLayout: undefined,
       totalAmountTrend: undefined,

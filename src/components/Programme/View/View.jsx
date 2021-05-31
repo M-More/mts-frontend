@@ -20,6 +20,7 @@ import getProgrammeRegionLayout from '../../../services/request/programme/getPro
 import getEventTree from '../../../services/request/data/getEventTree';
 import getProgrammeSentimentLayout from '../../../services/request/programme/getProgrammeSentimentLayout';
 import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
+import DateSelector from "../../common/DateSelector/DateSelector";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -27,9 +28,8 @@ class View extends React.Component {
   constructor() {
     super();
     this.state = {
-      dateRange: 0,
       endPublishedDay: moment().format(DATE_FORMAT),
-      startPublishedDay: moment().startOf('year').format(DATE_FORMAT),
+      startPublishedDay: moment().subtract(1, 'month').format(DATE_FORMAT),
       sensiLayout: {},
       sourceLayout: {},
       totalAmountTrend: {},
@@ -41,6 +41,7 @@ class View extends React.Component {
       eventTree: {},
       emotionTrend: {},
       data: {},
+      curPage: 0,
     };
   }
 
@@ -51,16 +52,28 @@ class View extends React.Component {
     return JSON.stringify(criteria);
   };
 
+  formatSummary = (summary) => {
+    summary = summary.replace(/\s/g, '')
+    const arr = [];
+    while (summary.length) {
+      arr.push(summary.substr(0, 8))
+      summary = summary.substr(8)
+    }
+    return arr.join('\n');
+  };
+
   formatEventTree = (rawData) => {
     const list = [rawData];
+    rawData.summary = this.props.curProgramme.name;
+    rawData.time = '';
     while (list.length) {
       const head = list.shift();
-      head.name = `事件${head.clusterNum}: \n${head.time}`;
+      head.name = `${this.formatSummary(head.summary)}: \n${head.time}`;
       head.children = head.childList;
       head.data = {
         clusterNum: head.clusterNum,
         time: head.time,
-        summary: head.summary,
+        summary: head.summary.replace(' ', ''),
       };
       head.children && head.children.forEach((item) => {
         list.push(item);
@@ -93,21 +106,23 @@ class View extends React.Component {
 
   handleCarouselChange = (current) => {
     const criteria = this.getCriteria();
+    const { fid } = this.props.curProgramme;
     switch (current) {
-      case 0: if (!this.state.keywordsCloud[criteria]) this.getKeywordsCloud(); break;
-      case 2: if (!this.state.sensiLayout[criteria]) this.getSensiLayout(); break;
-      case 3: if (!this.state.sourceLayout[criteria]) this.getSourceLayout(); break;
+      case 0: if (!this.state.keywordsCloud[fid]) this.getKeywordsCloud(); break;
+      case 2: if (!this.state.sensiLayout[fid]) this.getSensiLayout(); break;
+      case 3: if (!this.state.sourceLayout[fid]) this.getSourceLayout(); break;
       case 4: if (!this.state.totalAmountTrend[criteria]) this.getAmountTrend(); break;
       case 5: if (!this.state.sourceAmountTrend[criteria]) this.getAmountTrend(); break;
-      case 6: if (!this.state.regionLayout[criteria]) this.getRegionLayout(); break;
-      case 1: if (!this.state.data[criteria]) this.getLatestInfo(); break;
-      case 7: if (!this.state.emotionLayout[criteria]) this.getEmotionLayout(); break; // 情感分布
+      case 6: if (!this.state.regionLayout[fid]) this.getRegionLayout(); break;
+      case 1: if (!this.state.data[fid]) this.getLatestInfo(); break;
+      case 7: if (!this.state.emotionLayout[fid]) this.getEmotionLayout(); break; // 情感分布
       case 8: if (!this.state.emotionTrend[criteria]) this.getEmotionTrend(); break; // 情感趋势
-      case 9: if (!this.state.eventTree[criteria]) this.getEventTree(); break; // 事件溯源
-      case 10: if (!this.state.traceTree[criteria]) this.getTraceTree(); break; // 话题溯源1
-      case 11: if (!this.state.traceTree[criteria]) this.getTraceTree(); break; // 话题溯源2
+      case 9: if (!this.state.eventTree[fid]) this.getEventTree(); break; // 事件溯源
+      case 10: if (!this.state.traceTree[fid]) this.getTraceTree(); break; // 话题溯源1
+      case 11: if (!this.state.traceTree[fid]) this.getTraceTree(); break; // 话题溯源2
       default: break;
     }
+    this.setState({ curPage: current })
   };
 
   getLatestInfo = async () => {
@@ -125,8 +140,9 @@ class View extends React.Component {
     ];
     const result = await getProgrammeData(...params);
     const criteria = this.getCriteria();
+    const { fid } = this.props.curProgramme;
     const newData = { ...this.state.data };
-    newData[criteria] = result.data;
+    newData[fid] = result.data;
     this.setState({ data: newData });
   };
 
@@ -146,7 +162,7 @@ class View extends React.Component {
     const emotionLayout = await getProgrammeSentimentLayout(fid, startPublishedDay, endPublishedDay);
     const criteria = this.getCriteria();
     const newData = { ...this.state.emotionLayout };
-    newData[criteria] = emotionLayout;
+    newData[fid] = emotionLayout;
     this.setState({ emotionLayout: newData });
   };
 
@@ -157,7 +173,7 @@ class View extends React.Component {
     const keywordsCloud = await getKeywordsCloud(fid, startPublishedDay, endPublishedDay, wordNumber);
     const criteria = this.getCriteria();
     const newData = { ...this.state.keywordsCloud };
-    newData[criteria] = keywordsCloud;
+    newData[fid] = keywordsCloud;
     this.setState({ keywordsCloud: newData });
   };
 
@@ -173,9 +189,10 @@ class View extends React.Component {
       if (withChildren.length > 20) traceTree.children = withChildren.slice(0, 20);
       else traceTree.children = withChildren.concat(noChildren.slice(0, 20 - withChildren.length));
     }
+    traceTree.name = this.props.curProgramme.name;
     const criteria = this.getCriteria();
     const newData = { ...this.state.traceTree };
-    newData[criteria] = traceTree;
+    newData[fid] = traceTree;
     this.setState({ traceTree: newData });
   };
 
@@ -185,7 +202,7 @@ class View extends React.Component {
     const regionLayout = await getProgrammeRegionLayout(fid, startPublishedDay, endPublishedDay);
     const criteria = this.getCriteria();
     const newData = { ...this.state.regionLayout };
-    newData[criteria] = regionLayout;
+    newData[fid] = regionLayout;
     this.setState({ regionLayout: newData });
   };
 
@@ -195,7 +212,7 @@ class View extends React.Component {
     const sourceLayout = await getProgrammeSourceLayout(fid, startPublishedDay, endPublishedDay);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sourceLayout };
-    newData[criteria] = sourceLayout;
+    newData[fid] = sourceLayout;
     this.setState({ sourceLayout: newData });
   };
 
@@ -205,7 +222,7 @@ class View extends React.Component {
     const sensiLayout = await getProgrammeSensiLayout(fid, startPublishedDay, endPublishedDay);
     const criteria = this.getCriteria();
     const newData = { ...this.state.sensiLayout };
-    newData[criteria] = sensiLayout;
+    newData[fid] = sensiLayout;
     this.setState({ sensiLayout: newData });
   };
 
@@ -227,58 +244,38 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
     const formatedEventTree = this.formatEventTree(eventTree);
+    console.log(formatedEventTree);
     const criteria = this.getCriteria();
     const newData = { ...this.state.eventTree };
-    newData[criteria] = formatedEventTree;
+    newData[fid] = formatedEventTree;
     this.setState({ eventTree: newData });
   };
 
   handleDateChange = (moments) => {
-    if (!moments) {
-      this.setState({
-        startPublishedDay: null,
-        endPublishedDay: null,
-      });
-    }
     const [startMoment, endMoment] = moments;
     this.setState({
       startPublishedDay: startMoment.format(DATE_FORMAT),
       endPublishedDay: endMoment.format(DATE_FORMAT),
+    }, () => {
+      this.getAmountTrend();
+      this.getEmotionTrend();
     });
-  };
-
-  handleSelect = (name, value) => {
-    const newState = {};
-    newState[name] = value;
-    this.setState(newState);
-    const current = '2020-07-18 12:00:00';
-    if (name === 'dateRange') {
-      switch (value) {
-        case 0:
-          this.handleDateChange([
-            moment(current),
-            moment(current).startOf('day'),
-          ]);
-          break;
-        case -1:
-        case null:
-          this.handleDateChange();
-          break;
-        default:
-          this.handleDateChange([
-            moment(current),
-            moment(current).subtract(value, 'days'),
-          ]);
-          break;
-      }
-    }
   };
 
   render() {
     const { data, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     const criteria = this.getCriteria();
+    const { fid } = this.props.curProgramme;
+    const { curPage } = this.state;
     return (
-      <div ref={r => this.carouselWrap = r}>
+      <div
+        className="view"
+        ref={r => this.carouselWrap = r}
+      >
+        {(curPage === 4 || curPage === 5 || curPage === 8) && <DateSelector
+          className="view-date-selector"
+          onDateSelect={this.handleDateChange}
+        />}
         <Carousel
           ref={r => this.carousel = r}
           dotPosition="left"
@@ -292,7 +289,7 @@ class View extends React.Component {
               padding={200}
             >
               <WordCloud
-                option={keywordsCloud[criteria]}
+                option={keywordsCloud[fid]}
               />
             </AutofitWrap>
           </div>
@@ -303,7 +300,7 @@ class View extends React.Component {
             >
               <div className="latest-info">
                 <div className="theme">最新舆情</div>
-                {data[criteria] && data[criteria].map((item) => (
+                {data[fid] && data[fid].map((item) => (
                   <div className="latest-info-item">
                     <span className="title">{item.title}</span>
                     <span className="content">{item.content}</span>
@@ -320,7 +317,8 @@ class View extends React.Component {
               <Echart
                 title="敏感度分布"
                 type="doughnutPie"
-                data={sensiLayout[criteria]}
+                data={sensiLayout[fid]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -332,7 +330,8 @@ class View extends React.Component {
               <Echart
                 title="来源分部"
                 type="defaultPie"
-                data={sourceLayout[criteria]}
+                data={sourceLayout[fid]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -345,6 +344,7 @@ class View extends React.Component {
                 title="总量趋势"
                 type="areaLine"
                 data={totalAmountTrend[criteria]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -357,6 +357,7 @@ class View extends React.Component {
                 title="来源趋势"
                 type="horizontalBar"
                 data={sourceAmountTrend[criteria]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -368,7 +369,8 @@ class View extends React.Component {
               <Echart
                 title="地域分布"
                 type="chinaMap"
-                data={regionLayout[criteria]}
+                data={regionLayout[fid]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -381,7 +383,8 @@ class View extends React.Component {
               <Echart
                 title="情感分析"
                 type="defaultPie"
-                data={emotionLayout[criteria]}
+                data={emotionLayout[fid]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -394,6 +397,7 @@ class View extends React.Component {
                 title="情感趋势图"
                 type="horizontalBar"
                 data={emotionTrend[criteria]}
+                size="big"
               />
             </AutofitWrap>
           </div>
@@ -405,7 +409,8 @@ class View extends React.Component {
               <Echart
                 title="事件溯源"
                 type="connGraph"
-                data={eventTree[criteria]}
+                size="big"
+                data={eventTree[fid]}
               />
             </AutofitWrap>
           </div>
@@ -417,7 +422,8 @@ class View extends React.Component {
               <Echart
                 title="话题溯源"
                 type="defaultTree"
-                data={traceTree[criteria]}
+                size="big"
+                data={traceTree[fid]}
               />
             </AutofitWrap>
           </div>
@@ -429,7 +435,8 @@ class View extends React.Component {
               <Echart
                 title="话题溯源"
                 type="circleTree"
-                data={traceTree[criteria]}
+                size="big"
+                data={traceTree[fid]}
               />
             </AutofitWrap>
           </div>

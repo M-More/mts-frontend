@@ -12,7 +12,7 @@ class Loading extends React.Component {
     return (
       <div id="caseVerteClaire">
         <div id="load">
-          <p>加载中</p>
+          <p>加载中 {this.props.title || ''}</p>
         </div>
         <div id="transform">
           <div id="transform1" />

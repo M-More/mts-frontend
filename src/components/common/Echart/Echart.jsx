@@ -62,7 +62,7 @@ class Echart extends React.Component {
               option={option}
               theme="light"
             /> :
-            <Loading />
+            <Loading title={title} />
         }
       </div>
     );

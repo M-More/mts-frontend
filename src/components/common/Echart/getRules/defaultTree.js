@@ -2,7 +2,6 @@ const defaultTree = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
-    top: '5%',
   },
   tooltip: {
     trigger: 'item',
