@@ -1,14 +1,8 @@
 import React from 'react';
 import Mock from 'mockjs';
-import echart from 'echarts/lib/echarts';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/chart/map';
-import 'echarts/map/js/china';
+import ReactEcharts from 'echarts-for-react';
+import * as echarts from 'echarts';
+import china from '../../../utils/map/json/china';
 import defaultPie from './getRules/defaultPie';
 import areaLine from './getRules/areaLine';
 import doughnutPie from './getRules/doughnutPie';
@@ -17,6 +11,10 @@ import chinaMap from './getRules/chinaMap';
 import './Echart.scss';
 import defaultTree from './getRules/defaultTree';
 import circleTree from './getRules/circleTree';
+import connGraph from "./getRules/connGraph";
+import Loading from "../Loading/Loading";
+import stackLine from "./getRules/stackLine";
+import basicLine from "./getRules/basicLine";
 
 class Echart extends React.Component {
   constructor() {
@@ -26,10 +24,11 @@ class Echart extends React.Component {
     };
     this.defaultWidth = '400px';
     this.defaultHeight = '250px';
+    echarts.registerMap('china', china);
   }
 
-  componentDidUpdate() {
-    const { title, data, type } = this.props;
+  render() {
+    const { title, data, type, size } = this.props;
     let getRules;
     switch (type) {
       case 'defaultPie': getRules = defaultPie; break;
@@ -39,23 +38,33 @@ class Echart extends React.Component {
       case 'chinaMap': getRules = chinaMap; break;
       case 'defaultTree': getRules = defaultTree; break;
       case 'circleTree': getRules = circleTree; break;
+      case 'connGraph': getRules = connGraph; break;
+      case 'stackLine': getRules = stackLine; break;
+      case 'basicLine': getRules = basicLine; break;
       default: break;
     }
-    const { guid } = this.state;
-    const myChart = echart.init(document.getElementById(`echart-${guid}`), 'dark');
-    if (data) myChart.setOption(getRules(data, title));
-  }
-
-  render() {
+    const option = data ? getRules(data, title, size) : {};
     const { guid } = this.state;
     const width = this.props.width || this.defaultWidth;
     const height = this.props.height || this.defaultHeight;
     return (
       <div
-        style={{ width, height }}
+        className="common-chart-wrap"
         id={`echart-${guid}`}
-        className="common-chart"
-      />
+      >
+        {
+          data ?
+            <ReactEcharts
+              style={{
+                width: '100%',
+                height: '100%'
+              }}
+              option={option}
+              theme="light"
+            /> :
+            <Loading title={title} />
+        }
+      </div>
     );
   }
 }

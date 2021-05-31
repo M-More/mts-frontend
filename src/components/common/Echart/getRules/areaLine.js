@@ -1,4 +1,4 @@
-const areaLine = (data, title) => ({
+const areaLine = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
@@ -13,6 +13,17 @@ const areaLine = (data, title) => ({
     data: data.yAxis,
     type: 'line',
     areaStyle: {},
+    label: {
+      'normal': {
+        'show': true,
+        'textStyle': {
+          'fontSize': 16 },
+      },
+      'emphasis': {
+        'show': true,
+      },
+    },
+    smooth: 0.6,
   }],
 });
 

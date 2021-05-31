@@ -5,6 +5,7 @@ import OrgList from './OrgList/OrgList';
 import UserList from './UserList/UserList';
 import './Admin.scss';
 import getUsers from "../../services/request/data/getUsers";
+import AutofitWrap from "../common/AutofitWrap/AutofitWrap";
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -39,7 +40,7 @@ class Admin extends Component {
   render() {
     const { curRole, users, orgs } = this.state;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout>
         <Sider
           className="admin-sider-wrap"
           theme="light"
@@ -56,8 +57,14 @@ class Admin extends Component {
           </Menu>
         </Sider>
         <Content className="site-layout-background">
-          { curRole === 'user' ? <UserList users={users} /> : null }
-          { curRole === 'org' ? <OrgList orgs={orgs} /> : null }
+          <AutofitWrap
+            minHeight={600}
+            padding={200}
+          >
+
+            { curRole === 'user' ? <UserList users={users} /> : null }
+            { curRole === 'org' ? <OrgList orgs={orgs} /> : null }
+          </AutofitWrap>
         </Content>
       </Layout>
     );

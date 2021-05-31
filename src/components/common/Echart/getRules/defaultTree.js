@@ -1,4 +1,4 @@
-const defaultTree = (data, title) => ({
+const defaultTree = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
@@ -7,7 +7,7 @@ const defaultTree = (data, title) => ({
     trigger: 'item',
     formatter: (params) => {
       const { data } = params.data;
-      return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data.author}\n${data.content}</div>`;
+      return `<div style="max-width: 200px; display: inline-block; white-space: pre-wrap">${data?.author || 'root'}\n${data?.content}</div>`;
     },
     triggerOn: 'mousemove',
   },
@@ -15,6 +15,7 @@ const defaultTree = (data, title) => ({
     {
       type: 'tree',
       data: [data],
+      roam: true,
       left: '10%',
       right: '10%',
       symbolSize: 7,
@@ -22,7 +23,7 @@ const defaultTree = (data, title) => ({
         position: 'left',
         verticalAlign: 'middle',
         align: 'right',
-        fontSize: 9,
+        fontSize: 14,
       },
       leaves: {
         label: {
@@ -34,6 +35,7 @@ const defaultTree = (data, title) => ({
       emphasis: {
         focus: 'descendant',
       },
+      initialTreeDepth: [-1],
       expandAndCollapse: true,
       animationDuration: 550,
       animationDurationUpdate: 750,

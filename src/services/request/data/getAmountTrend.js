@@ -1,14 +1,15 @@
 import requests from '../../requests';
 import qs from 'qs';
+import moment from "moment";
 
 const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
-  const params = {
+  /* const params = {
     keyword,
     startPublishedDay,
     endPublishedDay,
-  };
-  const url = encodeURI(`${requests.getAmountTrend.url}?${qs.stringify(params)}`);
-  const response = await fetch(url, { method: requests.getOverallData.method });
+  }; */
+  const url = encodeURI(`${requests.getAmountTrend.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  const response = await fetch(url, { method: requests.getAmountTrend.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 
   const options = [
@@ -22,7 +23,13 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
     { label: '新闻', value: '7' },
   ];
   const sourceAmountTrend = {
-    yAxis: rawResult.timeRange.map((timestamp) => (timestamp.slice(0, 5))),
+    yAxis: rawResult.timeRange ? rawResult.timeRange.map((str) => {
+      const moments = str.split(' to ');
+      const fromMoment = moment(moments[0]);
+      const toMoment = moment(moments[1]);
+      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      return avgTime
+    }) : [],
     xAxis: Object.keys(rawResult)
       .map((key) => ({
         key,
@@ -36,7 +43,13 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
       })),
   };
   const totalAmountTrend = {
-    xAxis: rawResult.timeRange.map((timestamp) => (timestamp.slice(0, 5))),
+    xAxis: rawResult.timeRange ? rawResult.timeRange.map((str) => {
+      const moments = str.split(' to ');
+      const fromMoment = moment(moments[0]);
+      const toMoment = moment(moments[1]);
+      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      return avgTime;
+    }) : [],
     yAxis: rawResult.totalAmountTrend,
   };
   return [totalAmountTrend, sourceAmountTrend];

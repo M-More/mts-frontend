@@ -5,10 +5,10 @@
   align-items: center;
   justify-content: center;
   .config-form {
-    width: 500px;
+    width: 90%;
     background: white;
     padding: 30px;
-    margin: 30px;
+    margin: 30px auto;
     .submit-btn-wrap {
       width: 100%;
       display: flex;
@@ -17,8 +17,8 @@
       justify-content: center;
       .submit-btn {
         width: 100px;
-        margin-right: 10px;
-        margin-left: 10px;
+        margin-right: 20px;
+        margin-left: 20px;
       }
     }
   }

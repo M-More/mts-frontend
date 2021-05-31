@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import logout from '../../../services/request/auth/logout';
 import login from '../../../services/request/auth/login';
 import { actions } from "../../../redux/actions";
+import { LogoutOutlined, RadarChartOutlined } from "@ant-design/icons";
 
 const history = createBrowserHistory();
 
@@ -15,7 +16,7 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = { current: 'home' };
-    this.userMenu = (
+    /* this.userMenu = (
       <Menu
         theme="dark"
       >
@@ -23,23 +24,29 @@ class Header extends React.Component {
           登出
         </Menu.Item>
       </Menu>
-    );
+    ); */
   }
 
   handleLogout = async () => {
-    const result = await logout();
-    console.log(result);
-    if (result.logout !== 1) alert('登出失败');
-    else {
-      alert('登出成功');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userType');
-      this.props.onAuthChange();
-      this.props.history.push('/login');
-    }
+    // const result = await logout();
+    // if (result.logout !== 1) alert('登出失败');
+    // else {
+    //   alert('登出成功');
+    //   localStorage.removeItem('userName');
+    //   localStorage.removeItem('userType');
+    //   this.props.onAuthChange();
+    //   this.props.history.push('/login');
+    // }
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userType');
+    this.props.onAuthChange();
+    this.props.history.push('/login');
   };
 
-  handleClick = (e) => { this.setState({ current: e.key }); };
+  handleClick = (e) => {
+    if (e.key === 'search') this.props.onOverallPathChange({ path: ''});
+    this.setState({ current: e.key });
+  };
 
   componentDidMount = () => {
     const { userType } = this.props;
@@ -60,25 +67,33 @@ class Header extends React.Component {
     const { current } = this.state;
     return (
       <div className="mts-header-container">
+        <div className="top-bar">
+          <span className="title">
+            <RadarChartOutlined />
+            &nbsp;
+            舆情监测系统
+          </span>
+          <span className="logout" onClick={this.handleLogout}>
+            <LogoutOutlined />
+          </span>
+          <span className="username">{userName}</span>
+        </div>
         <Menu
           onClick={this.handleClick}
           selectedKeys={[current]}
-          theme="dark"
           mode="horizontal"
           className="mts-header"
         >
-          { getRoutes(userType).map((route) => (
+          {getRoutes(userType).map((route) => (
             <Menu.Item key={route.key}>
-              <Link to={route.link}>{route.label}</Link>
+              <Link
+                to={route.link}
+                className="link"
+              >
+                {route.label}
+              </Link>
             </Menu.Item>
           ))}
-          <Dropdown
-            className="user-menu"
-            overlay={this.userMenu}
-            arrow
-          >
-            <span>{userName}</span>
-          </Dropdown>
         </Menu>
       </div>
     );
@@ -91,6 +106,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
   onAuthChange: actions.onAuthChange,
+  onOverallPathChange: actions.onOverallPathChange,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Header));

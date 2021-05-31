@@ -2,10 +2,15 @@ import React from 'react';
 import moment from 'moment';
 import Lodash from 'lodash';
 import { Layout } from 'antd';
-import getOverallData from '../../../services/request/data/getOverallData';
+import { connect } from 'react-redux';
+import getProgrammeData from '../../../services/request/data/getProgrammeData';
+import getContentEmotion from '../../../services/request/data/getContentEmotion';
 import MultiFilter from '../../common/MultiFilter/MultiFilter';
 import DataList from '../../common/DataList/DataList';
 import './Specific.scss';
+import { actions } from '../../../redux/actions';
+import getContentTag from '../../../services/request/data/getContentTag';
+import getOverallData from '../../../services/request/data/getOverallData';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -18,48 +23,89 @@ class Specific extends React.Component {
       pageSize: PAGE_SIZE,
       keyword: '',
       source: null,
-      startPublishedDay: null,
-      endPublishedDay: null,
+      startPublishedDay: '',
+      endPublishedDay: '',
       sensi: null,
       dateRange: null,
+      loading: false,
       timeOrder: 0,
-      dataSize: 0,
-      data: [],
+      data: {},
     };
   }
+
+  getCriteria = () => {
+    const fid = this.props.curProgramme?.fid;
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId } = this.state;
+    const criteria = { fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId };
+    return JSON.stringify(criteria);
+  };
 
   componentDidMount() {
     this.handleSearch();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.curProgramme?.fid !== this.props.curProgramme?.fid) this.handleSearch();
+    const criteria = this.getCriteria();
+    if (!this.state.data[criteria] && !this.state.loading) {
+      this.handleSearch();
+    }
   }
 
   handleSearch = async () => {
-    const params = [
-      this.state.keyword,
-      this.state.source,
-      this.state.startPublishedDay,
-      this.state.endPublishedDay,
-      this.state.sensi,
-      this.state.timeOrder,
-      this.state.pageSize,
-      this.state.pageId,
-    ];
-    const result = await getOverallData(...params);
+    await this.setState({ loading: true });
+    const fid = this.props.curProgramme?.fid;
+    const { keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId, data } = this.state;
+    const params = [fid, keyword, source, startPublishedDay, endPublishedDay, sensi, timeOrder, pageSize, pageId];
+    const result = await getProgrammeData(...params);
+    const newData = { ...data };
+    newData[this.getCriteria()] = result;
     this.setState({
-      data: result.data,
-      dataSize: result.dataSize,
+      loading: false,
+      data: newData,
+    });
+    this.getContentTag();
+    this.getContentEmotion();
+  };
+
+  getContentEmotion = async () => {
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentEmotion(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria]?.data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.emotion = tag || '';
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
+  getContentTag = async () => {
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getContentTag(contents, undefined);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria]?.data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.tag = tag || '';
+    });
+    this.setState({
+      data: newData,
     });
   };
 
   handleDateChange = (moments) => {
     if (!moments) {
       this.setState({
-        startPublishedDay: null,
-        endPublishedDay: null,
+        startPublishedDay: '',
+        endPublishedDay: '',
       });
+      return;
     }
     const [startMoment, endMoment] = moments;
     this.setState({
@@ -93,10 +139,17 @@ class Specific extends React.Component {
           break;
       }
     }
+    this.handleSearch();
   };
 
   handlePageChange = (pageId) => {
     this.setState({ pageId }, () => {
+      this.handleSearch();
+    });
+  };
+
+  handlePageSizeChange = (current, pageSize) => {
+    this.setState({ pageSize, pageId: 0 }, () => {
       this.handleSearch();
     });
   };
@@ -110,8 +163,12 @@ class Specific extends React.Component {
   render() {
     const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const current = Lodash.pick(this.state, params);
+    const criteria = this.getCriteria();
     const { curProgramme } = this.props;
-    const { data, dataSize, pageSize } = this.state;
+    const { pageSize, loading } = this.state;
+    const data = this.state.data[criteria]?.data || [];
+    const dataSize = this.state.data[criteria]?.dataSize || 0;
+
     return (
       <Layout className="programme-specific-wrap">
         <MultiFilter
@@ -124,11 +181,21 @@ class Specific extends React.Component {
           data={data}
           dataSize={dataSize}
           pageSize={pageSize}
+          loading={loading}
           onPageChange={this.handlePageChange}
+          onPageSizeChange={this.handlePageSizeChange}
         />
       </Layout>
     );
   }
 }
 
-export default Specific;
+const mapStateToProps = (state) => ({
+  userName: state.userName,
+  curProgramme: state.curProgramme,
+});
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Specific);

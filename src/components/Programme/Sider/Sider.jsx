@@ -4,6 +4,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import getProgrammes from '../../../services/request/programme/getProgrammes';
 import './Sider.scss';
 import { connect } from 'react-redux';
+import addProgramme from '../../../services/request/programme/addProgramme';
+import { actions } from '../../../redux/actions';
 
 class Sider extends React.Component {
   constructor() {
@@ -11,19 +13,41 @@ class Sider extends React.Component {
     this.state = {
       newProgrammeVisible: false,
       newProgrammeName: '',
-      programmes: [],
     };
   }
 
   componentDidMount() {
-    this.getProgrammes();
+    this.getProgrammes('init');
   }
 
-  getProgrammes = async () => {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { curProgramme } = this.props;
+    // console.log(curProgramme?.fid, prevProps.curProgramme?.fid);
+    if (!prevProps.curProgramme || !curProgramme) return;
+    if (prevProps.curProgramme.fid !== curProgramme.fid || prevProps.curProgramme.name !== curProgramme.name) {
+      this.getProgrammes();
+    }
+  }
+
+  getProgrammes = async (type) => {
     const programmes = await getProgrammes(this.props.userName);
-    // console.log(programmes);
-    this.setState({ programmes });
-    this.props.onProgrammeSelect(programmes[0]);
+    const { curProgramme } = this.props;
+    if (type === 'new') {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme: programmes[programmes.length - 1],
+      });
+    } else if (type === 'init') {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme: curProgramme || programmes[0],
+      });
+    } else {
+      this.props.onProgrammesChange({
+        programmes,
+        curProgramme,
+      });
+    }
   };
 
   handleProgrammeNew = (type, data) => {
@@ -32,6 +56,7 @@ class Sider extends React.Component {
         this.setState({ newProgrammeVisible: true });
         break;
       case 'ok':
+        this.addProgramme();
         this.setState({
           newProgrammeVisible: false,
           newProgrammeName: '',
@@ -50,50 +75,58 @@ class Sider extends React.Component {
     }
   };
 
-  handleProgrammeSelect = (e) => {
-    const curProgramme = this.state.programmes.find((item) => item.fid === e.key);
-    // console.log(curProgramme);
-    if (this.props.onProgrammeSelect) {
-      this.props.onProgrammeSelect(curProgramme);
+  addProgramme = async () => {
+    const { userName } = this.props;
+    const name = this.state.newProgrammeName;
+    const result = await addProgramme({ userName, name });
+    if (result.addProgramme !== 1) { alert('添加失败'); } else {
+      alert('添加成功');
+      this.getProgrammes('new');
+      this.props.onPageTagChange({ curPageTag: 'config' });
     }
   };
 
+  handleProgrammeSelect = (e) => {
+    const curProgramme = this.props.programmes.find((item) => item.fid === parseInt(e.key, 10));
+    this.props.onProgrammeChange({ curProgramme });
+  };
+
   render() {
-    const { curProgramme } = this.props;
-    const { newProgrammeVisible, newProgrammeName, programmes } = this.state;
+    const { curProgramme, programmes } = this.props;
+    const { newProgrammeVisible, newProgrammeName } = this.state;
     return (
       <Layout.Sider
-        theme="light"
         className="programme-sider-wrap"
       >
         <Button
           block="block"
           type="primary"
           className="programme-new-btn"
+          size="large"
           onClick={() => this.handleProgrammeNew('open')}
         >
           <PlusOutlined />
           添加方案
         </Button>
         <Modal
-          title="Basic Modal"
+          title="添加方案"
           visible={newProgrammeVisible}
           onCancel={() => this.handleProgrammeNew('cancel')}
           onOk={() => this.handleProgrammeNew('ok')}
         >
-          <span>添加分类</span>
+          <div style={{ fontSize: '16px', marginBottom: '5px' }}>方案名称</div>
           <Input
             value={newProgrammeName}
-            onChange={e => this.handleProgrammeNew('name', { name: e.target.value})}
+            onChange={e => this.handleProgrammeNew('name', { name: e.target.value })}
           />
         </Modal>
         <Menu
           onClick={this.handleProgrammeSelect}
-          selectedKeys={[curProgramme?.fid]}
+          selectedKeys={[curProgramme?.fid.toString()]}
           mode="inline"
         >
           { programmes.map((item) => (
-            <Menu.Item key={item.fid}>{item.name}</Menu.Item>
+            <Menu.Item key={item.fid.toString()}>{item.name}</Menu.Item>
           ))}
         </Menu>
       </Layout.Sider>
@@ -103,7 +136,13 @@ class Sider extends React.Component {
 
 const mapStateToProps = (state) => ({
   userName: state.userName,
+  curProgramme: state.curProgramme,
+  programmes: state.programmes,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  onProgrammesChange: actions.onProgrammesChange,
+  onProgrammeChange: actions.onProgrammeChange,
+  onPageTagChange: actions.onPageTagChange,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Sider);

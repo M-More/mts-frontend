@@ -1,13 +1,15 @@
-@import "../../static/config/constant";
+@import "../../config/constant";
 
 .login-wrap {
   height: 100%;
   display: flex;
+  background: $default-blue;
   justify-content: center;
   align-content: center;
   align-items: center;
   .login-tabs {
     position: relative;
+    opacity: 0.95;
     width: 400px;
     background: #ffffff;
     padding: 10px;

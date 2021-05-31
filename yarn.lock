@@ -4462,12 +4462,26 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-echarts@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npm.taobao.org/echarts/download/echarts-4.0.0.tgz#74340ff3fc88b67aee9839a80b1cb72faacd911a"
-  integrity sha1-dDQP8/yItnrumDmoCxy3L6rNkRo=
+echarts-for-react@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/echarts-for-react/download/echarts-for-react-3.0.1.tgz?cache=0&sync_timestamp=1614304814277&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fecharts-for-react%2Fdownload%2Fecharts-for-react-3.0.1.tgz#cf9de60e468b342c244314be2325e00d765a5137"
+  integrity sha1-z53mDkaLNCwkQxS+IyXgDXZaUTc=
   dependencies:
-    zrender "4.0.0"
+    fast-deep-equal "^3.1.3"
+    size-sensor "^1.0.1"
+
+echarts-wordcloud@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/echarts-wordcloud/download/echarts-wordcloud-2.0.0.tgz?cache=0&sync_timestamp=1610777395203&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fecharts-wordcloud%2Fdownload%2Fecharts-wordcloud-2.0.0.tgz#52ef817895801ffe9e99dd1bacab7686b2dec04a"
+  integrity sha1-Uu+BeJWAH/6emd0brKt2hrLewEo=
+
+echarts@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/echarts/download/echarts-5.1.0.tgz#768cc585aa092560f48f01b2d52de493aeecd2b0"
+  integrity sha1-dozFhaoJJWD0jwGy1S3kk67s0rA=
+  dependencies:
+    tslib "2.0.3"
+    zrender "5.1.0"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -5187,7 +5201,7 @@ extsprintf@^1.2.0:
   resolved "https://registry.npm.taobao.org/extsprintf/download/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fast-deep-equal@^3.1.1:
+fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npm.taobao.org/fast-deep-equal/download/fast-deep-equal-3.1.3.tgz?cache=0&sync_timestamp=1591599675178&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffast-deep-equal%2Fdownload%2Ffast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha1-On1WtVnWy8PrUSMlJE5hmmXGxSU=
@@ -11240,6 +11254,11 @@ sisteransi@^1.0.4:
   resolved "https://registry.npm.taobao.org/sisteransi/download/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha1-E01oEpd1ZDfMBcoBNw06elcQde0=
 
+size-sensor@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/size-sensor/download/size-sensor-1.0.1.tgz#f84e46206d3e259faff1d548e4b3beca93219dbb"
+  integrity sha1-+E5GIG0+JZ+v8dVI5LO+ypMhnbs=
+
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/slash/download/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -12056,6 +12075,11 @@ tsconfig-paths@^3.9.0:
     json5 "^1.0.1"
     minimist "^1.2.0"
     strip-bom "^3.0.0"
+
+tslib@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npm.taobao.org/tslib/download/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
 
 tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
@@ -12898,7 +12922,9 @@ yauzl@^2.10.0:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
 
-zrender@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npm.taobao.org/zrender/download/zrender-4.0.0.tgz?cache=0&sync_timestamp=1610458835064&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fzrender%2Fdownload%2Fzrender-4.0.0.tgz#908935151329fa95145a333d186edd4011cf86c5"
-  integrity sha1-kIk1FRMp+pUUWjM9GG7dQBHPhsU=
+zrender@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/zrender/download/zrender-5.1.0.tgz#b6a84c3aa7ccc6642ee0519901ca4c0835c4d85e"
+  integrity sha1-tqhMOqfMxmQu4FGZAcpMCDXE2F4=
+  dependencies:
+    tslib "2.0.3"

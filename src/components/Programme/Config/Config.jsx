@@ -4,28 +4,19 @@ import { QuestionCircleFilled } from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
 import delProgramme from "../../../services/request/programme/delProgramme";
+import { connect } from "react-redux";
+import { actions } from "../../../redux/actions";
+import getProgrammes from "../../../services/request/programme/getProgrammes";
 
 class Config extends React.Component {
   constructor() {
     super();
     this.layout = {
-      labelCol: { span: 5 },
+      labelCol: { span: 3 },
       wrapperCol: { span: 999 }
     };
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
     this.radioLayout = {};
-    // this.form = {};
-    // this.state = {
-    //   name: '',
-    //   keywordMatch: 'titleOnly',
-    //   regionKeywords: '',
-    //   regionMatch: 'and',
-    //   eventKeywords: '',
-    //   eventMatch: 'and',
-    //   roleKeywords: '',
-    //   roleMatch: 'and',
-    //   enableAlert: false,
-    // }
   }
 
   handleProgrammeConfig = (type, data) => {
@@ -52,18 +43,42 @@ class Config extends React.Component {
   roleMatchMethod: "or"
    */
   modifyProgramme = async (rawData) => {
+    const { userName, curProgramme } = this.props;
     const data = {
       fid: this.props.curProgramme.fid,
+      userName,
       ...rawData,
     };
     const result = await modifyProgramme(data);
-    console.log('modifyProgramme', result);
+    if (result.modifyProgramme !== 1) { alert('提交失败！'); }
+    else {
+      alert('提交成功！');
+      await this.getProgrammes();
+      const { programmes } = this.props;
+      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid)
+      this.props.onProgrammeChange({ curProgramme })
+    }
   }
 
+  getProgrammes = async () => {
+    const programmes = await getProgrammes(this.props.userName);
+    const { curProgramme } = this.props;
+    await this.props.onProgrammesChange({
+      programmes,
+      curProgramme: curProgramme || programmes[programmes.length - 1],
+    });
+  };
+
+
   delProgramme = async () => {
+    const { userName } = this.props;
     const { fid } = this.props.curProgramme;
-    const result = await delProgramme({ fid });
-    console.log('delProgramme', result);
+    const result = await delProgramme(fid, userName);
+    if (result.delProgramme !== 1) { alert('删除失败！'); }
+    else {
+      alert('删除成功！');
+      this.props.onProgrammeChange({ curProgramme: undefined });
+    }
   }
 
   componentDidMount() {
@@ -115,39 +130,45 @@ class Config extends React.Component {
             label="地域关键词"
             name="regionKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="regionMatch"
             label="地域关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
-            <Radio.Group>
-              <Radio.Button value="or">或</Radio.Button>
-              <Radio.Button value="and">与</Radio.Button>
+            <Radio.Group size="small">
+              <Radio value="or">或</Radio>
+              <Radio value="and">与</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             label="人物关键词"
             name="roleKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="roleMatch"
             label="人物关系"
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
-            <Radio.Group>
-              <Radio.Button value="or">或</Radio.Button>
-              <Radio.Button value="and">与</Radio.Button>
+            <Radio.Group size="small">
+              <Radio value="or">或</Radio>
+              <Radio value="and">与</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             label="事件关键词"
             name="eventKeywords"
           >
-            <Input />
+            <Input.TextArea
+              rows={5}
+            />
           </Form.Item>
           <Form.Item
             name="eventMatch"
@@ -155,16 +176,16 @@ class Config extends React.Component {
             rules={[{ required: true, message: '请选择匹配方式' }]}
           >
             <Radio.Group>
-              <Radio.Button value="and">或</Radio.Button>
-              <Radio.Button value="or">与</Radio.Button>
+              <Radio value="and">或</Radio>
+              <Radio value="or">与</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
+          {/*<Form.Item
             label="启用预警"
             name="enableAlert"
           >
             <Switch />
-          </Form.Item>
+          </Form.Item>*/}
           <Form.Item>
             <div className="submit-btn-wrap">
               <Button
@@ -188,4 +209,15 @@ class Config extends React.Component {
   }
 }
 
-export default Config;
+
+const mapStateToProps = (state) => ({
+  userName: state.userName,
+  curProgramme: state.curProgramme,
+  programmes: state.programmes,
+});
+const mapDispatchToProps = {
+  onProgrammeChange: actions.onProgrammeChange,
+  onProgrammesChange: actions.onProgrammesChange,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Config);

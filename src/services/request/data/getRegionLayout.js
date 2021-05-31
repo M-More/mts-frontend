@@ -31,15 +31,16 @@ const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     regionMap.set(37, '山东');
     regionMap.set(41, '河南');
     regionMap.set(42, '湖北');
-    regionMap.set(43, '广东');
-    regionMap.set(44, '广西');
-    regionMap.set(45, '海南');
-    regionMap.set(46, '重庆');
+    regionMap.set(43, '湖南');
+    regionMap.set(44, '广东');
+    regionMap.set(45, '广西');
+    regionMap.set(46, '海南');
+    regionMap.set(50, '重庆');
     regionMap.set(51, '四川');
     regionMap.set(52, '贵州');
     regionMap.set(53, '云南');
     regionMap.set(54, '西藏');
-    regionMap.set(61, '山西');
+    regionMap.set(61, '陕西');
     regionMap.set(62, '甘肃');
     regionMap.set(63, '青海');
     regionMap.set(64, '宁夏');
@@ -55,7 +56,21 @@ const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
       name: regionMap.get(key),
       value: rawResult[`from${key}`],
     }));
-  return regionLayout;
+  let totals = 0;
+  let cnt = 0;
+  let min = regionLayout[0]?.value || 0;
+  let max = 0;
+  regionLayout.forEach((item) => {
+    totals += item.value;
+    cnt += 1;
+    if (item.value < min) min = item.value;
+    if (item.value > max) max = item.value;
+  });
+  return {
+    regions: regionLayout,
+    min,
+    max,
+  };
 };
 
 export default getRegionLayout;

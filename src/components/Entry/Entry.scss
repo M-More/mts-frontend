@@ -1,14 +1,18 @@
+@import "../../config/constant.scss";
+
 .mts-app-wrap {
-  min-height: 100%;
   width: 100%;
+  min-height: 100%;
   min-width: 1000px;
   .mts-app-body {
-    min-height: calc(100% - 64px - 64px);
-    height: fit-content;
-    background: whitesmoke;
   }
   .mts-footer {
-    height: 64px;
+    height: 50px;
+    background: $default-dark-blue;
+    color: white;
+    line-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 html body #root {

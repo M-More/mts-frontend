@@ -1,8 +1,60 @@
+@import "../../config/constant.scss";
+
+.overall-wrap {
+  background: whitesmoke;
+}
 .mts-overall-container {
-  width: 80%;
-  height: fit-content;
+  width: 90%;
   margin: 0 auto;
+  height: fit-content;
   min-width: 1000px;
   background: white;
   padding: 8px;
+  .back {
+    color: $default-light-blue;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
+.search-entry-wrap {
+  background: rgba(255, 255, 255, 0.8);
+  width: 60%;
+  height: 250px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  .search-entry-input {
+    width: 80%;
+    margin-bottom: 50px;
+  }
+  .title {
+    font-size: 40px;
+    font-weight: bolder;
+    color: $default-light-blue;
+    margin-bottom: 30px;
+  }
+  .btn-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    button {
+      width: 150px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+}
+.main-wrap {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  background: url("../../materials/star.gif");
+  height: 100%;
+  width: 100%;
 }
