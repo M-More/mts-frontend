@@ -2,7 +2,6 @@ const areaLine = (data, title, size) => ({
   title: {
     text: title,
     left: 'center',
-    top: '5%',
   },
   xAxis: {
     type: 'category',
@@ -18,7 +17,7 @@ const areaLine = (data, title, size) => ({
       'normal': {
         'show': true,
         'textStyle': {
-          'fontSize': 18 },
+          'fontSize': 16 },
       },
       'emphasis': {
         'show': true,

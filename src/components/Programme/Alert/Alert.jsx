@@ -14,7 +14,6 @@ import getSensitiveData from "../../../services/request/programme/getSensitiveDa
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-
 class Alert extends React.Component {
   constructor() {
     super();
