@@ -276,6 +276,11 @@ class View extends React.Component {
           className="view-date-selector"
           onDateSelect={this.handleDateChange}
         />}
+        {curPage === 6 && <div className="region-rank">
+          {regionLayout[fid] && regionLayout[fid].regions.sort((a, b) => (b.value - a.value)).map((item) => (
+            <div className="region-rank-item">{item.name} {item.value}</div>
+          ))}
+        </div>}
         <Carousel
           ref={r => this.carousel = r}
           dotPosition="left"
@@ -366,6 +371,7 @@ class View extends React.Component {
               minHeight={550}
               padding={200}
             >
+
               <Echart
                 title="地域分布"
                 type="chinaMap"
