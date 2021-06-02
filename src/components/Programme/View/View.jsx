@@ -68,7 +68,7 @@ class View extends React.Component {
     rawData.time = '';
     while (list.length) {
       const head = list.shift();
-      head.name = `${this.formatSummary(head.summary)}: \n${head.time}`;
+      head.name = ` ${head.time}\n${this.formatSummary(head.summary)}`;
       head.children = head.childList;
       head.data = {
         clusterNum: head.clusterNum,
@@ -333,7 +333,7 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="来源分部"
+                title="来源分布"
                 type="defaultPie"
                 data={sourceLayout[fid]}
                 size="big"
@@ -426,7 +426,7 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="话题溯源"
+                title="微博溯源"
                 type="defaultTree"
                 size="big"
                 data={traceTree[fid]}
@@ -439,7 +439,7 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="话题溯源"
+                title="微博溯源"
                 type="circleTree"
                 size="big"
                 data={traceTree[fid]}

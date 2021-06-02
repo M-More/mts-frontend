@@ -27,7 +27,7 @@ const getProgrammeSourceLayout = async (fid, startPublishedDay, endPublishedDay)
         name: options[id].label,
         label: options[id].label,
         value: rawResult[`fromType${id}`],
-      }));
+      })).filter(item => item.value);
   return sourceLayout;
 };
 

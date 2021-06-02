@@ -27,7 +27,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
-      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      const avgTime = moment((fromMoment + toMoment) / 2).format('DD hh');
       return avgTime
     }) : [],
     xAxis: Object.keys(rawResult)
@@ -47,7 +47,7 @@ const getAmountTrend = async (keyword, startPublishedDay, endPublishedDay) => {
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
-      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      const avgTime = moment((fromMoment + toMoment) / 2).format('DD hh');
       return avgTime;
     }) : [],
     yAxis: rawResult.totalAmountTrend,

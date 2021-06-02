@@ -26,7 +26,7 @@ const getProgrammeAmountTrend = async (fid, startPublishedDay, endPublishedDay) 
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
-      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      const avgTime = `${moment(fromMoment).format('MM/DD hh')}~\n${moment(toMoment).format('MM/DD hh')}`;
       return avgTime
     }) : [],
     xAxis: Object.keys(rawResult)
@@ -46,7 +46,7 @@ const getProgrammeAmountTrend = async (fid, startPublishedDay, endPublishedDay) 
       const moments = str.split(' to ');
       const fromMoment = moment(moments[0]);
       const toMoment = moment(moments[1]);
-      const avgTime = moment((fromMoment + toMoment) / 2).format('MM/DD');
+      const avgTime = `${moment(fromMoment).format('MM/DD hh:00')}~\n${moment(toMoment).format('MM/DD hh:00')}`;
       return avgTime;
     }) : [],
     yAxis: rawResult.totalAmountTrend,
