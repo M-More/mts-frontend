@@ -129,10 +129,14 @@ class DataList extends React.Component {
     );
   };
 
+  handleOpen = (text) => {
+    window.open(text);
+  };
+
   renderAddr = (text) => (
     <a
       className="mts-data-list-addr"
-      href={text}
+      onClick={e => this.handleOpen(text)}
     >
       点击访问 >
     </a>

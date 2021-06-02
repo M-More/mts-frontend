@@ -7,7 +7,7 @@ const modifyProgramme = async (rawData) => {
     matchType: rawData.keywordMatch === 'or' ? 0 : 1,
     regionKeyword: rawData.regionKeywords,
     eventKeyword: rawData.eventKeywords,
-    roleKeyword: rawData.eventKeywords,
+    roleKeyword: rawData.roleKeywords,
     roleKeywordMatch: rawData.roleMatch === 'or' ? 0 : 1,
     eventKeywordMatch: rawData.eventMatch === 'or' ? 0 : 1,
     regionKeywordMatch: rawData.regionMatch === 'or' ? 0 : 1,

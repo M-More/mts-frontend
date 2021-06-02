@@ -38,9 +38,9 @@ const requests = {
 
   getSensitiveType: { url: `${domain3}/data/textAlert`, method: 'POST' },
   getSensitiveData: { url: `${domain3}/data/sensitiveCount`, method: 'GET'},
-  get48AmountTrend: { url: `${domain3}/data/globalSearch/amountTrendCount3`, method: 'GET' },
-  getActiveWeiboUser: { url: `${domain3}/data/getActivateUser`, method: 'GET' },
-  getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
+  get48AmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount3`, method: 'GET' },
+  getActiveWeiboUser: { url: `${curDomain}/data/getActivateUser`, method: 'GET' },
+  getWeiboUserData: { url: `${curDomain}/data/globalSearch/searchByUser`, method: 'GET' },
 };
 
 export default requests;

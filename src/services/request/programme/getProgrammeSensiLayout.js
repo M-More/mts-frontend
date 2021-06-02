@@ -25,7 +25,7 @@ const getProgrammeSensiLayout = async (fid, startPublishedDay, endPublishedDay) 
   const sensiLayout = [
     { name: '敏感', label: '敏感', value: rawResult.cflag1 },
     { name: '非敏感', label: '非敏感', value: rawResult.cflag0 },
-  ];
+  ].filter(item => item.value);
   return sensiLayout;
 };
 
