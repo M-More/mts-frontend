@@ -36,11 +36,12 @@ const requests = {
   getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'GET' },
   getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
 
-  getSensitiveType: { url: `${domain3}/data/textAlert`, method: 'POST' },
-  getSensitiveData: { url: `${domain3}/data/sensitiveCount`, method: 'GET'},
+  getSensitiveType: { url: `${curDomain}/data/textAlert`, method: 'POST' },
+  getSensitiveData: { url: `${curDomain}/data/sensitiveCount`, method: 'GET'},
   get48AmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount3`, method: 'GET' },
   getActiveWeiboUser: { url: `${curDomain}/data/getActivateUser`, method: 'GET' },
   getWeiboUserData: { url: `${curDomain}/data/globalSearch/searchByUser`, method: 'GET' },
+  getProgrammeSummary: { url: `${curDomain}/data/multiDocumentSummary`, method: 'GET' },
 };
 
 export default requests;

@@ -48,11 +48,18 @@ class DataList extends React.Component {
         render: this.renderMoment,
         width: 100,
       },
-      {
+      /* {
         title: '敏感度',
         dataIndex: 'sensi',
         key: 'sensi',
         render: this.renderSensi,
+        width: 100,
+      }, */
+      {
+        title: '敏感类型',
+        dataIndex: 'sensitiveType',
+        key: 'sensitiveType',
+        render: this.renderSensitiveType,
         width: 100,
       },
       {
@@ -109,6 +116,12 @@ class DataList extends React.Component {
   renderSensi = (text) => {
     if (text === '1') return <span style={{ color: 'red' }}>敏感</span>;
     return <span>非敏感</span>;
+  };
+
+  renderSensitiveType = (text) => {
+    if (text === '正常信息 ') return text;
+    if (text) return <span style={{ color: 'red' }}>{text}</span>
+    return <LoadingOutlined />
   };
 
   renderTitle = (text, record) => {

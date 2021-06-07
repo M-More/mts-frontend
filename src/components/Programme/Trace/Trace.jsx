@@ -10,6 +10,7 @@ import getActiveWeiboUser from '../../../services/request/data/getAcitveWeiboUse
 import getOverallData from '../../../services/request/data/getOverallData';
 import getSensitiveData from '../../../services/request/programme/getSensitiveData';
 import { LoadingOutlined } from "@ant-design/icons";
+import getSensitiveType from "../../../services/request/data/getSensitiveType";
 
 const PAGE_SIZE = 10;
 
@@ -53,14 +54,17 @@ class Trace extends React.Component {
     ];
     let userMap = [];
     sensiList.forEach(item => {
-      const user = userMap.find((target) => target.username = item.title)
-      if (user) user.number += 1;
-      else userMap.push({
+      const user = userMap.find((target) => target.username === item.title);
+      if (user) {
+        user.number += 1;
+        user.data.push(item);
+      } else userMap.push({
         username: item.title,
         number: 1,
+        data: [item],
       });
     });
-    userMap = userMap.sort((a, b) => - a.number + b.number);
+    userMap = userMap.sort((a, b) => - a.number + b.number).slice(0, 5);
     const newData = { ...this.state.sensiWeiboUser };
     newData[fid] = userMap;
     this.setState({
@@ -77,8 +81,16 @@ class Trace extends React.Component {
   getActiveWeiboUser = async () => {
     const { fid } = this.props.curProgramme;
     const result = await getActiveWeiboUser(fid);
+    let userMap = [];
+    Object.keys(result).forEach((key) => {
+      userMap.push({
+        username: key,
+        number: result[key],
+      });
+    });
+    userMap = userMap.sort((a, b) => - a.number + b.number).slice(0, 5);
     const newData = { ...this.state.activeWeiboUser };
-    newData[fid] = result;
+    newData[fid] = userMap;
     this.setState({
       activeWeiboUser: newData,
     });
@@ -105,6 +117,40 @@ class Trace extends React.Component {
       loading: false,
       data: newData,
     });
+    this.getSensitiveType();
+  };
+
+  getSensitiveType = async () => {
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getSensitiveType(contents);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria].data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.sensitiveType = tag || '';
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
+
+  handleSensiUserClick = (username) => {
+    this.setState({
+      prevUsername: username,
+      username,
+    });
+    const { fid } = this.props.curProgramme;
+    const { sensiWeiboUser } = this.state;
+    const user = sensiWeiboUser[fid].find((target) => target.username === username)
+    const result = user?.data || [];
+    const newData = { ...this.state.data };
+    newData[this.getCriteria()] = result;
+    this.setState({
+      data: newData,
+    });
   };
 
   handlePageChange = (pageId) => {
@@ -124,6 +170,7 @@ class Trace extends React.Component {
       this.handleSearch();
     });
   };
+
 
   render() {
     const { username, loading, activeWeiboUser, sensiWeiboUser } = this.state;
@@ -160,24 +207,26 @@ class Trace extends React.Component {
               disableEmotion
             />
           </div>
-          <Card
-            title="活跃用户列表"
-            className="activate-users-list"
-          >
-            { activeWeiboUser[fid] && Object.keys(activeWeiboUser[fid]).map((key, index, array) => (
-              <li><a onClick={e => this.handleUserClick(key)}>{key}</a>包含{activeWeiboUser[fid][key]}条微博</li>
-            ))}
-          </Card>
-          <Card
-            title="敏感用户列表"
-            className="activate-users-list"
-          >
-            {
-              sensiWeiboUser[fid] ? sensiWeiboUser[fid].map((item, index, array) => (
-                <li><a onClick={e => this.handleUserClick(item.username)}>{item.username}</a>包含{item.number}条敏感信息</li>
-              )):<LoadingOutlined />
-            }
-          </Card>
+          <div>
+            <Card
+              title="活跃用户列表"
+              className="activate-users-list"
+            >
+              { activeWeiboUser[fid] && activeWeiboUser[fid].map((item, index, array) => (
+                <span><a onClick={e => this.handleUserClick(item.username)}>{item.username}</a>包含{item.number}条微博<br/></span>
+              ))}
+            </Card>
+            <Card
+              title="敏感用户列表"
+              className="activate-users-list"
+            >
+              {
+                sensiWeiboUser[fid] ? sensiWeiboUser[fid].map((item, index, array) => (
+                  <span><a onClick={e => this.handleUserClick(item.username)}>{item.username}</a>包含敏感信息<br/></span>
+                )):<LoadingOutlined />
+              }
+            </Card>
+          </div>
         </div>
       </AutofitWrap>
     );

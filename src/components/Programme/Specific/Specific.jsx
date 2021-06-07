@@ -11,6 +11,7 @@ import './Specific.scss';
 import { actions } from '../../../redux/actions';
 import getContentTag from '../../../services/request/data/getContentTag';
 import getOverallData from '../../../services/request/data/getOverallData';
+import getSensitiveType from "../../../services/request/data/getSensitiveType";
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -51,6 +52,22 @@ class Specific extends React.Component {
     }
   }
 
+  getSensitiveType = async () => {
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getSensitiveType(contents);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria].data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.sensitiveType = tag || '';
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
   handleSearch = async () => {
     await this.setState({ loading: true });
     const fid = this.props.curProgramme?.fid;
@@ -65,6 +82,7 @@ class Specific extends React.Component {
     });
     this.getContentTag();
     this.getContentEmotion();
+    this.getSensitiveType();
   };
 
   getContentEmotion = async () => {

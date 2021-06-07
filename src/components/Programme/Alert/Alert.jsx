@@ -11,6 +11,7 @@ import getProgrammeSentimentLayout from "../../../services/request/programme/get
 import get48AmountTrend from "../../../services/request/data/get48AmountTrend";
 import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
 import getSensitiveData from "../../../services/request/programme/getSensitiveData";
+import getOverallData from "../../../services/request/data/getOverallData";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -21,6 +22,8 @@ class Alert extends React.Component {
       amountTrend: {},
       emotionTrend: {},
       sensiLayout: {},
+      data: {},
+      loading: false,
     };
 
     this.endPublishedDay = moment().format(DATE_FORMAT);
@@ -84,6 +87,7 @@ class Alert extends React.Component {
   };
 
   getSensitiveData = async () => {
+    await this.setState({ loading: true })
     const fid = this.props.curProgramme?.fid;
     const sensitiveData = await getSensitiveData(fid);
     const sensiLayout = [
@@ -92,15 +96,32 @@ class Alert extends React.Component {
       { name: '低俗信息', label: '低俗信息', value: sensitiveData['低俗信息'].length || 0 },
       { name: '广告营销', label: '广告营销', value: sensitiveData['广告营销'].length || 0 },
       { name: '人身攻击', label: '人身攻击', value: sensitiveData['人身攻击'].length || 0 },
-    ];
+    ].filter((item) => item.value);
     const newData = { ...this.state.sensiLayout };
     newData[fid] = sensiLayout;
-    this.setState({ sensiLayout: newData });
+    ['政治敏感', '低俗信息', '广告营销', '人身攻击'].forEach(type => {
+      sensitiveData[type].forEach(item => {
+        if (item.sensitiveType) item.sensitiveType += ` ${type}`;
+        else item.sensitiveType = type;
+      });
+    });
+
+    const result = [
+      ...sensitiveData['政治敏感'],
+      ...sensitiveData['低俗信息'],
+      ...sensitiveData['广告营销'],
+      ...sensitiveData['人身攻击'],
+    ];
+    const newData2 = { ...this.state.data };
+    newData2[fid] = result;
+    console.log(result);
+    this.setState({ sensiLayout: newData, data: newData2, loading: false });
   };
 
   render() {
-    const { amountTrend, emotionTrend, sensiLayout } = this.state;
+    const { amountTrend, emotionTrend, sensiLayout, data } = this.state;
     const fid = this.props.curProgramme?.fid;
+    const { loading } = this.state;
     console.log(sensiLayout);
     return (
       <div
@@ -137,7 +158,11 @@ class Alert extends React.Component {
           <div>
             敏感信息列表
             <DataList
-              data={[]}
+              data={data[fid]}
+              disableEmotion
+              disableTag
+              disableSource
+              loading={loading}
             />
           </div>
         </div>
