@@ -27,6 +27,12 @@ class Echart extends React.Component {
     echarts.registerMap('china', china);
   }
 
+  handleClick = (e) => {
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    }
+  };
+
   render() {
     const { title, data, type, size } = this.props;
     let getRules;
@@ -47,6 +53,7 @@ class Echart extends React.Component {
     const { guid } = this.state;
     const width = this.props.width || this.defaultWidth;
     const height = this.props.height || this.defaultHeight;
+
     return (
       <div
         className="common-chart-wrap"
@@ -61,6 +68,9 @@ class Echart extends React.Component {
               }}
               option={option}
               theme="light"
+              onEvents={{
+                click: this.handleClick
+              }}
             /> :
             <Loading title={title} />
         }

@@ -77,7 +77,7 @@ class Config extends React.Component {
     if (result.delProgramme !== 1) { alert('删除失败！'); }
     else {
       alert('删除成功！');
-      this.props.onProgrammeChange({ curProgramme: undefined });
+      this.props.onProgrammeChange({ curProgramme: this.props.programmes[0] || undefined });
     }
   }
 

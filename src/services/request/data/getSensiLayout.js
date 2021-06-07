@@ -7,7 +7,8 @@ const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getSensiLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  // const url = encodeURI(`${requests.getSensiLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  const url = encodeURI(`${requests.getSensiLayout.url}?keyword=${keyword}&startPublishedDay=&endPublishedDay=`);
   const response = await fetch(url, { method: requests.getSensiLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   /* const options = [
@@ -25,7 +26,7 @@ const getSensiLayout = async (keyword, startPublishedDay, endPublishedDay) => {
   const sensiLayout = [
     { name: '敏感', label: '敏感', value: rawResult.cflag1 },
     { name: '非敏感', label: '非敏感', value: rawResult.cflag0 },
-  ];
+  ].filter(item => item.value);
   return sensiLayout;
 };
 

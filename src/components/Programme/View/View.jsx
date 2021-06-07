@@ -21,6 +21,7 @@ import getEventTree from '../../../services/request/data/getEventTree';
 import getProgrammeSentimentLayout from '../../../services/request/programme/getProgrammeSentimentLayout';
 import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
 import DateSelector from "../../common/DateSelector/DateSelector";
+import getProgrammeSummary from "../../../services/request/programme/getProgrammeSummary";
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -41,6 +42,7 @@ class View extends React.Component {
       eventTree: {},
       emotionTrend: {},
       data: {},
+      summary: {},
       curPage: 0,
     };
   }
@@ -68,7 +70,7 @@ class View extends React.Component {
     rawData.time = '';
     while (list.length) {
       const head = list.shift();
-      head.name = `${this.formatSummary(head.summary)}: \n${head.time}`;
+      head.name = ` ${head.time}\n${this.formatSummary(head.summary)}`;
       head.children = head.childList;
       head.data = {
         clusterNum: head.clusterNum,
@@ -126,7 +128,7 @@ class View extends React.Component {
   };
 
   getLatestInfo = async () => {
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 12;
     const params = [
       this.props.curProgramme.fid,
       '', // keyword
@@ -139,11 +141,14 @@ class View extends React.Component {
       0, // pageId
     ];
     const result = await getProgrammeData(...params);
-    const criteria = this.getCriteria();
     const { fid } = this.props.curProgramme;
     const newData = { ...this.state.data };
     newData[fid] = result.data;
     this.setState({ data: newData });
+    const summaryResult = await getProgrammeSummary(fid, '', '');
+    const newSummary = { ...this.state.summary };
+    newSummary[fid] = summaryResult.summary;
+    this.setState({ summary: newSummary });
   };
 
   getEmotionTrend = async () => {
@@ -244,7 +249,6 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
     const formatedEventTree = this.formatEventTree(eventTree);
-    console.log(formatedEventTree);
     const criteria = this.getCriteria();
     const newData = { ...this.state.eventTree };
     newData[fid] = formatedEventTree;
@@ -262,8 +266,17 @@ class View extends React.Component {
     });
   };
 
+  handleWeiboTreeClick = (e) => {
+    const url = e.data?.data?.url;
+    if (/^http/.test(url)) window.open(url);
+  };
+
+  handleEventTreeClick = (e) => {
+    console.log(e);
+  }
+
   render() {
-    const { data, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const { data, summary, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     const criteria = this.getCriteria();
     const { fid } = this.props.curProgramme;
     const { curPage } = this.state;
@@ -276,6 +289,11 @@ class View extends React.Component {
           className="view-date-selector"
           onDateSelect={this.handleDateChange}
         />}
+        {curPage === 6 && <div className="region-rank">
+          {regionLayout[fid] && regionLayout[fid].regions.sort((a, b) => (b.value - a.value)).map((item) => (
+            <div className="region-rank-item">{item.name} {item.value}</div>
+          ))}
+        </div>}
         <Carousel
           ref={r => this.carousel = r}
           dotPosition="left"
@@ -300,12 +318,15 @@ class View extends React.Component {
             >
               <div className="latest-info">
                 <div className="theme">最新舆情</div>
-                {data[fid] && data[fid].map((item) => (
-                  <div className="latest-info-item">
-                    <span className="title">{item.title}</span>
-                    <span className="content">{item.content}</span>
-                  </div>
-                ))}
+                <div className="summary">话题摘要：{summary[fid]?.replace(/\s/g, '')}</div>
+                <div className="latest-info-item-group">
+                  {data[fid] && data[fid].map((item) => (
+                    <div className="latest-info-item">
+                      <div className="title">{item.title}</div>
+                      <div className="content">{item.content}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AutofitWrap>
           </div>
@@ -328,7 +349,7 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="来源分部"
+                title="来源分布"
                 type="defaultPie"
                 data={sourceLayout[fid]}
                 size="big"
@@ -366,6 +387,7 @@ class View extends React.Component {
               minHeight={550}
               padding={200}
             >
+
               <Echart
                 title="地域分布"
                 type="chinaMap"
@@ -411,6 +433,7 @@ class View extends React.Component {
                 type="connGraph"
                 size="big"
                 data={eventTree[fid]}
+                onClick={this.handleEventTreeClick}
               />
             </AutofitWrap>
           </div>
@@ -420,10 +443,11 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="话题溯源"
+                title="微博溯源"
                 type="defaultTree"
                 size="big"
                 data={traceTree[fid]}
+                onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
           </div>
@@ -433,10 +457,11 @@ class View extends React.Component {
               padding={200}
             >
               <Echart
-                title="话题溯源"
+                title="微博溯源"
                 type="circleTree"
                 size="big"
                 data={traceTree[fid]}
+                onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
           </div>

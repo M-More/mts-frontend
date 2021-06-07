@@ -1,5 +1,4 @@
 const chinaMap = (data, title, size) => {
-  console.log(data);
   return ({
     title: {
       text: title,
@@ -10,7 +9,7 @@ const chinaMap = (data, title, size) => {
       min: data.min,
       max: data.max,
       inRange: {
-        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8'].reverse(),
+        color: ['#ffffff', '#fdae61', '#f46d43', '#d73027', '#FF0000'],
       },
       text: ['最多舆情', '最少舆情'],
       calculable: true,

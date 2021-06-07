@@ -26,8 +26,8 @@ const getProgrammeSentimentLayout = async (fid, startPublishedDay, endPublishedD
     { name: '悲伤', label: '悲伤', value: rawResult.sad, color: 'blue' },
     { name: '恐惧', label: '恐惧', value: rawResult.fear, color: 'fear' },
     { name: '惊奇', label: '惊奇', value: rawResult.surprise, color: 'yellow' },
-    { name: '无情绪', label: '无情绪', value: rawResult.neutral, color: 'darkgray' },
-  ];
+    { name: '中立', label: '中立', value: rawResult.neutral, color: 'darkgray' },
+  ].filter(item => item.value);
   return sentimentLayout;
 };
 

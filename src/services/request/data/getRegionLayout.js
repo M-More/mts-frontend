@@ -7,7 +7,7 @@ const getRegionLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getRegionLayout.url}?${qs.stringify(params)}`);
+  const url = encodeURI(`${requests.getRegionLayout.url}?keyword=&startPublishedDay=&endPublishedDay=`);
   const response = await fetch(url, { method: requests.getRegionLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
 

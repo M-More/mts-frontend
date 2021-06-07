@@ -14,6 +14,7 @@ import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 import './Overall.scss';
 
 import { actions } from '../../redux/actions';
+import getSensitiveType from "../../services/request/data/getSensitiveType";
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -56,6 +57,23 @@ class Overall extends Component {
     });
     this.getContentTag();
     this.getContentEmotion();
+    this.getSensitiveType();
+  };
+
+  getSensitiveType = async () => {
+    const criteria = this.getCriteria();
+    const contents = this.state.data[criteria]?.data.map((item) => item.content);
+    const tagResult = await getSensitiveType(contents);
+    const newData = { ...this.state.data };
+    const tags = tagResult.result;
+    newData[criteria].data = [...newData[criteria].data];
+    newData[criteria].data.forEach((item, index) => {
+      const tag = tags[index.toString()];
+      item.sensitiveType = tag || '';
+    });
+    this.setState({
+      data: newData,
+    });
   };
 
   getContentEmotion = async () => {

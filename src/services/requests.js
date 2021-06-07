@@ -20,7 +20,7 @@ const requests = {
   getProgrammes: { url: `${curDomain}/User/findFangAn`, method: 'GET' },
   login: { url: `${curDomain}/User/login`, method: 'POST' },
   logout: { url: `${curDomain}/User/logout`, method: 'POST' },
-  getUsers: { url: `${curDomain}/User/allUsers`, method: 'GET' },
+  getUsers: { url: `${domain3}/User/allUsers`, method: 'GET' },
   getKeywordsCloud: { url: `${curDomain}/data/keywordExtraction`, method: 'GET' },
   getSensitiveWord: { url: `${curDomain}/data/sensitiveWord`, method: 'POST' },
   getContentTag: { url: `${curDomain}/data/textClass2`, method: 'POST' },
@@ -36,11 +36,13 @@ const requests = {
   getProgrammeSentimentLayout: { url: `${curDomain}/data/sentimentCount`, method: 'GET' },
   getProgrammeSentimentTrend: { url: `${curDomain}/data/sentimentTrendCount`, method: 'GET' },
 
-  getSensitiveType: { url: `${domain3}/data/textAlert`, method: 'POST' },
-  getSensitiveData: { url: `${domain3}/data/sensitiveCount`, method: 'GET'},
-  get48AmountTrend: { url: `${domain3}/data/globalSearch/amountTrendCount3`, method: 'GET' },
-  getActiveWeiboUser: { url: `${domain3}/data/getActivateUser`, method: 'GET' },
-  getWeiboUserData: { url: `${domain3}/data/globalSearch/searchByUser`, method: 'GET' },
+  getSensitiveType: { url: `${curDomain}/data/textAlert`, method: 'POST' },
+  getSensitiveData: { url: `${curDomain}/data/sensitiveCount`, method: 'GET'},
+  get48AmountTrend: { url: `${curDomain}/data/globalSearch/amountTrendCount3`, method: 'GET' },
+  getActiveWeiboUser: { url: `${curDomain}/data/getActivateUser`, method: 'GET' },
+  getWeiboUserData: { url: `${curDomain}/data/globalSearch/searchByUser`, method: 'GET' },
+  getProgrammeSummary: { url: `${curDomain}/data/multiDocumentSummary`, method: 'GET' },
+  changeUserState: { url: `${curDomain}/User/changeUserState`, method: 'GET' },
 };
 
 export default requests;

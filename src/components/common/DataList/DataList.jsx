@@ -48,11 +48,18 @@ class DataList extends React.Component {
         render: this.renderMoment,
         width: 100,
       },
-      {
+      /* {
         title: '敏感度',
         dataIndex: 'sensi',
         key: 'sensi',
         render: this.renderSensi,
+        width: 100,
+      }, */
+      {
+        title: '敏感类型',
+        dataIndex: 'sensitiveType',
+        key: 'sensitiveType',
+        render: this.renderSensitiveType,
         width: 100,
       },
       {
@@ -111,6 +118,12 @@ class DataList extends React.Component {
     return <span>非敏感</span>;
   };
 
+  renderSensitiveType = (text) => {
+    if (text === '正常信息 ') return text;
+    if (text) return <span style={{ color: 'red' }}>{text}</span>
+    return <LoadingOutlined />
+  };
+
   renderTitle = (text, record) => {
     const { content, source } = record;
     let renderTxt = '';
@@ -129,10 +142,14 @@ class DataList extends React.Component {
     );
   };
 
+  handleOpen = (text) => {
+    window.open(text);
+  };
+
   renderAddr = (text) => (
     <a
       className="mts-data-list-addr"
-      href={text}
+      onClick={e => this.handleOpen(text)}
     >
       点击访问 >
     </a>

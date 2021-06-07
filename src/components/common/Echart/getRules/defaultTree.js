@@ -36,7 +36,7 @@ const defaultTree = (data, title, size) => ({
         focus: 'descendant',
       },
       initialTreeDepth: [-1],
-      expandAndCollapse: true,
+      expandAndCollapse: false,
       animationDuration: 550,
       animationDurationUpdate: 750,
     },

@@ -7,7 +7,8 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
     startPublishedDay,
     endPublishedDay,
   };
-  const url = encodeURI(`${requests.getSourceLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  // const url = encodeURI(`${requests.getSourceLayout.url}?keyword=${keyword}&startPublishedDay=${startPublishedDay}&endPublishedDay=${endPublishedDay}`);
+  const url = encodeURI(`${requests.getSourceLayout.url}?keyword=${keyword}&startPublishedDay=&endPublishedDay=`);
   const response = await fetch(url, { method: requests.getSourceLayout.method });
   const rawResult = response.status === 200 ? await response.json() : {};
   const options = [
@@ -27,7 +28,7 @@ const getSourceLayout = async (keyword, startPublishedDay, endPublishedDay) => {
         name: options[id].label,
         label: options[id].label,
         value: rawResult[`fromType${id}`],
-      }));
+      })).filter(item => item.value);
   console.log(sourceLayout);
   return sourceLayout;
 };
