@@ -173,7 +173,7 @@ class Home extends React.Component {
                   [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
                 </span>
                 <span className="content2">
-                  {item.content}
+                  {item.content.replace(/\\n/g, '')}
                 </span>
               </div>
             )) :
@@ -208,7 +208,7 @@ class Home extends React.Component {
                   [{this.renderSource(item.source)} {moment(item.publishedDay).month()}/{moment(item.publishedDay).date()}]
                 </span>
                 <span className="content2">
-                  {item.content}
+                  {item.content.replace(/\\n/g, '')}
                 </span>
               </div>
             )) :

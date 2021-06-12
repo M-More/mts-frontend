@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Layout, Switch } from 'antd';
+import { Form, Input, Button, Radio, Layout, Switch, Modal } from 'antd';
 import { QuestionCircleFilled } from '@ant-design/icons';
 import './Config.scss';
 import modifyProgramme from "../../../services/request/programme/modifyProgamme";
@@ -7,6 +7,7 @@ import delProgramme from "../../../services/request/programme/delProgramme";
 import { connect } from "react-redux";
 import { actions } from "../../../redux/actions";
 import getProgrammes from "../../../services/request/programme/getProgrammes";
+import sampleKeywordAnalysis from "../../../services/request/programme/sampleKeywordAnalysis";
 
 class Config extends React.Component {
   constructor() {
@@ -17,6 +18,10 @@ class Config extends React.Component {
     };
     this.subLayout = { wrapperCol: { offset: 6, span: 999 }};
     this.radioLayout = {};
+    this.state = {
+      sampleVisible: false,
+      sampleText: '',
+    }
   }
 
   handleProgrammeConfig = (type, data) => {
@@ -62,6 +67,7 @@ class Config extends React.Component {
 
   getProgrammes = async () => {
     const programmes = await getProgrammes(this.props.userName);
+    console.log(programmes);
     const { curProgramme } = this.props;
     await this.props.onProgrammesChange({
       programmes,
@@ -96,8 +102,46 @@ class Config extends React.Component {
     })
   }
 
+  handleSampleChange = (e) => {
+    this.setState({
+      sampleText: e.target.value,
+    })
+  }
+
+  handleSampleSubmit = async (e) => {
+    const { sampleText } = this.state;
+    const fid = this.props.curProgramme.fid;
+    const result = await sampleKeywordAnalysis(fid, sampleText);
+    if (result.autoaddEkeyword !== 1) { alert('分析失败'); }
+    else {
+      alert('分析成功！');
+      await this.getProgrammes();
+      const { programmes } = this.props;
+      const curProgramme = programmes.find((item) => item.fid === this.props.curProgramme.fid)
+      this.props.onProgrammeChange({ curProgramme })
+    }
+    this.setState({
+      sampleText: '',
+      sampleVisible: false,
+    })
+  }
+
+  handleSampleCancel = (e) => {
+    this.setState({
+      sampleText: '',
+      sampleVisible: false,
+    })
+  }
+
+  openSample = (e) => {
+    this.setState({
+      sampleVisible: true,
+    })
+  }
+
   render() {
     const { layout, subLayout } = this;
+    const { sampleVisible, sampleText } = this.state;
     // console.log(this.props.curProgramme);
     return (
       <Layout className="programme-config-wrap">
@@ -180,12 +224,14 @@ class Config extends React.Component {
               <Radio value="or">与</Radio>
             </Radio.Group>
           </Form.Item>
-          {/*<Form.Item
-            label="启用预警"
-            name="enableAlert"
+          <Form.Item
+            name="sensitiveWord"
+            label="方案敏感词"
           >
-            <Switch />
-          </Form.Item>*/}
+            <Input.TextArea
+              rows={5}
+            />
+          </Form.Item>
           <Form.Item>
             <div className="submit-btn-wrap">
               <Button
@@ -196,6 +242,13 @@ class Config extends React.Component {
                 提交方案
               </Button>
               <Button
+                className="submit-btn"
+                type="primary"
+                onClick={this.openSample}
+              >
+                样例分析
+              </Button>
+              <Button
                 type="danger"
                 onClick={() => this.handleProgrammeConfig('del')}
               >
@@ -204,6 +257,18 @@ class Config extends React.Component {
             </div>
           </Form.Item>
         </Form>
+        <Modal
+          title="根据样例文档分析关键词"
+          visible={sampleVisible}
+          onOk={this.handleSampleSubmit}
+          onCancel={this.handleSampleCancel}
+        >
+          <Input.TextArea
+            rows={5}
+            value={sampleText}
+            onChange={this.handleSampleChange}
+          />
+        </Modal>
       </Layout>
     )
   }

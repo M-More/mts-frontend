@@ -1,5 +1,4 @@
 const chinaMap = (data, title, size) => {
-  console.log(data);
   return ({
     title: {
       text: title,

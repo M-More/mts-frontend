@@ -32,6 +32,7 @@ const circleTree = (data, title, size) => ({
       roam: true,
       symbolSize: 7,
       initialTreeDepth: 3,
+      expandAndCollapse: false,
       animationDurationUpdate: 750,
       emphasis: {
         focus: 'descendant',

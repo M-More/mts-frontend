@@ -2,7 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import './View.scss';
 import { connect } from 'react-redux';
-import { Button, Carousel } from 'antd';
+import { Button, Carousel, Modal } from 'antd';
+import { Divider } from 'antd/es';
 import Echart from '../../common/Echart/Echart';
 import getAmountTrend from '../../../services/request/data/getAmountTrend';
 import getSensiLayout from '../../../services/request/data/getSensiLayout';
@@ -19,8 +20,9 @@ import getProgrammeAmountTrend from '../../../services/request/programme/getProg
 import getProgrammeRegionLayout from '../../../services/request/programme/getProgrammeRegionLayout';
 import getEventTree from '../../../services/request/data/getEventTree';
 import getProgrammeSentimentLayout from '../../../services/request/programme/getProgrammeSentimentLayout';
-import getProgrammeSentimentTrend from "../../../services/request/programme/getProgrammeSentimentTrend";
-import DateSelector from "../../common/DateSelector/DateSelector";
+import getProgrammeSentimentTrend from '../../../services/request/programme/getProgrammeSentimentTrend';
+import DateSelector from '../../common/DateSelector/DateSelector';
+import getProgrammeSummary from '../../../services/request/programme/getProgrammeSummary';
 
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -41,7 +43,10 @@ class View extends React.Component {
       eventTree: {},
       emotionTrend: {},
       data: {},
+      summary: {},
       curPage: 0,
+      visible: false,
+      curEvent: undefined,
     };
   }
 
@@ -53,11 +58,11 @@ class View extends React.Component {
   };
 
   formatSummary = (summary) => {
-    summary = summary.replace(/\s/g, '')
+    summary = summary.replace(/\s/g, '');
     const arr = [];
     while (summary.length) {
-      arr.push(summary.substr(0, 8))
-      summary = summary.substr(8)
+      arr.push(summary.substr(0, 8));
+      summary = summary.substr(8);
     }
     return arr.join('\n');
   };
@@ -72,6 +77,7 @@ class View extends React.Component {
       head.children = head.childList;
       head.data = {
         clusterNum: head.clusterNum,
+        clusterData: head.clusterDatas,
         time: head.time,
         summary: head.summary.replace(' ', ''),
       };
@@ -79,6 +85,7 @@ class View extends React.Component {
         list.push(item);
       });
     }
+    console.log(rawData)
     return rawData;
   };
 
@@ -92,8 +99,8 @@ class View extends React.Component {
   componentDidMount() {
     this.handleCarouselChange(0);
     this.mouseWheel = (e) => {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
       if (e.deltaY > 0) this.carousel.next();
       else this.carousel.prev();
     };
@@ -122,11 +129,11 @@ class View extends React.Component {
       case 11: if (!this.state.traceTree[fid]) this.getTraceTree(); break; // 话题溯源2
       default: break;
     }
-    this.setState({ curPage: current })
+    this.setState({ curPage: current });
   };
 
   getLatestInfo = async () => {
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 12;
     const params = [
       this.props.curProgramme.fid,
       '', // keyword
@@ -139,11 +146,14 @@ class View extends React.Component {
       0, // pageId
     ];
     const result = await getProgrammeData(...params);
-    const criteria = this.getCriteria();
     const { fid } = this.props.curProgramme;
     const newData = { ...this.state.data };
     newData[fid] = result.data;
     this.setState({ data: newData });
+    const summaryResult = await getProgrammeSummary(fid, '', '');
+    const newSummary = { ...this.state.summary };
+    newSummary[fid] = summaryResult.summary;
+    this.setState({ summary: newSummary });
   };
 
   getEmotionTrend = async () => {
@@ -244,7 +254,6 @@ class View extends React.Component {
     const { startPublishedDay, endPublishedDay } = this.state;
     const eventTree = await getEventTree(fid, startPublishedDay, endPublishedDay);
     const formatedEventTree = this.formatEventTree(eventTree);
-    console.log(formatedEventTree);
     const criteria = this.getCriteria();
     const newData = { ...this.state.eventTree };
     newData[fid] = formatedEventTree;
@@ -262,25 +271,65 @@ class View extends React.Component {
     });
   };
 
+  handleWeiboTreeClick = (e) => {
+    const url = e.data?.data?.url;
+    if (/^http/.test(url)) window.open(url);
+  };
+
+  handleEventTreeClick = (e) => {
+    const data = e?.data?.data;
+    console.log(e?.data?.data);
+    this.setState({
+      visible: true,
+      curEvent: {
+        sumamry: data.summary,
+        clusterData: data.clusterData,
+      },
+    });
+  };
+
+  handleModalCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   render() {
-    const { data, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
+    const { data, curEvent, visible, summary, emotionTrend, emotionLayout, eventTree, sensiLayout, regionLayout, sourceLayout, totalAmountTrend, sourceAmountTrend, traceTree, keywordsCloud, traceTreeFormat } = this.state;
     const criteria = this.getCriteria();
     const { fid } = this.props.curProgramme;
     const { curPage } = this.state;
+    console.log(curEvent);
     return (
       <div
         className="view"
         ref={r => this.carouselWrap = r}
       >
-        {(curPage === 4 || curPage === 5 || curPage === 8) && <DateSelector
+        {curEvent && <Modal
+          title={curEvent.sumamry}
+          visible={visible}
+          onCancel={this.handleModalCancel}
+          wrapClassName="mts-data-list2"
+          className="mts-content-modal2"
+          footer={[]}
+        >
+          {curEvent.clusterData.map((item) => (
+            <a onClick={() => {window.open(item.webpageUrl)}}>{item.webpageUrl}</a>
+          ))}
+        </Modal>}
+        {(curPage === 4 || curPage === 5 || curPage === 8) && (
+        <DateSelector
           className="view-date-selector"
           onDateSelect={this.handleDateChange}
-        />}
-        {curPage === 6 && <div className="region-rank">
+        />
+        )}
+        {curPage === 6 && (
+        <div className="region-rank">
           {regionLayout[fid] && regionLayout[fid].regions.sort((a, b) => (b.value - a.value)).map((item) => (
             <div className="region-rank-item">{item.name} {item.value}</div>
           ))}
-        </div>}
+        </div>
+        )}
         <Carousel
           ref={r => this.carousel = r}
           dotPosition="left"
@@ -305,12 +354,15 @@ class View extends React.Component {
             >
               <div className="latest-info">
                 <div className="theme">最新舆情</div>
-                {data[fid] && data[fid].map((item) => (
-                  <div className="latest-info-item">
-                    <span className="title">{item.title}</span>
-                    <span className="content">{item.content}</span>
-                  </div>
-                ))}
+                <div className="summary">话题摘要：{summary[fid]?.replace(/\s/g, '')}</div>
+                <div className="latest-info-item-group">
+                  {data[fid] && data[fid].map((item) => (
+                    <div className="latest-info-item">
+                      <div className="title">{item.title}</div>
+                      <div className="content">{item.content}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AutofitWrap>
           </div>
@@ -417,6 +469,7 @@ class View extends React.Component {
                 type="connGraph"
                 size="big"
                 data={eventTree[fid]}
+                onClick={this.handleEventTreeClick}
               />
             </AutofitWrap>
           </div>
@@ -430,6 +483,7 @@ class View extends React.Component {
                 type="defaultTree"
                 size="big"
                 data={traceTree[fid]}
+                onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
           </div>
@@ -443,6 +497,7 @@ class View extends React.Component {
                 type="circleTree"
                 size="big"
                 data={traceTree[fid]}
+                onClick={this.handleWeiboTreeClick}
               />
             </AutofitWrap>
           </div>

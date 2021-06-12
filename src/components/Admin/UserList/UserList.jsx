@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from "antd";
 import {Switch} from "antd/es";
+import changeUserState from "../../../services/request/auth/changeUserState";
 
 class UserList extends React.Component {
   constructor() {
@@ -30,10 +31,17 @@ class UserList extends React.Component {
       {
         title: '操作',
         key: 'action',
-        render: () => <Switch/>
+        render: (text, record) => <Switch defaultChecked={record.status} onChange={() => this.handleChange(record.username)}/>
       },
     ];
   }
+
+  handleChange = async (username) => {
+    const result = await changeUserState(username);
+    if (result.changeUserState) {
+      alert('编辑成功！');
+    } else alert('编辑失败！');
+  };
 
   render() {
     const { users } = this.props;

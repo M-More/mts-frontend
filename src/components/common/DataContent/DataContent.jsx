@@ -112,8 +112,8 @@ class DataContent extends React.Component {
         <div className="content">
           {
           contentSlice.map((item) => (item.sensitive ?
-            <span className="sensitive">{item.slice}</span> :
-            <span>{item.slice}</span>))
+            <span className="sensitive">{item.slice.replace(/\\n/g, '')}</span> :
+            <span>{item.slice.replace(/\\n/g, '')}</span>))
         }
         </div>
       </Modal>
