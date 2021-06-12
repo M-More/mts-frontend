@@ -14,7 +14,7 @@ import AutofitWrap from '../common/AutofitWrap/AutofitWrap';
 import './Overall.scss';
 
 import { actions } from '../../redux/actions';
-import getSensitiveType from "../../services/request/data/getSensitiveType";
+import getSensitiveType from '../../services/request/data/getSensitiveType';
 
 const PAGE_SIZE = 10;
 const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -34,6 +34,7 @@ class Overall extends Component {
       timeOrder: 0,
       data: {},
       loading: false,
+      src: undefined,
     };
   }
 
@@ -169,6 +170,26 @@ class Overall extends Component {
     });
   };
 
+  handleBaiduSearch = () => {
+    const { keyword } = this.state;
+    this.setState({
+      src: encodeURI(`https://www.baidu.com/s?ie=UTF-8&wd=${keyword}`),
+    });
+  };
+
+  closeIframe = () => {
+    this.setState({
+      src: undefined,
+    });
+  };
+
+  handle360Search = () => {
+    const { keyword } = this.state;
+    this.setState({
+      src: encodeURI(`https://www.so.com/s?ie=utf-8&fr=none&src=home_suggst_revise&nlpv=base_bt65&q=${keyword}&eci=`),
+    });
+  };
+
   render() {
     const params = ['sensi', 'source', 'timeOrder', 'dateRange', 'startPublishedDay', 'endPublishedDay'];
     const criteria = this.getCriteria();
@@ -177,6 +198,7 @@ class Overall extends Component {
     const { pageSize, keyword, loading } = this.state;
     const data = this.state.data[criteria]?.data || [];
     const dataSize = this.state.data[criteria]?.dataSize || 0;
+    const { src } = this.state;
 
     switch (curPath) {
       case '/result':
@@ -210,19 +232,25 @@ class Overall extends Component {
           >
             <div className="search-entry-wrap">
               <div className="title">全网搜索 <SearchOutlined /></div>
-              <Input.Search
+              <Input
                 className="search-entry-input"
-                enterButton="搜素"
                 onChange={e => this.setState({ keyword: e.target.value })}
                 value={keyword}
                 size="large"
                 onSearch={this.handleSearch}
               />
-              {/* <div className="btn-group">
-                <Button type="primary" onClick={this.handleSearch}>百度搜素</Button>
-                <Button type="primary">搜狗搜素</Button>
-              </div> */}
+              <div className="btn-group">
+                <Button type="primary" onClick={this.handleSearch}>全库搜素</Button>
+                <Button type="primary" onClick={this.handleBaiduSearch}>百度搜素</Button>
+                <Button type="primary" onClick={this.handle360Search}>360搜素</Button>
+              </div>
             </div>
+            {src && (
+            <div className="iframe-wrap">
+              <button className="close-btn" onClick={this.closeIframe}>x</button>
+              <iframe className="iframe-content" src={src} />
+            </div>
+            )}
           </AutofitWrap>
         );
     }

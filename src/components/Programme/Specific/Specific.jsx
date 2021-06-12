@@ -58,6 +58,7 @@ class Specific extends React.Component {
     const tagResult = await getSensitiveType(contents);
     const newData = { ...this.state.data };
     const tags = tagResult.result;
+    if (newData[criteria]?.data instanceof Array === false) return;
     newData[criteria].data = [...newData[criteria].data];
     newData[criteria].data.forEach((item, index) => {
       const tag = tags[index.toString()];
@@ -91,6 +92,7 @@ class Specific extends React.Component {
     const tagResult = await getContentEmotion(contents, undefined);
     const newData = { ...this.state.data };
     const tags = tagResult.result;
+    if (newData[criteria]?.data instanceof Array === false) return;
     newData[criteria].data = [...newData[criteria]?.data];
     newData[criteria].data.forEach((item, index) => {
       const tag = tags[index.toString()];
@@ -107,6 +109,7 @@ class Specific extends React.Component {
     const tagResult = await getContentTag(contents, undefined);
     const newData = { ...this.state.data };
     const tags = tagResult.result;
+    if (newData[criteria]?.data instanceof Array === false) return;
     newData[criteria].data = [...newData[criteria]?.data];
     newData[criteria].data.forEach((item, index) => {
       const tag = tags[index.toString()];

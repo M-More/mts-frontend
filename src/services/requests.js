@@ -43,6 +43,10 @@ const requests = {
   getWeiboUserData: { url: `${curDomain}/data/globalSearch/searchByUser`, method: 'GET' },
   getProgrammeSummary: { url: `${curDomain}/data/multiDocumentSummary`, method: 'GET' },
   changeUserState: { url: `${curDomain}/User/changeUserState`, method: 'GET' },
+
+  sampleKeywordAnalysis: { url: `${curDomain}/data/autoaddEkeyword`, method: 'POST' },
+  addProgrammeSensitiveWord: { url: `${curDomain}/data/addSensitivewordForFid`, method: 'POST' },
+  getProgrammeSensitiveWord: { url: `${curDomain}/data/sensitiveWordByFid`, method: 'POST' },
 };
 
 export default requests;

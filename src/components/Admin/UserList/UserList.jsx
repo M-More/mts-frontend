@@ -37,7 +37,6 @@ class UserList extends React.Component {
   }
 
   handleChange = async (username) => {
-    console.log(username);
     const result = await changeUserState(username);
     if (result.changeUserState) {
       alert('编辑成功！');
